@@ -43,7 +43,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person structure and its manipulation functions
@@ -59,10 +59,13 @@ struct Person {
 
 void print(Person* p) {
     // TODO: [문제 1]
+	cout << p->name << " " << p->id << " " << p->weight << " " << p->married << " :" << p->address << ":";
 }
 
 void println(Person* p) {
     // TODO: [문제 1]
+	print(p);
+	cout << endl;
 }
 
 void input(Person* p) {
@@ -168,7 +171,21 @@ int selectMenu(const string menuStr, int menuItemCount) {
 
 Person p = { "Hong", 1, 61.1, true, "Seoul Jongno-gu Nam-ro 123" };
 
-void printlnTest() { }
+void printlnTest() { // Menu item 1
+    // 디폴트 값으로 초기화, 즉 모든 멤버 값을 0으로 초기화함
+    Person p1 = {}; // 또는 Person p{};
+    println(&p1);
+    // 위 p1을 Person p1;으로 선언해 놓고 p1을 출력해 보라. 아마 초기화가 되어 있지 않을 것이다.
+
+    // 구조체의 각 멤버 초기화
+    Person p2 = { "LeeSoonShin", 0, 70.1, true, "Gangnam Seoul" };
+    println(&p2);
+
+    Person p3{ "Hong,gildong", 1, 60.2, false, "Jongno-gu, Busan" };
+    println(&p3);
+
+    println(&p);
+}
 void initTest() { }
 void getter() { }
 void setter() { }

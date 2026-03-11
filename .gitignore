@@ -40,3 +40,8 @@
 # debug information files
 *.dwo
 .metadata/
+
+*/.settings/
+*/.cproject
+*/.project
+*/Debug/

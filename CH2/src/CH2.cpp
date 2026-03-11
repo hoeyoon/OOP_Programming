@@ -196,7 +196,10 @@ void initTest() { // Menu item 2
     init(&u2, "u2", p.id, p.weight, p.married, p.address);
     println(&p);
 }
-void getter() { }
+void getter() { // Menu item 3
+	cout << "name:" << p.name << ", id:" << p.id << ", weight:" << p.weight
+    << ", married:" << p.married << ", address:" << p.address << endl;
+}
 void setter() { }
 void isSameTest() { }
 void whatAreYouDoingTest() { }

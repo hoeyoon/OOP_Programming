@@ -86,6 +86,9 @@ void init(Person* p, const char *pname, int pid, double pweight,
     strcpy(p->name,  pname);
     p->id = pid;
     // TODO: [문제 2]
+    p->weight = pweight;
+    p->married = pmarried;
+    strcpy(p->address, paddress);
     cout << "init("; print(p); cout << ")" << endl;
 }
 
@@ -186,7 +189,13 @@ void printlnTest() { // Menu item 1
 
     println(&p);
 }
-void initTest() { }
+void initTest() { // Menu item 2
+    Person u1;
+    init(&u1, "u1", 10, 60.0, false, "Jongno-gu, Seoul");
+    Person u2;
+    init(&u2, "u2", p.id, p.weight, p.married, p.address);
+    println(&p);
+}
 void getter() { }
 void setter() { }
 void isSameTest() { }

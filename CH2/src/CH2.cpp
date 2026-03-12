@@ -262,7 +262,16 @@ void   boolAlphaInputPerson() { // Menu item 10
     cin  >> noboolalpha; // 원래 상태로 복구함
     cout << noboolalpha; // 원래 상태로 복구함
 }
-void dataTypeSize() { }
+void dataTypeSize() { // Menu item 11
+    cout << "bool   size: " << sizeof(bool)   << endl;
+    cout << "char   size: " << sizeof(char)   << endl;
+    cout << "short  size: " << sizeof(short)  << endl;
+    cout << "int    size: " << sizeof(int)    << endl;
+    cout << "long   size: " << sizeof(long)   << endl;
+    cout << "float  size: " << sizeof(float)  << endl;
+    cout << "double size: " << sizeof(double) << endl;
+    cout << "int*   size: " << sizeof(int*)   << endl;
+}
 
 /******************************************************************************
  * run() 함수

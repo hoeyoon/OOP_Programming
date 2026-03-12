@@ -223,7 +223,15 @@ void isSameTest() {// Menu item 5
 void whatAreYouDoingTest() { // Menu item 6
     whatAreYouDoing(&p);
 }
-void noBoolAlphaOutput() { }
+void noBoolAlphaOutput() { // Menu item 7
+    // married 멤버 값 또는 bool 값이 1, 0로 출력됨
+    printlnTest();
+    initTest();
+    getter();
+    setter();
+    isSameTest();
+    whatAreYouDoingTest();
+}
 void   boolAlphaOutput() { }
 void noBoolAlphaInputPerson() { }
 void   boolAlphaInputPerson() { }

@@ -251,7 +251,17 @@ void noBoolAlphaInputPerson() { // Menu item 9
     if (UI::inputPerson(&p)) // 입력시 정수 또는 실수 값을 일반 문자로 잘못 입력하지 않은 경우
         println(&p);
 }
-void   boolAlphaInputPerson() { }
+void   boolAlphaInputPerson() { // Menu item 10
+    cout << boolalpha;
+    // 아래는 married 멤버 값 또는 bool 값을 true 또는 false로 입력받도록 설정
+    cin  >> boolalpha;
+    // 아래 입력 인적정보에서 married 멤버 값이 1이 아닌 true임
+    // Hong 1 71.5 true :Gwangju Nam-gu Bongseon-dong 21:
+    if (UI::inputPerson(&p))  // 입력시 정수 또는 실수 값을 일반 문자로 잘못 입력하지 않은 경우
+        println(&p);
+    cin  >> noboolalpha; // 원래 상태로 복구함
+    cout << noboolalpha; // 원래 상태로 복구함
+}
 void dataTypeSize() { }
 
 /******************************************************************************

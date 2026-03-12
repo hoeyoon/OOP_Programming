@@ -82,6 +82,7 @@ bool isSame(const Person* p, const char* pname, int pid) {
 
 void whatAreYouDoing(Person* p) {
     // TODO: [문제 6]
+	cout << p->name << "is taking a rest." << endl;
 }
 
 void init(Person* p, const char *pname, int pid, double pweight,
@@ -219,7 +220,9 @@ void isSameTest() {// Menu item 5
     Person u = { "Hong", 1, };
     cout << "p.isSame(): " << isSame(&p, u.name, u.id) << endl;
 }
-void whatAreYouDoingTest() { }
+void whatAreYouDoingTest() { // Menu item 6
+    whatAreYouDoing(&p);
+}
 void noBoolAlphaOutput() { }
 void   boolAlphaOutput() { }
 void noBoolAlphaInputPerson() { }

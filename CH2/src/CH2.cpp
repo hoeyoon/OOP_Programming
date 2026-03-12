@@ -232,7 +232,11 @@ void noBoolAlphaOutput() { // Menu item 7
     isSameTest();
     whatAreYouDoingTest();
 }
-void   boolAlphaOutput() { }
+void   boolAlphaOutput() { // Menu item 8
+    cout << boolalpha;    // married 멤버 값 또는 bool 값이 true, false로 출력되도록 설정
+    noBoolAlphaOutput();
+    cout << noboolalpha;  // 원래 상태로 복구함
+}
 void noBoolAlphaInputPerson() { }
 void   boolAlphaInputPerson() { }
 void dataTypeSize() { }

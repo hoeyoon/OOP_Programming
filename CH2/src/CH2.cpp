@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 // 아래 문제를 해결하는 도중 출력이 잘못되었거나 문제 설명과 출력이 일치하지 않거나 오타가 있거나 등등
-// 조금이라도 문제에 이상한 것이 있으면 주저하지 말고 jhshim@chosun.ac.kr로 알려 주시기 바랍니다.
 //----------------------------------------------------------------------------
+// 조금이라도 문제에 이상한 것이 있으면 주저하지 말고 jhshim@chosun.ac.kr로 알려 주시기 바랍니다.
 
 /******************************************************************************
  * 코드 추가 1
@@ -200,7 +200,17 @@ void getter() { // Menu item 3
 	cout << "name:" << p.name << ", id:" << p.id << ", weight:" << p.weight
     << ", married:" << p.married << ", address:" << p.address << endl;
 }
-void setter() { }
+void setter() { // Menu item 4
+    Person u;
+    strcpy(u.name, "u");
+    u.id = p.id;
+    u.weight = p.weight;
+    u.married = p.married;
+    strcpy(u.address, p.address);
+    //TODO: p의 weight, married, address 값들을 u의 상응하는 멤버에 저장하라.
+
+    println(&u);
+}
 void isSameTest() { }
 void whatAreYouDoingTest() { }
 void noBoolAlphaOutput() { }

@@ -70,6 +70,14 @@ void println(Person* p) {
 
 void input(Person* p) {
     // TODO: [문제 9]
+	cin >> p->name >> p->id >> p->weight >> p->married;
+
+	if(!cin){
+		return;
+	}
+
+	cin.getline(p->address, sizeof(p->address), ':');
+	cin.getline(p->address, sizeof(p->address), ':');
 }
 
 bool isSame(const Person* p, const char* pname, int pid) {
@@ -237,7 +245,12 @@ void   boolAlphaOutput() { // Menu item 8
     noBoolAlphaOutput();
     cout << noboolalpha;  // 원래 상태로 복구함
 }
-void noBoolAlphaInputPerson() { }
+void noBoolAlphaInputPerson() { // Menu item 9
+    // married 멤버 값 또는 bool 값을 0 또는 1로 입력
+    // HongGilDong 0 71.5 1 :Gwangju Nam-gu Bongseon-dong 21:
+    if (UI::inputPerson(&p)) // 입력시 정수 또는 실수 값을 일반 문자로 잘못 입력하지 않은 경우
+        println(&p);
+}
 void   boolAlphaInputPerson() { }
 void dataTypeSize() { }
 

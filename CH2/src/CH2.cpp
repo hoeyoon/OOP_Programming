@@ -74,6 +74,9 @@ void input(Person* p) {
 
 bool isSame(const Person* p, const char* pname, int pid) {
     // TODO: [문제 5]
+	if(strcmp(p->name, pname) == 0 && p->id == pid){
+		return true;
+	}
     return false; // 이 문장을 삭제하고 새로 구현하라.
 }
 
@@ -211,7 +214,11 @@ void setter() { // Menu item 4
 
     println(&u);
 }
-void isSameTest() { }
+void isSameTest() {// Menu item 5
+    println(&p);
+    Person u = { "Hong", 1, };
+    cout << "p.isSame(): " << isSame(&p, u.name, u.id) << endl;
+}
 void whatAreYouDoingTest() { }
 void noBoolAlphaOutput() { }
 void   boolAlphaOutput() { }

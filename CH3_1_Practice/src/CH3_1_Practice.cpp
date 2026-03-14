@@ -29,6 +29,7 @@ class Person
 
 public:
     Person();
+    Person(string _name, int _id, double _weight, bool _married);
     void setName(string _name);
     void setId(int _id);
     void setWeight(double _weight);
@@ -44,6 +45,15 @@ Person::Person(){
 	weight = 0;
 	married = false;
 	cout << "Person::Person():";
+	println();
+}
+
+Person::Person(string _name, int _id, double _weight, bool _married){
+	name = _name;
+	id = _id;
+	weight = _weight;
+	married = _married;
+	cout << "Person::Person(...):";
 	println();
 }
 
@@ -83,6 +93,9 @@ void set(string name, int id, double weight, bool married) {
 }
 
 void creator() {
+    cout << "creator() begin" << endl;
+    Person p2("p2", 1002, 60.5, false);
+    cout << "creator() return" << endl;
 }
 
 int main() {
@@ -96,6 +109,10 @@ int main() {
     bool married = true;
 
     set(name, id, weight, married);
+
+    cout << endl;
+    creator();
+
 }
 
 

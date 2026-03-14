@@ -16,6 +16,10 @@
 
 // 적절한 head 파일 include할 것
 
+#include <iostream>
+#include <string>
+using namespace std;
+
 class Person
 {
     string name;
@@ -25,6 +29,9 @@ class Person
 
 public:
     void setName(string _name);
+    void setId(int _id);
+    void setWeight(double _weight);
+    void setMarried(bool _married);
 
     void println();
 };
@@ -33,8 +40,21 @@ void Person::setName(string _name)   {
     name = _name;
 }
 
+void Person::setId(int _id){
+	id = _id;
+}
+
+void Person::setWeight(double _weight){
+	weight = _weight;
+}
+
+void Person::setMarried(bool _married){
+	married = _married;
+}
+
 void Person::println()   {
     // ch2.cpp의 화면출력 코드를 참조할 것
+	cout << "name:" << name << ", id:" << id << ", weight:" << weight << ", married:" << married << endl;
 }
 
 void set(string name, int id, double weight, bool married) {

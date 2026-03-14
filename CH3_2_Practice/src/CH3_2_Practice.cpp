@@ -7,6 +7,30 @@
 using namespace std;
 
 //여기에 클래스 코드 작성할 것
+class alu{
+	public:
+		unsigned int r1, r2;
+		char oper;
+
+		alu(){
+			r1 = 1;
+			r2 = 3;
+			oper = '*';
+		}
+
+		unsigned int calc(){
+			if(oper == '+'){
+				return r1 + r2;
+			}
+			else if(oper == '-'){
+				return r1 - r2;
+			}
+			else if(oper == '*'){
+				return r1 * r2;
+			}
+			return 0;
+		}
+};
 
 //아래 main 함수는 수정 불가
 

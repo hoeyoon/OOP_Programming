@@ -35,6 +35,7 @@ public:
     void setMarried(bool _married);
 
     void println();
+    ~Person();
 };
 
 Person::Person(){
@@ -65,6 +66,11 @@ void Person::setMarried(bool _married){
 void Person::println()   {
     // ch2.cpp의 화면출력 코드를 참조할 것
 	cout << "name:" << name << ", id:" << id << ", weight:" << weight << ", married:" << married << endl;
+}
+
+Person::~Person(){
+	cout << "Person::~Person():";
+	println();
 }
 
 void set(string name, int id, double weight, bool married) {

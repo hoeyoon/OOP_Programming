@@ -35,6 +35,11 @@ public:
     void setWeight(double _weight);
     void setMarried(bool _married);
 
+    string getName();
+    int getId();
+    double getWeight();
+    bool getMarried();
+
     void println();
     ~Person();
 };
@@ -71,6 +76,22 @@ void Person::setWeight(double _weight){
 
 void Person::setMarried(bool _married){
 	married = _married;
+}
+
+string Person::getName() {
+    return name;
+}
+
+int Person::getId(){
+	return id;
+}
+
+double Person::getWeight(){
+	return weight;
+}
+
+bool Person::getMarried(){
+	return married;
 }
 
 void Person::println()   {
@@ -112,6 +133,15 @@ int main() {
 
     cout << endl;
     creator();
+
+    cout << endl;
+
+    cout << "name id weight married? ";
+    cin >> name >> id >> weight >> married;
+    Person p3(name, id, weight, married);
+
+    cout << "output name:" << p3.getName() << ", id:" << p3.getId() << ", weight:" <<
+    	    p3.getWeight() << ", married:" << p3.getMarried() << endl;
 
 }
 

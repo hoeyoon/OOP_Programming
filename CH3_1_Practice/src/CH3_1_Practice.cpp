@@ -28,6 +28,7 @@ class Person
     bool   married;
 
 public:
+    Person();
     void setName(string _name);
     void setId(int _id);
     void setWeight(double _weight);
@@ -35,6 +36,15 @@ public:
 
     void println();
 };
+
+Person::Person(){
+	name = "no-name";
+	id = 0;
+	weight = 0;
+	married = false;
+	cout << "Person::Person():";
+	println();
+}
 
 void Person::setName(string _name)   {
     name = _name;

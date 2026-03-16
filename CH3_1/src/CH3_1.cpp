@@ -123,6 +123,7 @@ Person::~Person() {
 
 void Person::printMembers(ostream* pout)   {
     // TODO: [문제 1]
+	*pout << name << " " << id << " " << weight << " " << married << " :" << address << ":";
 }
 
 /******************************************************************************
@@ -210,6 +211,7 @@ int selectMenu(const string menuStr, int menuItemCount) {
 class ClassAndObject
 {
     void defualConstructor() { // Menu item 1
+        Person ps;    // Person::Person() 기본 생성자 및 소멸자 실행
     }
 
     void constructor() { // Menu item 2: 지역객체의 다양한 생성자 및 소멸자 실행

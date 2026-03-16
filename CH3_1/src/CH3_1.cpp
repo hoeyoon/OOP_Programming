@@ -84,7 +84,10 @@ public:
     ~Person();
 
     void setName(const char* pname)       { strcpy(name, pname); }
-    void setAddress(const char* paddress) { /* TODO: [문제 2] */ }
+    void setAddress(const char* paddress) {
+    	/* TODO: [문제 2] */
+    	strcpy(address, paddress);
+    }
 
     void input(istream* pin)  {  }
     void print(ostream* pout) { printMembers(pout); }
@@ -98,8 +101,9 @@ Person::Person(): name{}, id{}, weight{}, married{}, address{} {
     cout << "Person::Person():"; println();
 }
 
-Person::Person(const char *name) /* : TODO [문제 2] */ {
+Person::Person(const char *name) : id{}, weight{}, married{}, address{} /* : TODO [문제 2] */ {
     // TODO: [문제 2]
+	setName(name);
     cout << "Person::Person(\"" << name << "\"):"; println();
 }
 
@@ -114,6 +118,8 @@ Person::Person(const char *name, int id, double weight, bool married,
     // 호출 또는 다른 함수를 호출할 때는 생성자 함수의 몸체 { } 내에서 호출해야 한다.
 
     // TODO: [문제 2]
+    setName(name);
+    setAddress(address);
     cout << "Person::Person(...):"; println();
 }
 
@@ -215,6 +221,9 @@ class ClassAndObject
     }
 
     void constructor() { // Menu item 2: 지역객체의 다양한 생성자 및 소멸자 실행
+        Person ps1;
+        Person ps2("ps2");
+        Person ps3("ps3", 3, 70.3, true, "ps3 address");
     }
 
     void construcor_destructor_inner_inner() {

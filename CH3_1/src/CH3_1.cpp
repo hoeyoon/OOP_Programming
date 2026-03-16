@@ -227,12 +227,34 @@ class ClassAndObject
     }
 
     void construcor_destructor_inner_inner() {
+        cout << "\n--- construcor_destructor_inner_inner() begins ---" << endl;
+        Person ps3("ps3");
+        cout << "\n- if begins -" << endl;
+        if (true) {
+            Person ps4("ps4");
+        }
+        cout << "- if ends -\n" << endl;
+        cout << "- temporary object begins -" << endl;
+        Person("temp_ps_1"); // 임시객체(이름 없는 객체) 성성 및 소멸
+        cout << endl;
+        Person("temp_ps_2").setName("TEMP_PS_2"); // 임시객체 생성,
+                                                  // setName() 호출, 임시객체 소멸
+        cout << "- temporary object ends -\n" << endl;
+        Person ps5("ps5");
     }
 
     void construcor_destructor_inner() {
+        cout << "\n--- construcor_destructor_inner() begins ---" << endl;
+        Person ps2("ps2");
+        construcor_destructor_inner_inner();
+        cout << "--- construcor_destructor_inner_inner() returned ---\n" << endl;
+        Person ps6("ps6");
     }
 
     void construcorDestructor() { // Menu item 3
+        Person ps1("ps1");
+        construcor_destructor_inner();
+        cout << "--- construcor_destructor_inner() returned ---\n" << endl;
     }
 
     void global_static_local_objects_inner() {

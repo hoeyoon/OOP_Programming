@@ -134,6 +134,9 @@ void Person::whatAreYouDoing() {
 
 bool Person::isSame(const char* pname, int pid) {
 	// TODO: [문제 6]
+	if(strcmp(name, pname) == 0 && id == pid){
+		return true;
+	}
 	return false; // 구현 시 수정하라.
 }
 

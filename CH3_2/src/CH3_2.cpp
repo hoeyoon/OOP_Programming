@@ -116,6 +116,11 @@ Person::Person(const char *name, int id, double weight, bool married,
 void Person::set(const char *pname, int pid, double pweight,
 	bool pmarried, const char *paddress) {
 	// TODO: [문제 4]
+	setName(pname);
+	id = pid;
+	weight = pweight;
+	married = pmarried;
+	setAddress(paddress);
 }
 
 void Person::inputMembers(istream* pin)   {

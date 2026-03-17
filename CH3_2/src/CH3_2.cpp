@@ -129,6 +129,7 @@ void Person::inputMembers(istream* pin)   {
 
 void Person::whatAreYouDoing() {
 	// TODO: [문제 5]
+	cout << name << "is taking a rest." << endl;
 }
 
 bool Person::isSame(const char* pname, int pid) {

@@ -64,8 +64,8 @@ public:
     void set(const char *pname, int pid, double pweight, bool pmarried, const char *paddress);
     void setName(const char* pname)       { strcpy(name, pname); }
     void setId(int pid)                   { id = pid; }
-    void setWeight(double pweight)        { /* TODO: [문제 3] */ }
-    void setMarried(bool pmarried)        { /* TODO: [문제 3] */ }
+    void setWeight(double pweight)        { /* TODO: [문제 3] */ weight = pweight; }
+    void setMarried(bool pmarried)        { /* TODO: [문제 3] */ married = pmarried; }
     void setAddress(const char* paddress) {
     	/* ch3_1.cpp의 동일 함수를 복사하라. */
     	strcpy(address, paddress);

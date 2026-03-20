@@ -33,10 +33,11 @@ public:
 
 void Container::setTitle(string title) {
     /* 매개변수 title 값을 멤버 변수 title에 저장한다. */
+	this->title = title;
 }
 
 string Container::getTitle() {
-    return "";  /* 멤버변수 title을 반환하라. */
+    return title;  /* 멤버변수 title을 반환하라. */
 }
 
 /******************************************************************************

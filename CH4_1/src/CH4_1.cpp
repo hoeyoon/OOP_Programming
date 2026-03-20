@@ -49,7 +49,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 
 class Person
 {
-    char   name[20];        // 이름
+    string name;	        // 이름
     int    id;              // Identifier
     double weight;          // 체중
     bool   married;         // 결혼여부
@@ -61,21 +61,21 @@ protected:
 
 public:
     Person();
-    Person(const char *name);
-    Person(const char *name, int id, double weight, bool married, const char *address);
+    Person(const string name);
+    Person(const string name, int id, double weight, bool married, const char *address);
     ~Person();
 
-    void set(const char *pname, int pid, double pweight, bool pmarried, const char *paddress);
-    void setName(const char* pname)       { strcpy(name, pname); }
-    void setId(int pid)                   { id = pid; }
-    void setWeight(double pweight)        { /* TODO: [문제 3] */ weight = pweight; }
-    void setMarried(bool pmarried)        { /* TODO: [문제 3] */ married = pmarried; }
-    void setAddress(const char* paddress) {
+    void set(const string name, int pid, double weight, bool married, const char *address);
+    void setName(const string name)       { this->name = name; }
+    void setId(int id)                   { this->id = id; }
+    void setWeight(double weight)        { /* TODO: [문제 3] */ this->weight = weight; }
+    void setMarried(bool married)        { /* TODO: [문제 3] */ this->married = married; }
+    void setAddress(const char* address) {
     	/* ch3_1.cpp의 동일 함수를 복사하라. */
-    	strcpy(address, paddress);
+    	strcpy(this->address, address);
     }
 
-    const char* getName()    { return name; }
+    string 		getName()    { return name; }
     int         getId()      { return id; }
     double      getWeight()  { /* TODO: [문제 2] */ return weight; }  // 구현 시
     bool        getMarried() { /* TODO: [문제 2] */ return married; }  // 리턴 값들을
@@ -85,7 +85,7 @@ public:
     void print(ostream* pout) { printMembers(pout); }
     void println()            { print(&cout); cout << endl; }
     void whatAreYouDoing();                          // ch3_2에서 추가
-    bool isSame(const char* pname, int pid);         // ch3_2에서 추가
+    bool isSame(const string name, int id);         // ch3_2에서 추가
 };
 
 Person::Person(): name{}, id{}, weight{}, married{}, address{} {
@@ -95,15 +95,14 @@ Person::Person(): name{}, id{}, weight{}, married{}, address{} {
     cout << "Person::Person():"; println();
 }
 
-Person::Person(const char *name) : id{}, weight{}, married{}, address{} /* : TODO [문제 2] */ {
+Person::Person(const string name) : name{name}, id{}, weight{}, married{}, address{} /* : TODO [문제 2] */ {
     // TODO: [문제 2]
-	setName(name);
     cout << "Person::Person(\"" << name << "\"):"; println();
 }
 
-Person::Person(const char *name, int id, double weight, bool married,
+Person::Person(const string name, int id, double weight, bool married,
                const char *address) :
-        id{id}, weight{weight}, married{married} {
+        name{name}, id{id}, weight{weight}, married{married} {
     // 위에서 각 멤버를 초기화하는 {}는 각 매개변수 값을 객체의 상응하는 멤버에 설정하는 것이다. 즉,
     // this->id=id, this->weight=weight, this->married=married와 동일하다.
     // 여기서 this는 해당 객체를 포인터하는 포인터 변수이며, (다음 장에서 설명될 예정임)
@@ -112,19 +111,18 @@ Person::Person(const char *name, int id, double weight, bool married,
     // 호출 또는 다른 함수를 호출할 때는 생성자 함수의 몸체 { } 내에서 호출해야 한다.
 
     // TODO: [문제 2]
-    setName(name);
     setAddress(address);
     cout << "Person::Person(...):"; println();
 }
 
-void Person::set(const char *pname, int pid, double pweight,
-	bool pmarried, const char *paddress) {
+void Person::set(const string name, int id, double weight,
+	bool married, const char *address) {
 	// TODO: [문제 4]
-	setName(pname);
-	id = pid;
-	weight = pweight;
-	married = pmarried;
-	setAddress(paddress);
+	this->name = name;
+	this->id = id;
+	this->weight = weight;
+	this->married = married;
+	setAddress(address);
 }
 
 void Person::inputMembers(istream* pin)   {
@@ -144,9 +142,9 @@ void Person::whatAreYouDoing() {
 	cout << name << "is taking a rest." << endl;
 }
 
-bool Person::isSame(const char* pname, int pid) {
+bool Person::isSame(const string name, int id) {
 	// TODO: [문제 6]
-	if(strcmp(name, pname) == 0 && id == pid){
+	if(this->name == name && this->id == id){
 		return true;
 	}
 	return false; // 구현 시 수정하라.

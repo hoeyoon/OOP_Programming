@@ -140,9 +140,16 @@ void inputTitle(Container* cp) {
     string s;
     getline(cin, s); // 앞서 입력된 메뉴항목 번호 뒤의 [엔터]를 제거함
     /* 여기에 코드를 구현하라. */
+    cout << "input title: ";
+    getline(cin, s);
+    cp->setTitle(s);
 }
 
 void rotateTitle() {
+    Container c;
+    inputTitle(&c);
+    cout << "c.getTitle(): " << c.getTitle() << endl;
+    //c.rightRotateTitle();
 }
 
 void findDelete() {

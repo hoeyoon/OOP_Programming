@@ -41,7 +41,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -241,10 +241,10 @@ int selectMenu(const string menuStr, int menuItemCount) {
 
 class CurrentUser
 {
-    Person user;
+    Person *pUser;
 
 public:
-    CurrentUser(Person u): user(u) { }  // user(u)는 this->user = u 와 동일한 기능
+    CurrentUser(Person *pUser): pUser(pUser) { }  // user(u)는 this->user = u 와 동일한 기능
     void display();
     void setter();
     void getter();
@@ -256,16 +256,19 @@ public:
 };
 
 void CurrentUser::display() { // Menu item 1
-    user.println();
+    pUser->println();
 }
 
 void CurrentUser::getter() { // Menu item 2
+	/*
     cout << "name:" << user.getName() << ", id:" << user.getId() << ", weight:" <<
             user.getWeight() << ", married:" << user.getMarried() <<
             ", address:" << user.getAddress() << endl;
+    */
 }
 
 void CurrentUser::setter() { // Menu item 3
+	/*
     Person ps("ps");
     ps.setName(ps.getName());
     ps.setId(user.getId());
@@ -273,29 +276,36 @@ void CurrentUser::setter() { // Menu item 3
     ps.setMarried(user.getMarried());
     ps.setAddress(user.getAddress());
     cout << "ps.setMembers():"; ps.println();
+    */
 }
 
 void CurrentUser::set() { // Menu item 4
+	/*
     Person ps("ps");
     ps.set(ps.getName(), user.getId(), user.getWeight(),
               !user.getMarried(), user.getAddress());
     cout << "ps.set():"; ps.println();
+    */
 }
 
 void CurrentUser::whatAreYouDoing() {  // Menu item 5
-    user.whatAreYouDoing();
+    //user.whatAreYouDoing();
 }
 
 void CurrentUser::isSame() { // Menu item 6
+	/*
     user.println();
     Person ps("user"); ps.setId(1);
     cout << "user.isSame(): "
          << user.isSame(ps.getName(), ps.getId()) << endl;
+    */
 }
 
 void CurrentUser::inputPerson() { // Menu item 7
+	/*
     if (UI::inputPerson(&user)) // GilDong 1 70.5 true :Jongno-gu, Seoul:
         display();              // user 1 71.1 true :Gwangju Nam-ro 21:
+    */
 }
 
 void CurrentUser::run() {
@@ -329,7 +339,7 @@ class MultiManager
 
 public:
     void currentUser() {
-        CurrentUser(person).run();
+        CurrentUser(&person).run();
     }
 }; // ch3_2: MultiManager class
 

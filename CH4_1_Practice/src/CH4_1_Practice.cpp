@@ -106,12 +106,23 @@ void intArray() {
 }
 
 Container *newObjectArray(int size) {
-    Container *pArr = nullptr; // Container 객체 배열 시작 주소
+    Container *pArr = new Container[size]; // Container 객체 배열 시작 주소
     /* 여기에 코드를 구현하라. */
+    cout << "input " << size << " words: ";
+    for(int i = 0; i < size; i++){
+		string temp;
+    	cin >> temp;
+    	pArr[i].setTitle(temp);
+    }
     return pArr;
 }
 
 void printTitles(Container *pArr, int size) {
+    cout << "words: ";
+	for(int i = 0; i < size; i++){
+		cout << pArr[i].getTitle() << " ";
+	}
+	cout << endl;
 }
 
 void objectArray() {
@@ -122,6 +133,7 @@ void objectArray() {
     pArr = newObjectArray(size);
     printTitles(pArr, size);
     /* 여기서 pArr이 포인터 하는 메모리를 반납하시오. */
+    delete []pArr;
 }
 
 void inputTitle(Container* cp) {

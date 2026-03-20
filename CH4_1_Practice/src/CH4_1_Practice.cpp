@@ -36,10 +36,10 @@ public:
 };
 
 Container::Container(){
-	title = "";
+    title = "";
 	size = 0;
 	arr = nullptr;
-	cout << "Container(): arr = nullptr" << "; size = " << size << endl;
+	cout << "Container(): arr = nullptr" << "; size = " << size << ";" <<  endl;
 }
 
 Container::~Container(){
@@ -96,6 +96,18 @@ void Container::rightRotateTitle(){
 		title = last + temp;
 		cout << title << endl;
 	}
+}
+
+void Container::findDeleteTitle(){
+	cout << "word to delete? ";
+	string s;
+	cin >> s;
+	int len = s.length();
+	size_t pos;
+	while((pos = title.find(s)) != string::npos){
+		title.erase(pos, len);
+	}
+	cout << getTitle() << endl;
 }
 
 /******************************************************************************
@@ -163,6 +175,9 @@ void rotateTitle() {
 }
 
 void findDelete() {
+    Container c;
+    inputTitle(&c);      // This AAis aAA AAtest AAtitle.
+    c.findDeleteTitle();
 }
 
 /******************************************************************************

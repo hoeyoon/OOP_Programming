@@ -29,6 +29,7 @@ public:
     string getTitle();
     void newArray();
     void newIntArray();
+    void inputIntArray();
     void average();
     void rightRotateTitle();
     void findDeleteTitle();
@@ -66,6 +67,19 @@ void Container::newIntArray(){
 	arr = new int[size];
 }
 
+void Container::inputIntArray(){
+	cout << "input " << size << " integers: ";
+	for(int i = 0; i < size; i++){
+		cin >> arr[i];
+	}
+
+	cout << "arr" << '[' << size << "]: ";
+	for(int i = 0; i < size; i++){
+		cout << arr[i] << " ";
+	}
+	cout << endl;
+}
+
 /******************************************************************************
  * Global functions
  ******************************************************************************/
@@ -79,7 +93,7 @@ void constructor() {
 void intArray() {
     Container c;
     c.newIntArray();
-    //c.inputIntArray();
+    c.inputIntArray();
     //c.average();
 }
 

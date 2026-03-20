@@ -266,24 +266,22 @@ void CurrentUser::getter() { // Menu item 2
 }
 
 void CurrentUser::setter() { // Menu item 3
-	/*
-    Person ps("ps");
-    ps.setName(ps.getName());
-    ps.setId(user.getId());
-    ps.setWeight(user.getWeight());
-    ps.setMarried(user.getMarried());
-    ps.setAddress(user.getAddress());
-    cout << "ps.setMembers():"; ps.println();
-    */
+    Person *pp = new Person("pp");
+    pp->setName(pp->getName());
+    pp->setId(pUser->getId());
+    pp->setWeight(pUser->getWeight());
+    pp->setMarried(pUser->getMarried());
+    pp->setAddress(pUser->getAddress());
+    cout << "pp->setMembers():"; pp->println();
+    delete pp;
 }
 
 void CurrentUser::set() { // Menu item 4
-	/*
-    Person ps("ps");
-    ps.set(ps.getName(), user.getId(), user.getWeight(),
-              !user.getMarried(), user.getAddress());
-    cout << "ps.set():"; ps.println();
-    */
+    Person *pp = new Person("pp");
+    pp->set(pp->getName(), pUser->getId(), pUser->getWeight(),
+              !pUser->getMarried(), pUser->getAddress());
+    cout << "pp->set():"; pp->println();
+    delete pp;
 }
 
 void CurrentUser::whatAreYouDoing() {  // Menu item 5

@@ -22,6 +22,9 @@ class Container {
     int    size;   // 컨테이너에 저장된 정수 배열 arr의 크기
     int    *arr;   // size 개의 원소를 가진 배열 시작 주소
 public:
+    Container();
+    ~Container();
+
     void setTitle(string title);
     string getTitle();
     void newArray();
@@ -30,6 +33,17 @@ public:
     void findDeleteTitle();
 };
 
+Container::Container(){
+	title = "";
+	size = 0;
+	arr = nullptr;
+	cout << "Container(): arr = nullptr" << "; size = " << size << endl;
+}
+
+Container::~Container(){
+	delete arr;
+	cout << "~Container(): " << getTitle() << endl;
+}
 
 void Container::setTitle(string title) {
     /* 매개변수 title 값을 멤버 변수 title에 저장한다. */

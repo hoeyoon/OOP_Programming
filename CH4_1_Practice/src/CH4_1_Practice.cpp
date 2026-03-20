@@ -80,6 +80,14 @@ void Container::inputIntArray(){
 	cout << endl;
 }
 
+void Container::average(){
+	double temp = 0;
+	for(int i = 0; i < size; i++){
+		temp += arr[i];
+	}
+	cout << "average: " << temp / size << endl;
+}
+
 /******************************************************************************
  * Global functions
  ******************************************************************************/
@@ -94,7 +102,7 @@ void intArray() {
     Container c;
     c.newIntArray();
     c.inputIntArray();
-    //c.average();
+    c.average();
 }
 
 Container *newObjectArray(int size) {

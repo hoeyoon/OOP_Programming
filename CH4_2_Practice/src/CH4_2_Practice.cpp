@@ -47,6 +47,43 @@ public:
 // 위에 코드는 수정 불가
 
 // 여기에 코드 작성
+void Name::set_name(string f, string l){
+	first = f;
+	last = l;
+}
+
+PersonManager::PersonManager(int n){
+	nofp = n;
+	p = new Name[nofp];
+	cout << "Enter " << nofp << " first and last names." << endl;
+
+	for(int i = 0; i < nofp; i++){
+		string f, l;
+		cin >> f >> l;
+		p[i].set_name(f, l);
+	}
+}
+
+void PersonManager::show(){
+	for(int i = 0; i < nofp; i++){
+		cout << p[i].get_first() << " " << p[i].get_last() << endl;
+	}
+}
+
+int PersonManager::serarch(string str){
+	int idx;
+	for(int i = 0; i < nofp; i++){
+		if(p[i].get_first() == str || p[i].get_last() == str){
+			idx = i + 1;
+		}
+	}
+	return idx;
+}
+
+PersonManager::~PersonManager(){
+	delete []p;
+	cout << "delete [] p;" << endl;
+}
 
 // 아래 main 함수는 수정 불가
 int main() {

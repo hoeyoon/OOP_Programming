@@ -88,6 +88,16 @@ void Container::average(){
 	cout << "average: " << temp / size << endl;
 }
 
+void Container::rightRotateTitle(){
+	int len = title.length();
+	for(int i = 0; i < len; i++){
+		string last = title.substr(len - 1);
+		string temp = title.substr(0, len - 1);
+		title = last + temp;
+		cout << title << endl;
+	}
+}
+
 /******************************************************************************
  * Global functions
  ******************************************************************************/
@@ -149,7 +159,7 @@ void rotateTitle() {
     Container c;
     inputTitle(&c);
     cout << "c.getTitle(): " << c.getTitle() << endl;
-    //c.rightRotateTitle();
+    c.rightRotateTitle();
 }
 
 void findDelete() {

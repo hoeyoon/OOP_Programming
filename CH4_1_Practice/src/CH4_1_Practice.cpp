@@ -28,6 +28,7 @@ public:
     void setTitle(string title);
     string getTitle();
     void newArray();
+    void newIntArray();
     void average();
     void rightRotateTitle();
     void findDeleteTitle();
@@ -41,8 +42,13 @@ Container::Container(){
 }
 
 Container::~Container(){
-	delete arr;
-	cout << "~Container(): " << getTitle() << endl;
+	if(arr != nullptr){
+		delete []arr;
+		cout << "~Container(): arr" << '[' << size << ']' << " deleted;" << endl;
+	}
+	else{
+		cout << "~Container(): " << title << endl;
+	}
 }
 
 void Container::setTitle(string title) {
@@ -52,6 +58,12 @@ void Container::setTitle(string title) {
 
 string Container::getTitle() {
     return title;  /* 멤버변수 title을 반환하라. */
+}
+
+void Container::newIntArray(){
+	cout << "element numbers of int array[]? ";
+	cin >> size;
+	arr = new int[size];
 }
 
 /******************************************************************************
@@ -65,6 +77,10 @@ void constructor() {
 }
 
 void intArray() {
+    Container c;
+    c.newIntArray();
+    //c.inputIntArray();
+    //c.average();
 }
 
 Container *newObjectArray(int size) {

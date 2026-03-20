@@ -260,11 +260,9 @@ void CurrentUser::display() { // Menu item 1
 }
 
 void CurrentUser::getter() { // Menu item 2
-	/*
-    cout << "name:" << user.getName() << ", id:" << user.getId() << ", weight:" <<
-            user.getWeight() << ", married:" << user.getMarried() <<
-            ", address:" << user.getAddress() << endl;
-    */
+    cout << "name:" << pUser->getName() << ", id:" << pUser->getId() << ", weight:" <<
+            pUser->getWeight() << ", married:" << pUser->getMarried() <<
+            ", address:" <<pUser->getAddress() << endl;
 }
 
 void CurrentUser::setter() { // Menu item 3

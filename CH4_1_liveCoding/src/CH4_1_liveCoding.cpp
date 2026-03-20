@@ -126,17 +126,15 @@ public:
 House::House(int size, string houseName, string address)
     : size(size), houseName(houseName), address(address) {  // 멤버 변수 초기화
 
-
     // 문제 1
     // 방 정보 저장을 위한 roomList 생성
     // 생성된 방의 번호를 1부터 순차적으로 초기화
     // 방 번호 변경 할때는 Room 클래스의 setRoomNO() 함수 이용
 
-
-
-
-
-
+	roomList = new Room[size];
+	for(int i = 0; i < size; i++){
+		roomList[i].setRoomNO(i + 1);
+	}
 }
 
 // House 클래스 소멸자: 메모리 해제
@@ -146,17 +144,19 @@ House::~House() {
     }
 }
 
-
 // 문제 2
 // House 클래스의 방 렌트 메소드
 // 입력한 방 번호가 존재하면 해당 번호의 방 사용자 이름 수정하고 true 리턴
 // 입력한 방 번호가 존재하지 않으면 false 리턴
 bool House::rentRoom(string name, int roomNO) {
-
+	for(int i = 0; i < size; i++){
+		if(roomList[i].getRoomNO() == roomNO){
+			roomList[i].changeName(name);
+			return true;
+		}
+	}
+	return false;
 }
-
-
-
 
 // House 클래스의 집 정보 출력 메소드
 void House::showHouse()  {

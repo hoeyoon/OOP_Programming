@@ -41,7 +41,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -285,23 +285,17 @@ void CurrentUser::set() { // Menu item 4
 }
 
 void CurrentUser::whatAreYouDoing() {  // Menu item 5
-    //user.whatAreYouDoing();
+    pUser->whatAreYouDoing();
 }
 
 void CurrentUser::isSame() { // Menu item 6
-	/*
-    user.println();
-    Person ps("user"); ps.setId(1);
-    cout << "user.isSame(): "
-         << user.isSame(ps.getName(), ps.getId()) << endl;
-    */
+    pUser->println();
+    cout << "isSame(\"user\", 1): " << pUser->isSame("user", 1) << endl;
 }
 
 void CurrentUser::inputPerson() { // Menu item 7
-	/*
-    if (UI::inputPerson(&user)) // GilDong 1 70.5 true :Jongno-gu, Seoul:
+    if (UI::inputPerson(pUser)) // GilDong 1 70.5 true :Jongno-gu, Seoul:
         display();              // user 1 71.1 true :Gwangju Nam-ro 21:
-    */
 }
 
 void CurrentUser::run() {

@@ -37,7 +37,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -84,16 +84,16 @@ public:
     bool isSame(const string name, int id);         // ch3_2에서 추가
 };
 
-Person::Person(): name{}, id{}, weight{}, married{}, address{} {
+Person::Person(): Person{""} {
     // 위 함수 서두(:와 함수 본체 사이)에서 각 멤버를 초기화하는데 이는 함수 진입하기 전에
     // 각 멤버의 값을 초기화하는 것이다. {}는 각 데이타 타입별로 디폴트 값으로 초기화하라는 의미임.
     // 즉, name[]={'\0'}="", id=0, weight=0.0, married=false, address[]={'\0'}=""
-    cout << "Person::Person():"; println();
+    // cout << "Person::Person():"; println();
 }
 
-Person::Person(const string name) : name{name}, id{}, weight{}, married{}, address{} /* : TODO [문제 2] */ {
+Person::Person(const string name) : Person{name, 0, 0, false, ""} /* : TODO [문제 2] */ {
     // TODO: [문제 2]
-    cout << "Person::Person(\"" << name << "\"):"; println();
+    // cout << "Person::Person(\"" << name << "\"):"; println();
 }
 
 Person::Person(const string name, int id, double weight, bool married,
@@ -333,37 +333,39 @@ class VectorPerson
     void extend_capacity(); /* TODO 문제 [7] */
 
 public:
-    VectorPerson() {  /* TODO 문제 [2]: 위임 생성자로 변환 */
+    VectorPerson() :VectorPerson{DEFAULT_SIZE} {  /* TODO 문제 [2]: 위임 생성자로 변환 */
+    	/*
         allocSize = DEFAULT_SIZE;
         count = 0;
         cout << "VectorPerson::VectorPerson(" << allocSize << ")" << endl;
         pVector = new Person*[allocSize]; // 객체 포인터들의 배열을 위한 동적 메모리 할당
+        */
     }
     VectorPerson(int capacity);
     ~VectorPerson();
 
     // 아래 긱 함수이름 뒤의 const는 그 함수가 클래스 멤버 변수들을 수정하지 않고 읽기만 한다는 의미임
     // pVector[index]의 포인터 값을 반환
-    Person* at(int index) const { /* TODO 문제 [1] */ return nullptr; }
+    Person* at(int index) const { /* TODO 문제 [1] */ return pVector[index]; }
 
     // 할당 받의 pVector의 총 배열 원소의 개수를 반환
-    int     capacity()    const { /* TODO 문제 [1] */ return 0; }
+    int     capacity()    const { /* TODO 문제 [1] */ return allocSize; }
 
     // pVector 배열에 현재 삽입된 객체 포인터의 개수를 0으로 설정
-    void    clear()             { /* TODO 문제 [1] */ }
+    void    clear()             { /* TODO 문제 [1] */ count = 0;}
 
     // 현재 삽입된 객체 포인터가 하나도 없으면 true, 있으면 false
-    bool    empty()       const { /* TODO 문제 [1] */ return true; }
+    bool    empty()       const { /* TODO 문제 [1] */ return count == 0 ? true : false; }
 
     // 현재 삽입된 객체 포인터의 개수를 반환
-    int     size()        const { /* TODO 문제 [1] */ return 0; }
+    int     size()        const { /* TODO 문제 [1] */ return count; }
 
     // pVector 배열에 마지막 삽입된 원소 뒤에 새로운 원소 p를 삽입하고 현재 삽입된 객체 개수를 증가
     void    push_back(Person* p); /* TODO 문제 [4, 7] */
 };
 
 // capacity는 할당해야 할 배열 원소의 개수
-VectorPerson::VectorPerson(int capacity) /* : TODO 문제 [2]: 멤버 초기화 */ {
+VectorPerson::VectorPerson(int capacity) : count{0}, allocSize{capacity} /* : TODO 문제 [2]: 멤버 초기화 */ {
     // allocSize = capacity, count = 0; 초기화를 위 함수 서두(위 /* */ 주석 사이)에서 할 것
     // 함수 서두에서 초기화하는 방법은 Person 클래스 참고할 것
     cout << "VectorPerson::VectorPerson(" << allocSize << ")" << endl;
@@ -372,7 +374,13 @@ VectorPerson::VectorPerson(int capacity) /* : TODO 문제 [2]: 멤버 초기화 
 
 VectorPerson::~VectorPerson() {
     /* TODO 문제 [2]: 동적으로 할당된 배열 pVector 반납: pVector가 배열임을 명심하라. */
-    // cout << "VectorPerson::~VectorPerson(): pVector deleted" << endl;
+    cout << "VectorPerson::~VectorPerson(): pVector deleted" << endl;
+}
+
+void VectorPerson::push_back(Person *p){
+	if(count < allocSize){
+		pVector[count++] = p;
+	}
 }
 
 /******************************************************************************
@@ -400,6 +408,12 @@ public:
 PersonManager::PersonManager(Person* array[], int len) {
     cout << "PersonManager::PersonManager(array[], len)" << endl;
     /* TODO 문제 [4] */
+    for(int i = 0; i < len; i++){
+    	Person *s = array[i];
+
+    	Person *temp = new Person(s->getName(), s->getId(), s->getWeight(), s->getMarried(), s->getAddress());
+    	persons.push_back(temp);
+    }
     display();
 }
 
@@ -410,6 +424,12 @@ PersonManager::~PersonManager() {
 
 void PersonManager::deleteElemets() {
     /* TODO 문제 [5] */
+	for(int i = 0; i < persons.size(); i++){
+		Person *temp = persons.at(i);
+
+		delete temp;
+	}
+	persons.clear();
 }
 
 void PersonManager::display() { // Menu item 1

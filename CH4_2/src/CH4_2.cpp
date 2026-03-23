@@ -384,12 +384,38 @@ void VectorPerson::push_back(Person *p){
 }
 
 /******************************************************************************
+ * ch4_2: Factory class
+ ******************************************************************************/
+
+class Factory
+{
+    Person* checkInputFormatError(istream* in, Person* p) {
+        if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
+            delete p;         // inputPerson(istream* in)에서 할당한 메모리 반납
+            return nullptr;   // nullptr은 에러가 발생했다는 의미임
+        }
+        if (UI::echo_input) p->println(); // 자동체크에서 사용됨
+        return p;
+    }
+
+public:
+    // 동적으로 Person 객체를 할당 받은 후 키보드로부터 새로 추가하고자 하는 사람의 인적정보를 읽어 들여
+    // 해당 객체에 저장한 후 그 객체의 포인터를 반환한다.
+    Person* inputPerson(istream* in) {
+        Person* p = new Person();
+        p->input(in);
+        return checkInputFormatError(in, p);
+    }
+};
+
+/******************************************************************************
  * ch4_2: PersonManager class
  ******************************************************************************/
 
 class PersonManager
 {
     VectorPerson persons;
+    Factory factory;
 
     void deleteElemets();
     void printNotice(const string preMessage, const string postMessage);
@@ -432,6 +458,11 @@ void PersonManager::deleteElemets() {
 	persons.clear();
 }
 
+void PersonManager::printNotice(const string preMessage, const string postMessage) {
+    cout << preMessage;
+    cout << " [person information] " << postMessage << endl;
+}
+
 void PersonManager::display() { // Menu item 1
     int count = persons.size();
     cout << "display(): count " << count << endl;
@@ -443,7 +474,19 @@ void PersonManager::display() { // Menu item 1
          << ", capacity():" << persons.capacity() << endl;
 }
 
-void PersonManager::append() { /* TODO 문제 [6] */ } // Menu item 2
+void PersonManager::append() { // Menu item 2
+    int count = UI::getPositiveInt("The number of persons to append? ");
+    // to_string(10) 함수: 정수 10을 문자열 "10"으로 변환
+    // stoi("10") 함수: 문자열 "10"을 정수 10으로 변환
+    printNotice("Input "+to_string(count), ":");
+    for (int i = 0; i < count; ++i) {
+        Person* p = factory.inputPerson(&cin); // 한 사람 정보 입력 받음
+        if (p) persons.push_back(p); // if (p != nullptr) 와 동일;
+        // 만약 p가 nullptr이면 이는 입력 시 에러가 발생한 것임
+        // (즉, 정수를 입력해야 하는 곳에 일반 문자를 입력한 경우)
+    }
+    display();
+}
 
 void PersonManager::clear() { // Menu item 3
     deleteElemets();

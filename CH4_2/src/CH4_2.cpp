@@ -37,7 +37,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -46,6 +46,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 class Person
 {
     string name;	        // 이름
+    string passwd;
     int    id;              // Identifier
     double weight;          // 체중
     bool   married;         // 결혼여부
@@ -62,7 +63,8 @@ public:
     ~Person();
 
     void set(const string name, int pid, double weight, bool married, const char *address);
-    void setName(const string name)       { this->name = name; }
+    void setName(const string name)      { this->name = name; }
+    void setPasswd(const string passwd)	 { this->passwd = passwd; }
     void setId(int id)                   { this->id = id; }
     void setWeight(double weight)        { /* TODO: [문제 3] */ this->weight = weight; }
     void setMarried(bool married)        { /* TODO: [문제 3] */ this->married = married; }
@@ -72,6 +74,7 @@ public:
     }
 
     string 		getName()    { return name; }
+    string		getPasswd()	 { return passwd; }
     int         getId()      { return id; }
     double      getWeight()  { /* TODO: [문제 2] */ return weight; }  // 구현 시
     bool        getMarried() { /* TODO: [문제 2] */ return married; }  // 리턴 값들을
@@ -191,6 +194,23 @@ bool inputPerson(Person* p) {
     return true;
 }
 
+// 입력장치에서 하나의 단어로 구성된 문자열을 입력 받음
+string getNext(const string msg) {
+    cout << msg; // 입력용 메시지를 출력
+    cin >> line; // 하나의 단어를 읽어 들임
+    if (echo_input) cout << line << endl; // 자동체크 시 출력됨
+    getline(cin, emptyLine); // 입력받은 한 단어 외 그 행의 나머지 데이타(엔터포함)는 읽어서 버림
+    return line;             // 이유는 여기서 [엔터]를 제거하지 않으면
+}                            // 다음의 getNextLine()에서 엔터만 읽어 들일 수 있기 때문에
+
+// 입력장치에서 한 행을 입력 받음
+string getNextLine(const string msg) {
+    cout << msg; // 입력용 메시지를 출력
+    getline(cin, line); // 한 행을 읽어 들임
+    if (echo_input) cout << line << endl; // 자동체크 시 출력됨
+    return line;
+}
+
 // 하나의 정수를 입력 받음; 정수가 아닌 아닌 문자열 입력시 에러 메시지 출력 후 재입력 받음
 int getInt(const string msg) {
     for (int value; true; ) {
@@ -248,6 +268,7 @@ public:
     void whatAreYouDoing();
     void isSame();
     void inputPerson();
+    void changePasswd();
     void run();
 };
 
@@ -294,18 +315,28 @@ void CurrentUser::inputPerson() { // Menu item 7
         display();              // user 1 71.1 true :Gwangju Nam-ro 21:
 }
 
+void CurrentUser::changePasswd() {
+    // UI::getNext("New password: ")를 사용해 비번을 입력 받고,
+    // pUser가 포인트하는 객체의 비번을 변경하라.
+
+	string passwd = UI::getNext("New password: ");
+	pUser->setPasswd(passwd);
+    cout << "Password changed" << endl;
+}
+
 void CurrentUser::run() {
     using func_t = void (CurrentUser::*)();
+    using CU = CurrentUser;
     func_t func_arr[] = {
-        nullptr, &CurrentUser::display, &CurrentUser::getter, &CurrentUser::setter,
-        &CurrentUser::set, &CurrentUser::whatAreYouDoing,
-        &CurrentUser::isSame, &CurrentUser::inputPerson,
+        nullptr, &CU::display, &CU::getter, &CU::setter,
+        &CU::set, &CU::whatAreYouDoing,
+        &CU::isSame, &CU::inputPerson, &CU::changePasswd,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 배열의 길이
     string menuStr =
         "+++++++++++++++++++++ Current User Menu ++++++++++++++++++++++++\n"
         "+ 0.Logout 1.Display 2.Getter 3.Setter 4.Set 5.WhatAreYouDoing +\n"
-        "+ 6.IsSame 7.InputPerson                                       +\n"
+        "+ 6.IsSame 7.InputPerson 8.ChangePasswd(4_2)                   +\n"
         "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
     while (true) {
@@ -482,6 +513,20 @@ void PersonManager::printNotice(const string preMessage, const string postMessag
     cout << " [person information] " << postMessage << endl;
 }
 
+Person* PersonManager::findByName(const string name) {
+    // for 문을 이용하여 persons에 저장된 각각(i)의 사람 객체에 대해
+    //     매개변수 name과 비교해서 동일한 이름을 가진 객체이면 해당 객체의 포인터(Person*)를 반환한다.
+    //     persons의 size(), at(i), at(i)->getName() 등의 멤버함수 활용하라.
+    // // 찾지 못한 경우
+	for(int i = 0; i < persons.size(); i++){
+		if(name == persons.at(i)->getName()){
+			return persons.at(i);
+		}
+	}
+	cout << name + ": NOT found" << endl;
+	return nullptr;
+}
+
 void PersonManager::display() { // Menu item 1
     int count = persons.size();
     cout << "display(): count " << count << endl;
@@ -511,8 +556,15 @@ void PersonManager::clear() { // Menu item 3
     deleteElemets();
     display();
 }
-void PersonManager::login() { // Menu item 4
-    /* TODO 문제 [8] */
+void PersonManager::login() {
+    string name = UI::getNext("user name: ");
+    Person* p = findByName(name); // 해당 사람을 VectorPerson에서 찾는다.
+    if (p == nullptr) return;     // 해당 사람 존재하지 않음
+    string passwd = UI::getNextLine("password: ");
+    if (passwd != p->getPasswd()) // 비번 불일치
+        cout << "WRONG password!!" << endl;
+    else
+        CurrentUser(p).run();
 }
 
 void PersonManager::run() {

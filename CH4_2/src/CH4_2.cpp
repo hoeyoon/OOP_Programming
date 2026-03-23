@@ -364,6 +364,21 @@ public:
     void    push_back(Person* p); /* TODO 문제 [4, 7] */
 };
 
+void VectorPerson::extend_capacity() {
+    Person **saved_persons = pVector; // 기존의 pVector를 백업함
+    // allocSize 값을 두 배로 늘린 후 새로 pVector를 할당 받는다.
+    // for 문을 이용하여 count 개수만큼만
+    //     saved_persons[i]에 저장된 포인터를 새로 할당 받은 pVector[i]에 저장한다.
+    // saved_persons [배열] 메모리를 반납한다. (배열임을 명심할 것)
+    allocSize *= 2;
+    pVector = new Person*[allocSize];
+    for(int i = 0; i < count; i++){
+    	pVector[i] = saved_persons[i];
+    }
+    delete []saved_persons;
+    cout << "VectorPerson: capacity extended to " << allocSize << endl;
+}
+
 // capacity는 할당해야 할 배열 원소의 개수
 VectorPerson::VectorPerson(int capacity) : count{0}, allocSize{capacity} /* : TODO 문제 [2]: 멤버 초기화 */ {
     // allocSize = capacity, count = 0; 초기화를 위 함수 서두(위 /* */ 주석 사이)에서 할 것
@@ -379,6 +394,10 @@ VectorPerson::~VectorPerson() {
 
 void VectorPerson::push_back(Person *p){
 	if(count < allocSize){
+		pVector[count++] = p;
+	}
+	else{
+		extend_capacity();
 		pVector[count++] = p;
 	}
 }

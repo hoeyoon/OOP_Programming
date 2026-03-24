@@ -37,7 +37,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -424,13 +424,10 @@ VectorPerson::~VectorPerson() {
 }
 
 void VectorPerson::push_back(Person *p){
-	if(count < allocSize){
-		pVector[count++] = p;
-	}
-	else{
+	if(count > allocSize){
 		extend_capacity();
-		pVector[count++] = p;
 	}
+	pVector[count++] = p;
 }
 
 /******************************************************************************

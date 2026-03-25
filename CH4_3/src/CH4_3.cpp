@@ -279,6 +279,28 @@ public:
     void run();
 };
 
+// 메모의 현 위치(pos = *ppos)에서 그 행의 끝을 찾은 후 행 전체를 별도의 string으로 구성해서 리턴함
+// string::npos는 해당 문자를 찾지 못했을 경우의 리턴 값이며 (-1)과 동일 값임
+string Memo::get_next_line(size_t* ppos) {
+    size_t pos = *ppos, end;
+
+    /*
+    TODO: string::find()를 이용해 행의 끝('\n') 위치를 찾아서(현재 행의 시작 위치는 pos임) end에 저장
+    */
+    end = mStr.find('\n', pos);
+
+    // 메모의 끝에 '\n'이 없을 경우: (end == string::npos)
+    end = (end == string::npos)? mStr.length() : end+1;
+    *ppos = end; // 다음 행의 시작 위치를 기록해 둠
+
+    /*
+    TODO: 찾은 현재 행을 string::substr()으로 발췌해서 별도의 string으로 구성하여 리턴하라.
+          발췌할 단어 길이는 pos와 end로 간단히 계산할 수 있음
+    */
+    string subStr = mStr.substr(pos, end - pos);
+	return subStr;
+}
+
 string Memo::getNext(size_t* ppos) {
     size_t pos = *ppos, end;
     for ( ; pos < mStr.size() && isspace(mStr[pos]); ++pos) ; // 단어 앞의 공백 문자들 스킵(있을 경우)
@@ -363,6 +385,27 @@ void Memo::compareWord() {
     cout << "larger: " << larger << endl;
 }
 
+// 메모 텍스트 mStr를 한 행씩 잘라서 행 번호와 함께 화면에 보여즘; 행 번호는 0부터 시작함
+void Memo::dispByLine() {
+    cout << "--- Memo by line ---" << endl;
+    /*
+    아래 pos는 get_next_line(&pos)를 호출할 때 다음 행의 시작 위치임
+    TODO: for(size_t pos = 0, ... 문을 이용하여 pos가 mStr의 길이보다 작을 동안 반복 수행
+             get_next_line(&pos)를 호출하여 반환된 다음 행 문자열을 line에 저장하고
+             적절한 행 번호와 함께 해당 행(line)을 출력(행번호 출력은 PersonManager::display() 참조)
+             행의 끝에 줄바꾸기 문자 '\n'가 없을 경우 endl 출력 (displayMemo() 참조)
+    */
+    string line;
+    int count = 0;
+    for (size_t pos = 0; (line = get_next_line(&pos)) != ""; ) {
+        cout << "[" << count << "] " << line;
+        if (line.length() > 0 && line[line.length()-1] != '\n')
+            cout << endl; // 메모 끝에 줄바꾸기 문자가 없을 경우 출력
+        count++;
+    }
+    cout << "--------------------" << endl;
+}
+
 // 아래 R"( 와 )"는 그 사이에 있는 모든 문자를 하나의 문자열로 취급하라는 의미이다.
 // 따라서 행과 행 사이에 있는 줄바꾸기 \n 문자도 문자열에 그대로 포함된다.
 // 이런 방식을 사용하지 않으면 여러 행에 걸친 문자열을 만들려면 복잡해진다.
@@ -384,7 +427,7 @@ void Memo::run() {
     // TODO 문제 [1]: func_arr[], menuCount 선언
     using func_t = void (Memo::*)();
     func_t func_arr[] = {
-        nullptr, &Memo::displayMemo, &Memo::findString, &Memo::compareWord,
+        nullptr, &Memo::displayMemo, &Memo::findString, &Memo::compareWord, &Memo::dispByLine,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

@@ -37,7 +37,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -279,6 +279,31 @@ public:
     void run();
 };
 
+string Memo::getNext(size_t* ppos) {
+    size_t pos = *ppos, end;
+    for ( ; pos < mStr.size() && isspace(mStr[pos]); ++pos) ; // 단어 앞의 공백 문자들 스킵(있을 경우)
+    end = pos; // pos는 단어의 시작 위치이고 end는 단어의 끝 다음 위치이다.
+    if (end < mStr.size() && ispunct(mStr[end])) // 첫 글자가 구두점일 경우
+        ++end;
+    else { // 단어의 끝을 찾음
+        for ( ; end < mStr.size() && !isspace(mStr[end]) &&
+                !ispunct(mStr[end]); ++end) ;
+    }
+    *ppos = end; // 다음 단어의 시작 위치를 기록해 둠
+    /*
+    TODO: string::substr()을 이용해서 찾은 단어를 발췌해서 별도의 string으로 구성하여 리턴하라.
+          mStr의 끝에 도착하여 더 이상 찾을 단어가 없을 경우 "" 문자열을 반환하게 된다.
+          발췌할 단어의 길이는 pos와 end의 간단한 계산으로 구할 수 있다.
+    */
+    string subStr = mStr.substr(pos, end - pos);
+    if(pos == end){
+    	return "";
+    }
+    else{
+    	return subStr;
+    }
+}
+
 void Memo::displayMemo() { // Menu item 1
     cout << "------- Memo -------" << endl;
     cout << mStr;
@@ -310,6 +335,34 @@ void Memo::findString(){
     cout << "Found count: " << count << endl;
 }
 
+void Memo::compareWord() {
+    string next, word = UI::getNext("Word to compare? ");
+    int less = 0, same = 0, larger = 0;
+    /*
+    아래 pos는 getNext(&pos)를 호출할 때 다음 단어를 찾아야 할 시작 위치임
+    TODO: for(size_t pos = 0; getNext(&pos)를 호출하여 mStr의 끝까지 반복 수행; )
+             위 getNext(&pos)를 호출시 리턴된 다음 단어를 next에 저장한 후
+             next가 ""일 경우 mStr의 끝을 의미하므로 for문 종료
+             ""가 아닌 경우 찾을 단어인 word와 비교(<, >, ==)하여
+             적절한 less, same, larger 변수의 값을 증가시킨다.
+    */
+    for(size_t pos = 0; (next = getNext(&pos)) != ""; ){
+    	if(next < word){
+    		less++;
+    	}
+    	else if(next == word){
+    		same++;
+    	}
+    	else if(next > word){
+    		larger++;
+    	}
+    }
+
+    cout << "less: "   << less   << endl;
+    cout << "same: "   << same   << endl;
+    cout << "larger: " << larger << endl;
+}
+
 // 아래 R"( 와 )"는 그 사이에 있는 모든 문자를 하나의 문자열로 취급하라는 의미이다.
 // 따라서 행과 행 사이에 있는 줄바꾸기 \n 문자도 문자열에 그대로 포함된다.
 // 이런 방식을 사용하지 않으면 여러 행에 걸친 문자열을 만들려면 복잡해진다.
@@ -331,7 +384,7 @@ void Memo::run() {
     // TODO 문제 [1]: func_arr[], menuCount 선언
     using func_t = void (Memo::*)();
     func_t func_arr[] = {
-        nullptr, &Memo::displayMemo, &Memo::findString,
+        nullptr, &Memo::displayMemo, &Memo::findString, &Memo::compareWord,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =
@@ -857,8 +910,8 @@ public:
  ******************************************************************************/
 
 void run() {
-    // MainMenu().run();
-	Memo().run();
+    MainMenu().run();
+//	Memo().run();
 
     // MainMenu 타입의 이름 없는 임시객체를 생성한 후
     // 그 객체의 run() 멤버함수를 호출함; run()에서 리턴한 후에는 임시객체가 자동 소멸됨

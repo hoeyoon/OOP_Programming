@@ -37,7 +37,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -301,6 +301,41 @@ string Memo::get_next_line(size_t* ppos) {
 	return subStr;
 }
 
+bool Memo::find_line(int line_num, size_t* pstart, size_t* plen) {
+    size_t start = 0;
+    /*
+    TODO: for 문을 이용해 line_num번 반복 수행 (0 행에서 line_num-1 행까지 반복)
+              string::find()를 이용해 start에서부터 행의 끝('\n')을 찾고,
+              find()의 리턴된 값을 다시 start에 저장
+              행의 끝을 찾지 못했을 경우(line_num 행까지 진행하지 못한 경우) 즉,
+              find()의 반환된 값 start가 string::npos이면
+                  여기서 false 리턴함 (line_num행을 찾지 못한 경우)
+              start 값을 1 증가시켜 다음 행의 시작 위치로 조정
+	*/
+    for(int i = 0; i < line_num; i++){
+    	start = mStr.find('\n', start);
+    	if(start == string::npos){
+    		return false;
+    	}
+    	start++;
+    }
+    *pstart = start; // line_num 행의 시작 위치를 기록
+
+//    TODO: line_num 행의 끝 위치를 찾고,
+//          찾았으면 그 행의 길이를 계산하여 *plen에 저장
+//          찾지 못한 경우 string::npos를 *plen에 저장 /* 예를들어, 실제로 행이
+//              [0], [1], [2] 행까지 있는데 [3] 행의 시작(메모의 끝 위치)을 찾을 경우에 해당함 */
+    size_t end = mStr.find('\n', start);
+    if(end == string::npos){
+    	*plen = string::npos;
+    }
+    else{
+    	*plen = end - start + 1;
+    }
+
+    return true; // line_num 행을 찾았다는 것을 의미함
+}
+
 string Memo::getNext(size_t* ppos) {
     size_t pos = *ppos, end;
     for ( ; pos < mStr.size() && isspace(mStr[pos]); ++pos) ; // 단어 앞의 공백 문자들 스킵(있을 경우)
@@ -406,6 +441,25 @@ void Memo::dispByLine() {
     cout << "--------------------" << endl;
 }
 
+void Memo::deleteLine() {
+    size_t start, len, line_num = UI::getPositiveInt("Line number to delete? ");
+    /*
+    TODO: 만약 line_num 행을 찾지 못한 경우
+          ( 즉, mStr이 비어 있거나 또는
+            find_line(line_num,&start,&len) 호출하여 line_num 행을 못 찾았거나(false) 또는
+            찾았지만(true) 행의 시작 위치인 start가 메모 텍스트의 끝인 경우(start == mStr.size()) )
+              "Out of line range" 문장 출력
+          line_num 행을 찾은 경우 mStr에서 해당 행을 삭제한 후 dispByLine() 호출
+    */
+    if(find_line(line_num, &start, &len) == false || start == mStr.size()){
+    	cout << "Out of line range" << endl;
+    	return;
+    }
+    mStr.erase(start, len);
+
+    dispByLine();
+}
+
 // 아래 R"( 와 )"는 그 사이에 있는 모든 문자를 하나의 문자열로 취급하라는 의미이다.
 // 따라서 행과 행 사이에 있는 줄바꾸기 \n 문자도 문자열에 그대로 포함된다.
 // 이런 방식을 사용하지 않으면 여러 행에 걸친 문자열을 만들려면 복잡해진다.
@@ -428,6 +482,7 @@ void Memo::run() {
     using func_t = void (Memo::*)();
     func_t func_arr[] = {
         nullptr, &Memo::displayMemo, &Memo::findString, &Memo::compareWord, &Memo::dispByLine,
+		&Memo::deleteLine,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =
@@ -953,8 +1008,8 @@ public:
  ******************************************************************************/
 
 void run() {
-    MainMenu().run();
-//	Memo().run();
+//	MainMenu().run();
+	Memo().run();
 
     // MainMenu 타입의 이름 없는 임시객체를 생성한 후
     // 그 객체의 run() 멤버함수를 호출함; run()에서 리턴한 후에는 임시객체가 자동 소멸됨

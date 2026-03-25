@@ -46,7 +46,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 class Person
 {
     string name;	        // 이름
-    string passwd;
+    string passwd;			// 비번
     int    id;              // Identifier
     double weight;          // 체중
     bool   married;         // 결혼여부

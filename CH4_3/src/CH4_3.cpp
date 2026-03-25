@@ -336,6 +336,21 @@ bool Memo::find_line(int line_num, size_t* pstart, size_t* plen) {
     return true; // line_num 행을 찾았다는 것을 의미함
 }
 
+// 마지막 행의 시작 위치를 찾아서 반환함
+size_t Memo::find_last_line() {
+    for (size_t start = 0, pos = 0; true; start = pos) {
+    	/*
+        TODO: start 위치 이후로 행 끝을 찾아 pos에 저장
+              행 끝을 못 찾았거나 또는 ++pos가 mStr의 길이와 같으면(마지막 행) start 값 리턴
+		*/
+    	pos = mStr.find('\n', start);
+    	if(pos == string::npos || ++pos == mStr.length()){
+    		return start;
+    	}
+    }
+}
+
+
 string Memo::getNext(size_t* ppos) {
     size_t pos = *ppos, end;
     for ( ; pos < mStr.size() && isspace(mStr[pos]); ++pos) ; // 단어 앞의 공백 문자들 스킵(있을 경우)
@@ -498,6 +513,22 @@ void Memo::scrollUp() {
     dispByLine();
 }
 
+void Memo::scrollDown() {
+	/*
+    size_t last = (find_last_line()을 호출하여 마지막 행의 시작 위치를 찾음)
+    size_t len = (last와 mStr의 길이를 이용하여 마지막 행의 길이 계산)
+    마지막 행을 서브 string으로 발췌하여 별도 저장
+    마지막 행 삭제
+    발췌했던 마지막 행을 맨 처음에 삽입한 후 dispByLine() 호출
+    */
+	size_t last = find_last_line();
+	size_t len = mStr.length() - last;
+	string subStr = mStr.substr(last, len);
+	mStr.erase(last, len);
+	mStr.insert(0, subStr);
+	dispByLine();
+}
+
 // 아래 R"( 와 )"는 그 사이에 있는 모든 문자를 하나의 문자열로 취급하라는 의미이다.
 // 따라서 행과 행 사이에 있는 줄바꾸기 \n 문자도 문자열에 그대로 포함된다.
 // 이런 방식을 사용하지 않으면 여러 행에 걸친 문자열을 만들려면 복잡해진다.
@@ -520,7 +551,7 @@ void Memo::run() {
     using func_t = void (Memo::*)();
     func_t func_arr[] = {
         nullptr, &Memo::displayMemo, &Memo::findString, &Memo::compareWord, &Memo::dispByLine,
-		&Memo::deleteLine, &Memo::replaceLine, &Memo::scrollUp,
+		&Memo::deleteLine, &Memo::replaceLine, &Memo::scrollUp, &Memo::scrollDown,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

@@ -37,7 +37,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -87,7 +87,7 @@ public:
     bool isSame(const string name, int id);         // ch3_2에서 추가
 };
 
-Person::Person(): Person{""} {
+Person::Person(): Person("") {
     // 위 함수 서두(:와 함수 본체 사이)에서 각 멤버를 초기화하는데 이는 함수 진입하기 전에
     // 각 멤버의 값을 초기화하는 것이다. {}는 각 데이타 타입별로 디폴트 값으로 초기화하라는 의미임.
     // 즉, name[]={'\0'}="", id=0, weight=0.0, married=false, address[]={'\0'}=""
@@ -306,7 +306,11 @@ than the native warrior of North America.
 void Memo::run() {
 
     // TODO 문제 [1]: func_arr[], menuCount 선언
-
+    using func_t = void (Memo::*)();
+    func_t func_arr[] = {
+        nullptr, &Memo::displayMemo,
+    };
+    int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =
         "++++++++++++++++++++++ Memo Management Menu +++++++++++++++++++++\n"
         "+ 0.Exit 1.DisplayMemo 2.FindString 3.CompareWord 4.DispByLine  +\n"
@@ -316,9 +320,11 @@ void Memo::run() {
     if (mStr == "") mStr = memoData;// 멤버 mStr이 비었을 경우 위 memoData로 초기화한다.
 
     // TODO 문제 [1]: while 문장 삽입하여 선택된 메뉴항목 실행하는 함수 호출
-
-    cout << menuStr; // TODO 문제 [1]: 이 두 문장은 삭제될 예정임
-    cout << mStr;    // TODO 문제 [1]
+    while (true) {
+        int menuItem = UI::selectMenu(menuStr, menuCount);
+        if (menuItem == 0) return;
+        (this->*func_arr[menuItem])();
+    }
 }
 
 /******************************************************************************

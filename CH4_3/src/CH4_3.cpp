@@ -51,6 +51,7 @@ class Person
     double weight;          // 체중
     bool   married;         // 결혼여부
     char   address[40];     // 주소
+    char   memo_c_str[1024]; // 메모장
 
 protected:
     void inputMembers(istream* in);
@@ -72,6 +73,7 @@ public:
     	/* ch3_1.cpp의 동일 함수를 복사하라. */
     	strcpy(this->address, address);
     }
+    void setMemo(const char* c_str)      { strcpy(memo_c_str, c_str); }
 
     string 		getName()    { return name; }
     string		getPasswd()	 { return passwd; }
@@ -79,6 +81,7 @@ public:
     double      getWeight()  { /* TODO: [문제 2] */ return weight; }  // 구현 시
     bool        getMarried() { /* TODO: [문제 2] */ return married; }  // 리턴 값들을
     const char* getAddress() { /* TODO: [문제 2] */ return address; } // 수정하시오.
+    const char* getMemo()    { return memo_c_str; }
 
     void input(istream* pin)  { inputMembers(pin); } // ch3_2에서 추가
     void print(ostream* pout) { printMembers(pout); }
@@ -101,7 +104,7 @@ Person::Person(const string name) : Person{name, 0, 0, false, ""} /* : TODO [문
 
 Person::Person(const string name, int id, double weight, bool married,
                const char *address) :
-        name{name}, id{id}, weight{weight}, married{married} {
+        name{name}, id{id}, weight{weight}, married{married}, memo_c_str{} {
     // 위에서 각 멤버를 초기화하는 {}는 각 매개변수 값을 객체의 상응하는 멤버에 설정하는 것이다. 즉,
     // this->id=id, this->weight=weight, this->married=married와 동일하다.
     // 여기서 this는 해당 객체를 포인터하는 포인터 변수이며, (다음 장에서 설명될 예정임)
@@ -266,8 +269,8 @@ class Memo
 public:
     string getNext(size_t* ppos);
     void displayMemo();
-    const char *get_c_str();
-    void set_c_str(const char *c_str);
+    const char *get_c_str() { return mStr.c_str(); }
+    void set_c_str(const char *c_str) { mStr = c_str; }
     void findString();
     void compareWord();
     void dispByLine();
@@ -529,6 +532,33 @@ void Memo::scrollDown() {
 	dispByLine();
 }
 
+void Memo::inputMemo() {
+
+    // TODO: 기존 mStr의 문자열을 모두 삭제하고, 크기를 0으로 만듦
+	mStr.clear();
+
+    string line;
+    cout << "--- Input memo lines, and then input empty line at the end ---" << endl;
+    while (true) {
+    	/*
+        TODO: getline(cin, line)을 사용하여 키보드로부터 한 줄을 입력 받아 line에 저장
+              if (UI::echo_input) cout << line << endl; // 자동체크 때 실행됨
+              입력 받은 한 행이 빈 줄이면 리턴함
+              입력 받은 행 끝에 "\n"을 추가
+              입력 받은 행을 mStr의 끝에 추가
+		*/
+    	getline(cin, line);
+    	if(UI::echo_input){
+    		cout << line << endl;
+    	}
+    	if(line == ""){
+    		return;
+    	}
+    	line.append("\n");
+    	mStr.append(line);
+    }
+}
+
 // 아래 R"( 와 )"는 그 사이에 있는 모든 문자를 하나의 문자열로 취급하라는 의미이다.
 // 따라서 행과 행 사이에 있는 줄바꾸기 \n 문자도 문자열에 그대로 포함된다.
 // 이런 방식을 사용하지 않으면 여러 행에 걸친 문자열을 만들려면 복잡해진다.
@@ -551,7 +581,7 @@ void Memo::run() {
     using func_t = void (Memo::*)();
     func_t func_arr[] = {
         nullptr, &Memo::displayMemo, &Memo::findString, &Memo::compareWord, &Memo::dispByLine,
-		&Memo::deleteLine, &Memo::replaceLine, &Memo::scrollUp, &Memo::scrollDown,
+		&Memo::deleteLine, &Memo::replaceLine, &Memo::scrollUp, &Memo::scrollDown, &Memo::inputMemo,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =
@@ -645,8 +675,13 @@ void CurrentUser::changePasswd() {
     cout << "Password changed" << endl;
 }
 
+// Person 객체에 저장되어 있던 메모 내용을 memo 객체로 복사하고
+// 메모 메뉴에서 메모의 추가, 삭제, 교체 등의 조작이 끝나고 나면 (memo.run())
+// 반대로 memo에 있던 메모 내용을 다시 Person 객체로 복사한다.
 void CurrentUser::manageMemo() { // Menu item 9
+    memo.set_c_str(pUser->getMemo());
     memo.run();
+    pUser->setMemo(memo.get_c_str());
 }
 
 void CurrentUser::run() {
@@ -1077,8 +1112,8 @@ public:
  ******************************************************************************/
 
 void run() {
-//	MainMenu().run();
-	Memo().run();
+	MainMenu().run();
+//	Memo().run();
 
     // MainMenu 타입의 이름 없는 임시객체를 생성한 후
     // 그 객체의 run() 멤버함수를 호출함; run()에서 리턴한 후에는 임시객체가 자동 소멸됨

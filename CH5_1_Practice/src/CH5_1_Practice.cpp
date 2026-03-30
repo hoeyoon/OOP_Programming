@@ -20,8 +20,8 @@ public:
     void setTitle(string title);
     string getTitle();
     void printIntArray();
-    void newIntArray();
-    void inputIntArray();
+    Container& newIntArray();
+    Container& inputIntArray();
 };
 
 Container::Container() : Container("no-title"){ }
@@ -57,18 +57,20 @@ void Container::printIntArray() {
     cout << endl;
 }
 
-void Container::newIntArray() {
+Container& Container::newIntArray() {
     if (arr != nullptr)
         delete [] arr;
     cout << "element numbers of int array[]? ";
     cin >> size;
     arr = new int[size];
+    return *this;
 }
 
-void Container::inputIntArray() {
+Container& Container::inputIntArray() {
     cout << "input " << size << " integers: ";
     for (int i = 0; i < size; ++i)
         cin >> arr[i];
+    return *this;
 }
 
 /******************************************************************************
@@ -119,6 +121,8 @@ void refRet1() {
 }
 
 void refRet2() {
+    Container c("C");
+    c.newIntArray().inputIntArray().printIntArray();
 }
 
 void explicitCopy() {

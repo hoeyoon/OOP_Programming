@@ -150,6 +150,13 @@ void explicitCopy() {
 }
 
 void implicitCopy() {
+    Container a("A", 2);
+    a.inputIntArray().printIntArray();
+    cout << "---" << endl;
+    Container b = a; // 자동으로 복사생성자 호출
+    b.setTitle("B");
+    b.inputIntArray().printIntArray();
+    cout << "---" << endl;
 }
 
 string menuStr =

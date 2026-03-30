@@ -973,12 +973,21 @@ public:
     // u는 일반 생성자, backup은 복사생성자를 이용하여 멤버를 초기화
     CopyConstructor(): u("u", 1, 70, true, "Gwangju"), backup(u) { }
 
+    void explicitCopyConstructor() { // Menu item 1
+        cout << "u: "; u.println();
+        Person p(u);
+        p.set("p", 2, 80, false, "Seoul");
+        cout << "u: "; u.println();
+        cout << "p: "; p.println();
+        // 함수 리턴 시 객체 p의 소멸자가 실행됨
+    }
+
     void run() {
     	using func_t = void (CopyConstructor::*)();
-        //using CC = CopyConstructor;
+        using CC = CopyConstructor;
 
         func_t func_arr[] = {
-        		nullptr,
+        		nullptr, &CC::explicitCopyConstructor,
         };
 
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);

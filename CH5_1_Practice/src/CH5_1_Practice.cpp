@@ -29,7 +29,7 @@ Container::Container() { }
 Container::Container(string title) : Container(title, 0){ }
 
 Container::Container(string title, int size) {
-    arr = nullptr; this->size = size; // 추후 수정할 것
+    arr = nullptr; this->size = size; this->title = title;// 추후 수정할 것
     if(size > 0){
     	arr = new int[size]{0};
     }

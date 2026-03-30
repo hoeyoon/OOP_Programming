@@ -43,6 +43,7 @@ public:
     bool push(const Point& item);
     Point& front();
     Point& back();
+	void pop();
 };
 
 //-------------------------------------------------
@@ -73,6 +74,14 @@ Point& Queue::back(){
 	return elements[idx];
 }
 
+void Queue::pop(){
+	if(count == 0){
+		return;
+	}
+	frontIdx = (frontIdx + 1) % capacity;
+	count--;
+}
+
 //-------------------------------------------------
 // 아래 함수들은 문제에서 제시한 코드로 대체하시오.
 //-------------------------------------------------
@@ -89,6 +98,14 @@ void swap(Queue& queue) {
 }
 // 큐의 일부 원소들을 출력한 후 삭제한다.
 void pop(Queue& queue) {
+    cout << "half pop: ";
+    int count = queue.size() / 2;
+    for (int i = 0; i < count; ++i) {
+        queue.front().print();
+        queue.pop();
+    }
+    cout << endl;
+    queue.print();
 }
 // 아래 함수의 매개변수는 call by value 이다.
 void printQueue(Queue q) { // 함수 수정 금지

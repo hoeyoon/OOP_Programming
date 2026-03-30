@@ -24,7 +24,7 @@ public:
     void inputIntArray();
 };
 
-Container::Container() { }
+Container::Container() : Container("no-title"){ }
 
 Container::Container(string title) : Container(title, 0){ }
 
@@ -78,6 +78,7 @@ void Container::inputIntArray() {
 void refParam() {
     Container c("C", 3);
     Container b("B");
+    Container a;
 }
 
 void refRet1() {

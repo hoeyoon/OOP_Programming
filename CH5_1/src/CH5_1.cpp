@@ -1042,12 +1042,67 @@ public:
         cout << "return_member_object() returned" << endl;
     }
 
+    Person return_local_object() { // Menu item 4-1
+        Person pL("pL", 0, 70, true, "Gwangju Nam-gu");
+        cout << "return_local_object() returns pL" << endl;
+        return pL;
+        // 정석대로 하면 리턴하기 전에 복사생성자를 호출하여 지역 객체 pL를 복사해 준 후
+        // 리턴 직전에 pL를 소멸해야 한다.
+        // 그러나 컴파일러는 효율적인 실행을 위해 복사생성자와 소멸자를 호출하지 않고
+        // 함수가 리턴한 후 return_local_object().println() 호출 시
+        // 함수의 지역 객체 pL의 메모리를 그대로 재사용한다. (소멸되지 않았으므로)
+        // println() 실행 후 더 이상 객체가 필요 없으면 그제서야 소멸자를 호출하여 소멸시킴
+    }
+
+    Person return_temporary_object() { // Menu item 4-2
+        cout << "return_temporary_object() returns Person(pT, 0, 70, true, Gwangju Nam-gu)" << endl;
+        return Person("pT", 0, 70, true, "Gwangju Nam-gu"); // 임시 객체를 리턴함
+        // return {"p", 0, 70, true, "Gwangju Nam-gu"}; // 위 문장과 동일한 기능임
+        // 위 문장은 컴파일러가 함수의 리턴 타입을 참고하여
+        //   Person("p", 0, 70, true, "Gwangju Nam-gu")으로 자동 처리함
+    }
+
+    void temporaryObject() { // Menu item 4
+        cout << "temporary object 1: Person(p0, 10, 70, true, Gwangju)" << endl;
+        // 임시객체 생성 방법: 클래스이름(생성자 인자들)
+        // 생성자 호출된 후 아래 문장이 끝나면 바로 소멸자가 호출됨
+        // 주요: 임시 객체가 포함된 해당 문장의 실행이 종료되면 임시 객체는 소멸됨
+        Person("p0", 10, 70, true, "Gwangju");
+
+        cout << "\ntemporary object 2: Person(p1, 11, 60, false, Seoul).println()" << endl;
+        // 임시객체: 생성자 호출, println() 호출, 소멸자 호출
+        Person("p1", 11, 60, false, "Seoul").println();
+
+        cout << "\nreturn_member_object().println()" << endl;
+        return_member_object().println(); // 복사 생성자 활용
+        cout << "return_member_object() returned" << endl;
+
+        cout << "\nreturn_local_object().println()" << endl;
+        return_local_object().println(); // 복사 생성자 사용하지 않음
+        cout << "return_local_object() returned" << endl;
+
+        cout << "\nPerson pL = return_local_object()" << endl;
+        Person pL = return_local_object(); // 복사 생성자 활용
+        cout << "return_local_object() returned" << endl;
+        pL.println();
+
+        cout << "\nreturn_temporary_object().println()" << endl;
+        return_temporary_object().println();  // 생성자 활용
+        cout << "return_temporary_object() returned" << endl;
+
+        cout << "\nPerson pT = return_temporary_object()" << endl;
+        Person pT = return_temporary_object();  // 생성자 활용
+        cout << "return_temporary_object() returned" << endl;
+        pT.println();
+    }
+
     void run() {
     	using func_t = void (CopyConstructor::*)();
         using CC = CopyConstructor;
 
         func_t func_arr[] = {
         		nullptr, &CC::explicitCopyConstructor, &CC::referenceVariable, &CC::implicitCopyConstructor,
+				&CC::temporaryObject,
         };
 
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);

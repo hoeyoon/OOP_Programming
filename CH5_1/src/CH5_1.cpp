@@ -982,12 +982,32 @@ public:
         // 함수 리턴 시 객체 p의 소멸자가 실행됨
     }
 
+    void referenceVariable() { // Menu item 2
+        cout << "p: ";
+        Person p(u);
+        Person &r = p;
+
+        cout << "p: "; p.println();         // r은 참조이고 u와 동일한 객체를 공유하므로
+        cout << "r: "; r.println();         // 두 출력물은 동일한 객체를 출력함
+
+        r.set("r", 2, 80, false, "Seoul");
+
+        cout << "p: "; p.println();
+        cout << "r: "; r.println();
+
+        p.set("p", 1, 70, true, "Gwangju");
+
+        cout << "p: "; p.println();
+        cout << "r: "; r.println();
+        // r은 객체 p를 공유하는 참조이므로 함수 리턴 시 소멸자가 실행되지 않음
+    }
+
     void run() {
     	using func_t = void (CopyConstructor::*)();
         using CC = CopyConstructor;
 
         func_t func_arr[] = {
-        		nullptr, &CC::explicitCopyConstructor,
+        		nullptr, &CC::explicitCopyConstructor, &CC::referenceVariable,
         };
 
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);

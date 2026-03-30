@@ -126,6 +126,15 @@ void refRet2() {
 }
 
 void explicitCopy() {
+    Container c1("c1", 4);
+    c1.inputIntArray().printIntArray();
+    cout << "---" << endl;
+    Container c2(c1);
+    c2.setTitle("c2");
+    c2.printIntArray();
+    cout << "---" << endl;
+    c2.inputIntArray().printIntArray();
+    c1.printIntArray();
 }
 
 void implicitCopy() {

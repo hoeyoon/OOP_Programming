@@ -149,6 +149,12 @@ void explicitCopy() {
     c1.printIntArray();
 }
 
+void callByValue(Container v) {
+    cout << "callByValue" << endl;
+    v.setTitle("V");
+    v.inputIntArray().printIntArray();
+}
+
 void implicitCopy() {
     Container a("A", 2);
     a.inputIntArray().printIntArray();
@@ -156,6 +162,8 @@ void implicitCopy() {
     Container b = a; // 자동으로 복사생성자 호출
     b.setTitle("B");
     b.inputIntArray().printIntArray();
+    cout << "---" << endl;
+    callByValue(a); // 자동으로 복사생성자 호출
     cout << "---" << endl;
 }
 

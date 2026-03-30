@@ -1143,13 +1143,92 @@ public:
         cout << endl; // 단순히 u의 주소값, 즉 포인터가 전달됨
     }
 
+    Person return_value() {                   // return value
+		return u;
+	}
+
+   void return_value_test() { // Menu item 6-1
+		cout << "--- return_value_test() ---" << endl;
+		cout << "call return_value()" << endl;
+		cout << "p: ";
+
+		Person p = return_value();
+
+		cout << "return_value() returned" << endl;
+		cout << "p: "; p.println();
+		cout << "p.set(p, 2, 80, false, Seoul)" << endl;
+		p.set("p", 2, 80, false, "Seoul");
+		cout << "p: "; p.println();        // 두 객체의 name은 다른 값임
+		cout << "u: "; u.println();
+		// 함수 리턴 시 지역변수 p 객체의 소멸자 함수가 호출됨
+	}
+
+    Person &return_reference() {                  // return reference
+    	return u;
+	}
+
+	void return_reference_test() { // Menu item 6-2
+		cout << "--- return_reference_test() ---" << endl;
+		cout << "call return_reference()" << endl;
+		cout << "p: ";
+
+		Person p = return_reference();
+
+		cout << "return_reference() returned" << endl;
+		cout << "p.set(p, 2, 80, false, Seoul)" << endl;
+		p.set("p", 2, 80, false, "Seoul");
+		cout << "p: "; p.println();
+		cout << "u: "; u.println();
+		cout << endl;
+
+		cout << "call return_reference()" << endl;
+
+		Person& r = return_reference(); // r는 리턴된 u의 참조를 저장하고 있는 참조변수임
+		cout << "return_reference() returned" << endl;
+		cout << "u: "; u.println();
+		cout << "r.set(p, 2, 80, false, Seoul)" << endl;
+		r.set("r", 2, 80, false, "Seoul");
+		cout << "r: "; r.println();
+		cout << "u: "; u.println();
+		u = backup;
+		// 함수 리턴 시 지역 객체 p의 경우 소멸자 함수가 호출되지만
+		//           참조 변수 r는 소멸자가 호출되지 않음
+	}
+
+    Person *return_address() {                  // return address
+    	return &u;
+    }
+
+	void return_address_test() { // Menu item 6-3
+		cout << "--- return_address_test() ---" << endl;
+		cout << "call return_address()" << endl;
+
+		Person *p = return_address();
+
+		cout << "return_address() returned" << endl;
+		cout << "p: "; p->println();
+		cout << "u: "; u.println();
+		cout << "p.set(p, 2, 80, false, Seoul)" << endl;
+		p->set("p", 2, 80, false, "Seoul"); // p는 u 객체를 포인터하므로 u과 동일한 메모리를 공유함
+		cout << "p: "; p->println();
+		cout << "u: "; u.println();
+		u = backup;
+		// 함수 리턴 시 p는 포인터 변수이므로 소멸자가 호출되지 않음
+	}
+
+	void returnDataType() { // Menu item 6
+		return_value_test();        cout << endl;
+		return_reference_test();    cout << endl;
+		return_address_test();
+	}
+
     void run() {
     	using func_t = void (CopyConstructor::*)();
         using CC = CopyConstructor;
 
         func_t func_arr[] = {
         		nullptr, &CC::explicitCopyConstructor, &CC::referenceVariable, &CC::implicitCopyConstructor,
-				&CC::temporaryObject, &CC::functionParameterType,
+				&CC::temporaryObject, &CC::functionParameterType, &CC::returnDataType,
         };
 
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);

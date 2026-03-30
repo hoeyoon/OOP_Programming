@@ -75,10 +75,25 @@ void Container::inputIntArray() {
  * Global functions
  ******************************************************************************/
 
+void skipEnter() {
+    string s;
+    getline(cin, s); // 메뉴항목 번호 뒤의 [엔터]를 제거함
+}
+
+void inputTitle(Container &ref){
+	cout << "input title: ";
+	string s;
+	getline(cin, s);
+	ref.setTitle(s);
+}
+
 void refParam() {
     Container c("C", 3);
     Container b("B");
     Container a;
+    Container d;
+    skipEnter();
+    inputTitle(d);
 }
 
 void refRet1() {

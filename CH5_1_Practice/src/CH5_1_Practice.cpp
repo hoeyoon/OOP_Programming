@@ -29,7 +29,10 @@ Container::Container() { }
 Container::Container(string title) { }
 
 Container::Container(string title, int size) {
-    arr = nullptr; this->size = 0; // 추후 수정할 것
+    arr = nullptr; this->size = size; // 추후 수정할 것
+    if(size > 0){
+    	arr = new int[size]{0};
+    }
     cout << "Container(): "; printIntArray();
 }
 

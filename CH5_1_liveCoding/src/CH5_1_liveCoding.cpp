@@ -25,6 +25,17 @@ public:
         this->capacity = capacity;
         count = frontIdx = backIdx = 0;
     }
+    Queue(const Queue &ref){
+    	pname = new string(*ref.pname);
+    	elements = new Point[ref.capacity];
+    	for(int i = 0; i < ref.capacity; i++){
+    		elements[i] = ref.elements[i];
+    	}
+    	capacity = ref.capacity;
+    	count = ref.count;
+    	frontIdx = ref.frontIdx;
+    	backIdx = ref.backIdx;
+    }
     ~Queue() {
         delete pname;
         delete [] elements;

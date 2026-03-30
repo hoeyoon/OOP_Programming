@@ -15,6 +15,7 @@ public:
     Container();
     Container(string title);
     Container(string title, int size);
+    Container(const Container &ref);
     ~Container();
 
     void setTitle(string title);
@@ -34,6 +35,17 @@ Container::Container(string title, int size) {
     	arr = new int[size]{0};
     }
     cout << "Container(): "; printIntArray();
+}
+
+Container::Container(const Container &ref){
+    arr = nullptr; size = ref.size; title = ref.title;// 추후 수정할 것
+    if(size > 0){
+    	arr = new int[size];
+    	for(int i = 0; i < size; i++){
+    		arr[i] = ref.arr[i];
+    	}
+    }
+    cout << "Container(Container& c): "; printIntArray();
 }
 
 Container::~Container() {

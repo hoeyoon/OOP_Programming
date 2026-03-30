@@ -37,7 +37,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -736,9 +736,7 @@ public:
 PersonManager::PersonManager(Person* array[], int len) {
     cout << "PersonManager::PersonManager(array[], len)" << endl;
     for(int i = 0; i < len; i++){
-    	Person &s = *array[i];
-
-    	Person *temp = new Person(s.getName(), s.getId(), s.getWeight(), s.getMarried(), s.getAddress());
+    	Person *temp = new Person(*array[i]);
     	persons.push_back(temp);
     }
     display();

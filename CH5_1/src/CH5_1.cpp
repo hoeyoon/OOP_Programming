@@ -1222,13 +1222,20 @@ public:
 		return_address_test();
 	}
 
+    void inputPerson() { // Menu item 7
+    	cout << "u: "; u.println();
+        while (!UI::inputPerson(&u)) ;  // USER 11 88 false :DONG-GU, DAEGU:
+        backup = u;
+        cout << "u: "; u.println();
+    }
+
     void run() {
     	using func_t = void (CopyConstructor::*)();
         using CC = CopyConstructor;
 
         func_t func_arr[] = {
         		nullptr, &CC::explicitCopyConstructor, &CC::referenceVariable, &CC::implicitCopyConstructor,
-				&CC::temporaryObject, &CC::functionParameterType, &CC::returnDataType,
+				&CC::temporaryObject, &CC::functionParameterType, &CC::returnDataType, &CC::inputPerson,
         };
 
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);

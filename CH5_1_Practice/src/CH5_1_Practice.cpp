@@ -96,7 +96,20 @@ void refParam() {
     inputTitle(d);
 }
 
+Container& changeTitle(Container& rc) {
+    string s;
+    cout << "title to change: ";
+    getline(cin, s);
+    rc.setTitle(s);
+    return rc;       // rc의 원본 객체의 참조를 리턴함
+}
+
 void refRet1() {
+    skipEnter();
+    Container c("C");
+    Container& rc = changeTitle(c); // rc는 원본 객체 c의 데이타를 공유하는 참조변수임
+    cout << " c.getTitle(): " <<  c.getTitle() << endl;
+    cout << "rc.getTitle(): " << rc.getTitle() << endl;
 }
 
 void refRet2() {

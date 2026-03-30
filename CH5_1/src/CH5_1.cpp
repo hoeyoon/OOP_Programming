@@ -1096,13 +1096,60 @@ public:
         pT.println();
     }
 
+    void call_by_value(Person p) { // Menu item 5-1: call by value: 복사생성자에 의해 복사됨
+        cout << "p: "; p.println();
+        cout << "u: "; u.println();
+        cout << "p.set(p, 2, 80, false, Seoul)" << endl;
+        p.set("p", 2, 80, false, "Seoul");
+        cout << "p: "; p.println();      // p는 u과 다른 메모리를 사용하는 객체임
+        cout << "u: "; u.println(); // u은 영향을 받지 않음
+        // 함수 리턴 시 매개변수 p 객체의 소멸자 함수가 호출됨
+    }
+
+    void call_by_reference(Person &p) { // Menu item 5-2: call by reference
+        cout << "p: "; p.println();   // p는 u의 참조이므로 u와 동일한 객체 메모리를 공유함
+        cout << "u: "; u.println();
+        cout << "p.set(p, 2, 80, false, Seoul)" << endl;
+        p.set("p", 2, 80, false, "Seoul");
+        cout << "p: "; p.println();   // p와 u은 동일한 객체 메모리를 공유하므로 항상 내용이 동일함
+        cout << "u: "; u.println();
+        u = backup;       // u 값을 원래 값으로 복구
+        // 매개변수 p는 참조이므로 함수 리턴 시 소멸자가 호출되지 않음
+    }
+
+    void call_by_address(Person *p) { // Menu item 5-3: call by address
+        cout << "p: "; p->println();   // p는 u 메모리를 포인터하므로 동일한 내용이 출력됨
+        cout << "u: "; u.println();
+        cout << "p->set(p, 2, 80, false, Seoul)" << endl;
+        p->set("p", 2, 80, false, "Seoul");
+        cout << "p: "; p->println();   // p는 u 메모리를 포인터하므로 항상 동일한 내용이 출력됨
+        cout << "u: "; u.println();
+        u = backup;       // u 값을 원래 값으로 복구
+        // 매개변수 p는 포인터이므로 함수 리턴 시 소멸자가 호출되지 않음
+    }
+
+    void functionParameterType() { // Menu item 5
+        cout << "call_by_value" << endl;
+        // 함수 호출 시 복사생성자를 통해 u 객체를 매개변수 p에 복사
+        call_by_value(u);
+        cout << endl;
+
+        cout << "call_by_reference" << endl;
+        call_by_reference(u);
+        cout << endl; // 단순히 u의 참조만 전달됨
+
+        cout << "call_by_address" << endl;
+        call_by_address(&u);
+        cout << endl; // 단순히 u의 주소값, 즉 포인터가 전달됨
+    }
+
     void run() {
     	using func_t = void (CopyConstructor::*)();
         using CC = CopyConstructor;
 
         func_t func_arr[] = {
         		nullptr, &CC::explicitCopyConstructor, &CC::referenceVariable, &CC::implicitCopyConstructor,
-				&CC::temporaryObject,
+				&CC::temporaryObject, &CC::functionParameterType,
         };
 
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);

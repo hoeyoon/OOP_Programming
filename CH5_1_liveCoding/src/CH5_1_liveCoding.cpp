@@ -55,6 +55,9 @@ bool Queue::push(const Point& item) {
     // item을 elements[backIdx]에 저장한 후
     // 원형 큐이므로 backIdx = (backIdx+1) % capacity; 한 후
     // count 증가
+    elements[backIdx] = item;
+    backIdx = (backIdx + 1) % capacity;
+    count++;
     return true;
 }
 

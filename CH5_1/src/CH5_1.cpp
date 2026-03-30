@@ -1002,12 +1002,52 @@ public:
         // r은 객체 p를 공유하는 참조이므로 함수 리턴 시 소멸자가 실행되지 않음
     }
 
+    // 매개변수 a는 함수호출시 복사 생성자에 의해 복사되어 초기화됨; call by value로 매개변수를 선언하라.
+    void function_argument(Person a) { // Menu item 3-1
+        cout << "a: "; a.println();
+        cout << "a.setName(a)" << endl;
+        a.setName("a");
+        cout << "a: "; a.println();
+    }
+
+    Person return_member_object() { // Menu item 3-2
+    	return u;
+    }
+
+    void implicitCopyConstructor() { // Menu item 3
+        cout << "u: "; u.println();
+        cout << "\nimplicit copy constructor 1: operator =" << endl;
+        cout << "Person p = u" << endl;
+        cout << "p: ";
+
+        Person p = u;
+
+        cout << "p.setName(p)" << endl;
+        p.setName("p");
+        cout << "p: "; p.println();
+
+        cout << "\nimplicit copy constructor 2: function argument" << endl;
+        cout << "call function_argument(u)" << endl;
+
+        // 묵시적으로 복사 생성자를 호출하여 함수 인자를 복사하여 함수의 매개변수 a에 넘김
+        function_argument(u);
+        cout << "function_argument(u) returned" << endl;
+
+        cout << "\nimplicit copy constructor 3: return object" << endl;
+        cout << "call return_member_object().println()" << endl;
+        return_member_object().println();
+          // return_member_object()의 리턴 값을 복사생성자에 의해 임시객체(이름 없는 지역변수)에 복사하고
+          // 그 임시 객체의 println()을 호출하여 객체를 출력한다.
+          // 출력 후 더 이상 그 임시 객체가 필요 없기 때문에 소멸자를 호출하여 바로 임시 객체를 소멸시킴
+        cout << "return_member_object() returned" << endl;
+    }
+
     void run() {
     	using func_t = void (CopyConstructor::*)();
         using CC = CopyConstructor;
 
         func_t func_arr[] = {
-        		nullptr, &CC::explicitCopyConstructor, &CC::referenceVariable,
+        		nullptr, &CC::explicitCopyConstructor, &CC::referenceVariable, &CC::implicitCopyConstructor,
         };
 
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);

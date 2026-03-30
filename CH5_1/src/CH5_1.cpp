@@ -37,7 +37,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 /******************************************************************************
  * Person class
@@ -61,6 +61,7 @@ public:
     Person();
     Person(const string name);
     Person(const string name, int id, double weight, bool married, const char *address);
+    Person(const Person& p);
     ~Person();
 
     void set(const string name, int pid, double weight, bool married, const char *address);
@@ -109,6 +110,21 @@ Person::Person(const string name, int id, double weight, bool married,
     cout << "Person::Person(...):"; println();
 }
 
+Person::Person(const Person& p):
+    name(p.name), id(p.id), weight(p.weight), married(p.married) {
+    /*
+    TODO [문제1]: address와 memo_c_str 역시 setAddress(), setMemo()를 호출하여
+                 p의 상응하는 멤버를 복사해서 초기화하라.
+    */
+	setAddress(p.address);
+	setMemo(p.memo_c_str);
+    cout << "Person::Person(const Person&):"; println();
+}
+
+Person::~Person() {
+    cout << "Person::~Person():"; println();
+}
+
 void Person::set(const string name, int id, double weight,
 	bool married, const char *address) {
 	this->name = name;
@@ -140,9 +156,6 @@ bool Person::isSame(const string name, int id) {
 	return false; // 구현 시 수정하라.
 }
 
-Person::~Person() {
-    cout << "Person::~Person():"; println();
-}
 
 void Person::printMembers(ostream* pout)   {
 	*pout << name << " " << id << " " << weight << " " << married << " :" << address << ":";
@@ -723,9 +736,9 @@ public:
 PersonManager::PersonManager(Person* array[], int len) {
     cout << "PersonManager::PersonManager(array[], len)" << endl;
     for(int i = 0; i < len; i++){
-    	Person *s = array[i];
+    	Person &s = *array[i];
 
-    	Person *temp = new Person(s->getName(), s->getId(), s->getWeight(), s->getMarried(), s->getAddress());
+    	Person *temp = new Person(s.getName(), s.getId(), s.getWeight(), s.getMarried(), s.getAddress());
     	persons.push_back(temp);
     }
     display();
@@ -963,9 +976,14 @@ public:
     CopyConstructor(): u("u", 1, 70, true, "Gwangju"), backup(u) { }
 
     void run() {
+    	using func_t = void (CopyConstructor::*)();
         //using CC = CopyConstructor;
 
-        // TODO 문제 [3]: func_t, func_arr[], menuCount 선언
+        func_t func_arr[] = {
+        		nullptr,
+        };
+
+        int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 
         string menuStr =
             "+++++++++ Reference And Copy Constructor Menu ++++++++++\n"
@@ -975,12 +993,11 @@ public:
             "+ 7.inputPerson                                        +\n"
             "++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
-        // TODO 문제 [3]: while 문장 삽입하여 선택된 메뉴항목 실행하는 함수를 호출하라.
-        cout << menuStr;
-        u.println();
-        backup.setName("backup");
-        backup.println();
-        cout << "------------------" << endl;
+        while (true) {
+            int menuItem = UI::selectMenu(menuStr, menuCount);
+            if (menuItem == 0) return;
+            (this->*func_arr[menuItem])();
+        }
   }
 }; // ch5_1: Reference and CopyConstructor
 

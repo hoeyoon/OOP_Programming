@@ -26,7 +26,7 @@ public:
 
 Container::Container() { }
 
-Container::Container(string title) { }
+Container::Container(string title) : Container(title, 0){ }
 
 Container::Container(string title, int size) {
     arr = nullptr; this->size = size; // 추후 수정할 것
@@ -77,6 +77,7 @@ void Container::inputIntArray() {
 
 void refParam() {
     Container c("C", 3);
+    Container b("B");
 }
 
 void refRet1() {

@@ -110,6 +110,12 @@ void refRet1() {
     Container& rc = changeTitle(c); // rc는 원본 객체 c의 데이타를 공유하는 참조변수임
     cout << " c.getTitle(): " <<  c.getTitle() << endl;
     cout << "rc.getTitle(): " << rc.getTitle() << endl;
+    cout << "---" << endl;
+    cout << "appendTitle(c).getTitle(): " << changeTitle(rc).getTitle() << endl;
+    cout << "             c.getTitle(): " <<               c.getTitle() << endl;
+    cout << "            rc.getTitle(): " <<              rc.getTitle() << endl;
+    // changeTitle(rc)에 의해 반환되는 참조 역시 원본 객체 c의 데이타를 공유하는 참조변수임
+    // 참조 변수는 생성자 및 소멸자가 없다. 원본 객체의 데이터를 공유하는 또 다른 변수 이름일 뿐이다.
 }
 
 void refRet2() {

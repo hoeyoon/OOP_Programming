@@ -41,6 +41,8 @@ public:
         cout << endl;
     }
     bool push(const Point& item);
+    Point& front();
+    Point& back();
 };
 
 //-------------------------------------------------
@@ -61,12 +63,29 @@ bool Queue::push(const Point& item) {
     return true;
 }
 
+Point& Queue::front(){
+	return elements[frontIdx];
+}
+
+Point& Queue::back(){
+    int idx = backIdx-1;
+    if (idx < 0) idx = capacity-1; // 원형 큐이므로
+	return elements[idx];
+}
+
 //-------------------------------------------------
 // 아래 함수들은 문제에서 제시한 코드로 대체하시오.
 //-------------------------------------------------
 
 // 큐의 첫 원소와 마지막 원소의 위치를 서로 바꾼다.
 void swap(Queue& queue) {
+    queue.print();
+    // queue.front()와 queue.back()의 좌표 값들의 위치를 서로 바꿈
+    Point tmp = queue.front();
+    queue.front() = queue.back();
+    queue.back() = tmp;
+    cout << "swap(queue.front(), queue.back())" << endl;
+    queue.print();
 }
 // 큐의 일부 원소들을 출력한 후 삭제한다.
 void pop(Queue& queue) {

@@ -112,8 +112,13 @@ Person::Person(const string name, int id, double weight, bool married, const cha
 
 Person::Person(const Person& p):
     name(p.name), id(p.id), weight(p.weight), married(p.married) {
-	setAddress(p.address);
-	setMemo(p.memo_c_str);
+	/*
+    TODO: p 객체의 address 문자열을 멤버 address에 복사함
+          (즉, setAddress() 대신 copyAddress() 사용해야 함)
+          p 객체의 메모 문자열을 멤버 memo_c_str에 복사함 (copyMemo() 사용해야 함)
+	*/
+	copyAddress(p.address);
+	copyMemo(p.memo_c_str);
     cout << "Person::Person(const Person&):"; println();
 }
 
@@ -174,7 +179,7 @@ void Person::copyMemo(const char* c_str)      {
 	}
 	char *s = new char[strlen(c_str) + 1];
 	memo_c_str = s;
-	strcpy(memo_c_str, c_str);
+	strcpy(s, c_str);
 	//delete []s;
 }
 
@@ -1390,10 +1395,42 @@ class AllocatedMember
         print_memo(u);
     }
 
+    Person call_by_value_and_return_value(Person p) { // 복사생성자로 p 초기화
+        cout << "p.setName(p)" << endl;
+        p.setName("p");
+        // 함수 리턴 전에 p를 p2에 복사해서 초기화(복사생성자)
+        cout << "p2: ";
+        return p; // 함수 리턴 시 p 소멸자 실행
+    }
+
+    void copyConstructor() { // Menu Item 4
+        cout << "u: ";    u.println();
+        print_memo(u);
+
+        cout << "Person p1(u)" << endl;
+        cout << "p1: ";
+        Person p1(u); // 명시적 복사생성자로 p1 초기화
+        p1.setName("p1");
+        p1.println();
+        print_memo(p1);
+
+        cout << "Person p2 = call_by_value_and_return_value(p1)" << endl;
+        // 묵시적으로 두번의 복사생성자 실행: 함수 인자를 넘길 때, 함수 리턴 값을 p2에 복사할 때
+        cout << "p: ";
+        Person p2 = call_by_value_and_return_value(p1);
+        cout << "call_by_value_and_return_value(p1) returned\n" << endl;
+        cout << "p2.setName(p2)" << endl;
+        p2.setName("p2");
+        p2.println();
+        print_memo(p2);
+        cout << "copyConstructor() returns" << endl;
+        // 함수 리턴 시 지역객체 p1, p2 소멸자 실행됨
+    }
+
 public:
     AllocatedMember():
         u("u", 1, 70, true, "NAMDAEMUN-RO 123, JONGNO-GU, SEOUL, KOREA") {
-        u.setMemo("It is believed that the Aborigines of the American continent");
+        u.setMemo("It is believed that the Aborigines of the American continent\n");
     }
 
     void run() {
@@ -1402,7 +1439,7 @@ public:
         // TODO 문제 [1]: func_t, func_arr[], menuCount 선언
     	using func_t = void (AllocatedMember::*)();
     	func_t func_arr[] = {
-    			nullptr, &AM::changeAddress, &AM::changeMemo, &AM::manageMemo,
+    			nullptr, &AM::changeAddress, &AM::changeMemo, &AM::manageMemo, &AM::copyConstructor,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

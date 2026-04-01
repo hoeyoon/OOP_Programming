@@ -24,6 +24,58 @@ public:
 // 위에 코드는 수정 불가
 
 // 여기에 MyStack의 모든 멤버 함수들을 작성하라.
+MyStack::MyStack(int size) : size(size), tos(-1){
+	element = new string[size];
+	cout << "MyStack(" << size << ")" << endl;
+}
+
+MyStack::MyStack(MyStack& s){
+	size = s.size;
+	tos = s.tos;
+	element = new string[size];
+	for(int i = 0; i < size; i++){
+		element[i] = s.element[i];
+	}
+	cout << "MyStack(MyStack& s): tos+1 = " << tos + 1 << endl;
+}
+
+MyStack::~MyStack(){
+	delete []element;
+	cout << "~MyStack(): tos+1 = " << tos + 1 << endl;
+}
+
+bool MyStack::push(string item){
+	if(tos == (size - 1)){
+		cout << "stack is full" << endl;
+		return false;
+	}
+	element[++tos] = item;
+	return true;
+}
+
+bool MyStack::pop(string &item){
+	if(tos == -1){
+		cout << "stack is empty" << endl;
+		return false;
+	}
+	item = element[tos--];
+	return true;
+}
+
+bool MyStack::peek(string &item){
+	if(tos == -1){
+		return false;
+	}
+	item = element[tos];
+	return false;
+}
+
+void MyStack::print_stack(){
+	for(int i = 0; i < tos + 1; i++){
+		cout << element[i] << " ";
+	}
+	cout << endl;
+}
 
 // 아래 코드는 수정 불가
 

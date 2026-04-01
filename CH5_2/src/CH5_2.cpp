@@ -92,6 +92,7 @@ public:
     void print(ostream* pout) { printMembers(pout); }
     void println()            { print(&cout); cout << endl; }
     void whatAreYouDoing();                          // ch3_2에서 추가
+    Person& assign(const Person& p);				// ch5_2에서 추가
     bool isSame(const string name, int id);         // ch3_2에서 추가
 };
 
@@ -244,6 +245,32 @@ void Person::inputMembers(istream* pin)   {
 
 void Person::whatAreYouDoing() {
 	cout << name << "is taking a rest." << endl;
+}
+
+Person& Person::assign(const Person& p) {
+	/*
+    TODO: name, passwd, id, weight, married 멤버의 경우 = 연산자를 사용하여 p의 상응하는
+          멤버 값을 this의 멤버에 바로 대입시켜라. (C++의 기본 데이타 타입과 string인 경우)
+          즉, this의 각 멤버에 =를 이용해 p의 멤버 값을 저장하라.
+
+          p.addres와 p.memo_c_str의 경우 각각 setAddress(), setMemo()를 호출하여
+          this의 addres와 memo_c_str에 복사하라. 이 함수들은 기존에 할당 받았던 this의
+          address와 memo_c_str 멤버의 메모리를 먼저 반납하고 새로 할당 받은 후 복사한다.
+	 */
+	this->name = p.name;
+	this->passwd = p.passwd;
+	this->id = p.id;
+	this->weight = p.weight;
+	this->married = p.married;
+	setAddress(p.address);
+	setMemo(p.memo_c_str);
+          // 복사생성자에서는 copyAddress()와 copyMemo()를 호출했는데 (처음 초기화할 때)
+          // 여기서는 setAddress(), setMemo()를 호출하였다. (기존 값을 변경하고자 할 때)
+          // 왜 그렇게 했는지 이해했는가?
+
+    return *this; // this 객체 자신의 참조자를 반환한다.
+    // 자신 객체의 참조자를 리턴했기 때문에 c.assign(p.assign(backup)).println() 등의
+    // 연속된 함수 호출도 가능해 진다. 즉 (c = p = backup).println()과 같은 효과
 }
 
 bool Person::isSame(const string name, int id) {
@@ -1210,7 +1237,7 @@ public:
         p.set("p", 2, 80, false, "Seoul");
         cout << "p: "; p.println();   // p와 u은 동일한 객체 메모리를 공유하므로 항상 내용이 동일함
         cout << "u: "; u.println();
-        u = backup;       // u 값을 원래 값으로 복구
+        u.assign(backup);       // u 값을 원래 값으로 복구
         // 매개변수 p는 참조이므로 함수 리턴 시 소멸자가 호출되지 않음
     }
 
@@ -1221,7 +1248,7 @@ public:
         p->set("p", 2, 80, false, "Seoul");
         cout << "p: "; p->println();   // p는 u 메모리를 포인터하므로 항상 동일한 내용이 출력됨
         cout << "u: "; u.println();
-        u = backup;       // u 값을 원래 값으로 복구
+        u.assign(backup);       // u 값을 원래 값으로 복구
         // 매개변수 p는 포인터이므로 함수 리턴 시 소멸자가 호출되지 않음
     }
 
@@ -1287,7 +1314,7 @@ public:
 		r.set("r", 2, 80, false, "Seoul");
 		cout << "r: "; r.println();
 		cout << "u: "; u.println();
-		u = backup;
+		u.assign(backup);
 		// 함수 리턴 시 지역 객체 p의 경우 소멸자 함수가 호출되지만
 		//           참조 변수 r는 소멸자가 호출되지 않음
 	}
@@ -1309,7 +1336,7 @@ public:
 		p->set("p", 2, 80, false, "Seoul"); // p는 u 객체를 포인터하므로 u과 동일한 메모리를 공유함
 		cout << "p: "; p->println();
 		cout << "u: "; u.println();
-		u = backup;
+		u.assign(backup);
 		// 함수 리턴 시 p는 포인터 변수이므로 소멸자가 호출되지 않음
 	}
 
@@ -1322,7 +1349,7 @@ public:
     void inputPerson() { // Menu item 7
     	cout << "u: "; u.println();
         while (!UI::inputPerson(&u)) ;  // USER 11 88 false :DONG-GU, DAEGU:
-        backup = u;
+        backup.assign(u);
         cout << "u: "; u.println();
     }
 

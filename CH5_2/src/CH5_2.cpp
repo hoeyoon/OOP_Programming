@@ -1382,6 +1382,14 @@ class AllocatedMember
         set_print_memo(p, u.getMemo());
     }
 
+    void manageMemo() { // Menu item 3
+        memo.set_c_str(u.getMemo());
+        memo.run();
+        cout << "\nmemo.run() returned" << endl;
+        u.setMemo(memo.get_c_str());   // 메모 메뉴에서 새로 삽입한 메모를 u에 저장
+        print_memo(u);
+    }
+
 public:
     AllocatedMember():
         u("u", 1, 70, true, "NAMDAEMUN-RO 123, JONGNO-GU, SEOUL, KOREA") {
@@ -1394,7 +1402,7 @@ public:
         // TODO 문제 [1]: func_t, func_arr[], menuCount 선언
     	using func_t = void (AllocatedMember::*)();
     	func_t func_arr[] = {
-    			nullptr, &AM::changeAddress, &AM::changeMemo,
+    			nullptr, &AM::changeAddress, &AM::changeMemo, &AM::manageMemo,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

@@ -246,7 +246,7 @@ bool Person::isSame(const string name, int id) {
 
 
 void Person::printMembers(ostream* pout)   {
-	*pout << name << " " << id << " " << weight << " " << married << " :" << address << ":";
+	*pout << name << " " << id << " " << weight << " " << married << " :" << (address == nullptr ? "" : address) << ":";
 }
 
 /******************************************************************************
@@ -358,7 +358,7 @@ public:
     string getNext(size_t* ppos);
     void displayMemo();
     const char *get_c_str() { return mStr.c_str(); }
-    void set_c_str(const char *c_str) { mStr = c_str; }
+    void set_c_str(const char *c_str){ c_str == nullptr ? mStr = "" : mStr = c_str; }
     void findString();
     void compareWord();
     void dispByLine();
@@ -1427,6 +1427,25 @@ class AllocatedMember
         // 함수 리턴 시 지역객체 p1, p2 소멸자 실행됨
     }
 
+    void nullptrMember() { // Menu Item 5
+        u.println();
+        print_memo(u);
+        cout << "set address = memo_c_str = nullptr" << endl;
+        u.setAddress(nullptr);
+        u.setMemo(nullptr);
+        u.println();
+        print_memo(u);
+
+        cout << "memo.set_c_str(u.getMemo())" << endl;
+        memo.set_c_str(u.getMemo()); // u.getMemo() == nullptr이므로 memo의 mStr은 ""이다.
+        memo.displayMemo();
+
+        cout << endl << "u.setMemo(memo.get_c_str())" << endl;
+        u.setMemo(memo.get_c_str()); // memo.get_c_str() == nullptr 이므로
+                                      // u의 memo_c_str은 nullptr로 설정
+        print_memo(u);
+    }
+
 public:
     AllocatedMember():
         u("u", 1, 70, true, "NAMDAEMUN-RO 123, JONGNO-GU, SEOUL, KOREA") {
@@ -1440,6 +1459,7 @@ public:
     	using func_t = void (AllocatedMember::*)();
     	func_t func_arr[] = {
     			nullptr, &AM::changeAddress, &AM::changeMemo, &AM::manageMemo, &AM::copyConstructor,
+				&AM::nullptrMember,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

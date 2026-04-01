@@ -55,12 +55,14 @@ class Person
     int    id;              // Identifier
     double weight;          // 체중
     bool   married;         // 결혼여부
-    char   address[40];     // 주소
-    char   memo_c_str[1024]; // 메모장
+    char*  address;	        // 주소: 5_2에서 []에서 *로 변경
+    char*  memo_c_str; 		// 메모장: 5_2에서 []에서 *로 변경
 
 protected:
     void inputMembers(istream* in);
     void printMembers(ostream* out);
+    void copyAddress(const char* address); // 5_2에서 추가
+    void copyMemo(const char* c_str);      // 5_2에서 추가
 
 public:
     Person();
@@ -101,26 +103,15 @@ Person::Person(): Person("") {
 
 Person::Person(const string name) : Person{name, 0, 0, false, ""} {}
 
-Person::Person(const string name, int id, double weight, bool married,
-               const char *address) :
-        name{name}, id{id}, weight{weight}, married{married}, memo_c_str{} {
-    // 위에서 각 멤버를 초기화하는 {}는 각 매개변수 값을 객체의 상응하는 멤버에 설정하는 것이다. 즉,
-    // this->id=id, this->weight=weight, this->married=married와 동일하다.
-    // 여기서 this는 해당 객체를 포인터하는 포인터 변수이며, (다음 장에서 설명될 예정임)
-    // this->id는 해당 객체의 멤버 id를 지칭하며 =의 우측변수 id는 함수의 매개변수이다.
-    // 값을 간단히 대입하는 것은 위처럼 하면 되지만 name[], address[]와 같은 배열 복사 함수
-    // 호출 또는 다른 함수를 호출할 때는 생성자 함수의 몸체 { } 내에서 호출해야 한다.
-
-    setAddress(address);
+Person::Person(const string name, int id, double weight, bool married, const char* address):
+        name(name), id{id}, weight{weight}, married{married}, memo_c_str{} {
+    // 생성자 서두에서 memo_c_str{}은 초기 값으로 디폴트 값인 nullptr(실제로는 주소 값 0)로 설정됨
+    copyAddress(address);
     cout << "Person::Person(...):"; println();
 }
 
 Person::Person(const Person& p):
     name(p.name), id(p.id), weight(p.weight), married(p.married) {
-    /*
-    TODO [문제1]: address와 memo_c_str 역시 setAddress(), setMemo()를 호출하여
-                 p의 상응하는 멤버를 복사해서 초기화하라.
-    */
 	setAddress(p.address);
 	setMemo(p.memo_c_str);
     cout << "Person::Person(const Person&):"; println();
@@ -128,6 +119,63 @@ Person::Person(const Person& p):
 
 Person::~Person() {
     cout << "Person::~Person():"; println();
+
+    if (address) cout << "address";
+    if (address && memo_c_str) cout << ", ";
+    if (memo_c_str) cout << "memo_c_str";
+    if (address || memo_c_str) cout << " deleted" << endl;
+    // 위 if 문장들은 i) "address deleted" 또는
+    // ii) "memo_c_str deleted" 또는
+    // iii) "address, memo_c_str deleted" 가 출력됨; 즉, 셋 중 하나가 출력됨
+    /*
+    TODO: address와 memo_c_str가 포인터하는 배열 메모리를 반납한다.
+          이들 포인터가 nullptr인 경우 반납하지 말아야 한다.
+	*/
+    delete []address;
+    delete []memo_c_str;
+}
+
+// 처음 객체가 초기화될 때(생성자 또는 복사생성자) address 멤버를 초기화하고자 할 때 호출된다.
+// 즉, 일반 생성자 또는 복사 생성자에서만 호출됨.
+// 새로 할당받은 메모리에 매개변수 address 문자열을 복사한다.
+void Person::copyAddress(const char* address) {
+	/*
+    TODO: 매개변수 address가 nullptr인 경우, address 멤버도 nullptr로 설정하고 리턴하라.
+          매개변수 address가 포인터하는 문자열을 포함할 수 있는 배열 메모리를 할당 받은 후
+          할당된 메모리 주소를 멤버 address에 저장하고,
+          매개변수의 문자열을 멤버 변수의 할당받은 메모리로 복사한다.
+	 */
+	if(address == nullptr){
+		this->address = nullptr;
+		return;
+	}
+	char *a = new char[strlen(address) + 1];
+	this->address = a;
+	strcpy(a, address);
+	//delete []a;
+          // [교재 예제 5-11]의 복사 생성자  참조할 것
+          // strlen(), strcpy() 함수는 구글링 또는 http://www.cplusplus.com/reference/에서 검색
+          // strlen()은 끝의 null 문자를 포함하지 않은 길이이므로
+          // 이를 포함하기 위해 할당해야 할 메모리는 strlen()+1이어야 함
+          // strcpy()는 끝의 null 문자도 함께 복사해 준다라는 사실에 유의하라.
+}
+
+// 복사 생성자에 의해 처음 메모 문자열 memo_c_str을 초기화할 때 호출된다.
+// 복사 생성자에서만 호출되고 일반 생성자에서는 nullptr로 설정됨
+void Person::copyMemo(const char* c_str)      {
+	/*
+    TODO: 매개변수 c_str가 nullptr인 경우, memo_c_str만 nullptr로 설정하고 리턴하라.
+          매개변수 c_str가 포인터하는 문자열을 포함할 수 있는 배열 메모리를 할당 받아
+          멤버 memo_c_str에 주소를 저장하고 매개변수의 문자열을 멤버 변수로 복사한다.
+	*/
+	if(c_str == nullptr){
+		memo_c_str = nullptr;
+		return;
+	}
+	char *s = new char[strlen(c_str) + 1];
+	memo_c_str = s;
+	strcpy(memo_c_str, c_str);
+	//delete []s;
 }
 
 void Person::set(const string name, int id, double weight,

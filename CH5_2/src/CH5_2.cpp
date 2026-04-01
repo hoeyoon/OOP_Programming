@@ -1279,6 +1279,11 @@ public:
         //using AM = AllocatedMember;
 
         // TODO 문제 [1]: func_t, func_arr[], menuCount 선언
+    	using func_t = void (AllocatedMember::*)();
+    	func_t func_arr[] = {
+    			nullptr,
+    	};
+    	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 
         string menuStr =
             "++++++++++++++++ Allocated Member Menu ++++++++++++++++\n"
@@ -1287,7 +1292,11 @@ public:
             "+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
         // TODO 문제 [1]: while 문장 삽입하여 선택된 메뉴항목 실행하는 함수 호출
-        cout << menuStr;
+        while (true) {
+            int menuItem = UI::selectMenu(menuStr, menuCount);
+            if (menuItem == 0) return;
+            (this->*func_arr[menuItem])();
+        }
   }
 }; // ch5_2: AllocatedMember
 

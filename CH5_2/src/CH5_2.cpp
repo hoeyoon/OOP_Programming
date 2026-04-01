@@ -78,7 +78,7 @@ public:
     void setWeight(double weight)        { this->weight = weight; }
     void setMarried(bool married)        { this->married = married; }
     void setAddress(const char* address); // 5_2에서 수정
-    void setMemo(const char* c_str)      { strcpy(memo_c_str, c_str); }
+    void setMemo(const char* c_str);      // 5_2에서 수정
 
     string 		getName()    { return name; }
     string		getPasswd()	 { return passwd; }
@@ -191,6 +191,21 @@ void Person::setAddress(const char* address) {
 		delete []this->address;
 	}
     copyAddress(address); // 새로 메모리 할당받은 후 복사한다.
+}
+
+// 멤버 memo_c_str은 생성자에 의해 nullptr로 설정되었거나 복사생성자에 의해 이미 초기화되었 수도 있음
+// 만약 멤버 memo_c_str용 메모리가 할당되었다면 먼저 반납해야 함
+void Person::setMemo(const char* c_str)      {
+	/*
+    TODO: 기존의 멤버 memo_c_str가 nullptr이 아닌 경우
+              cout << "old memo_c_str deleted" << endl;
+              멤버 memo_c_str가 포인터하는 [배열] 메모리를 반납한다. []를 잊지 마라.
+	*/
+	if(memo_c_str != nullptr){
+		cout << "old memo_c_str deleted" << endl;
+		delete []memo_c_str;
+	}
+    copyMemo(c_str); // 새로 메모리 할당받아 복사한다.
 }
 
 void Person::set(const string name, int id, double weight,
@@ -1347,10 +1362,30 @@ class AllocatedMember
         set_print_address(p, u.getAddress());
     }
 
+    void print_memo(Person& p) { // 객체 p의 메모 출력
+        cout << "------ " << p.getName() << " memo ------" << endl;
+        const char *pmemo = p.getMemo();
+        cout << (pmemo? pmemo : ""); // 메모 출력; nullptr이면 "" 출력
+        cout << "--------------------" << endl << endl;
+    }
+
+    void set_print_memo(Person& p, const char* memo) { // 객체 p에 메모 복사하고 출력
+        cout << "p.setMemo(memo)" << endl;
+        p.setMemo(memo);
+        print_memo(p);
+    }
+
+    void changeMemo() { // Menu Item 2
+        Person p("p", 1, 70, true, "Gwangju");
+        set_print_memo(p, "short memo\n");
+        set_print_memo(p, "middle long memo: The Last of the Mohicans\n");
+        set_print_memo(p, u.getMemo());
+    }
+
 public:
     AllocatedMember():
         u("u", 1, 70, true, "NAMDAEMUN-RO 123, JONGNO-GU, SEOUL, KOREA") {
-        //u.setMemo("It is believed that the Aborigines of the American continent");
+        u.setMemo("It is believed that the Aborigines of the American continent");
     }
 
     void run() {
@@ -1359,7 +1394,7 @@ public:
         // TODO 문제 [1]: func_t, func_arr[], menuCount 선언
     	using func_t = void (AllocatedMember::*)();
     	func_t func_arr[] = {
-    			nullptr, &AM::changeAddress,
+    			nullptr, &AM::changeAddress, &AM::changeMemo,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

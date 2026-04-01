@@ -77,7 +77,7 @@ public:
     void setId(int id)                   { this->id = id; }
     void setWeight(double weight)        { this->weight = weight; }
     void setMarried(bool married)        { this->married = married; }
-    void setAddress(const char* address) { strcpy(this->address, address); }
+    void setAddress(const char* address); // 5_2에서 수정
     void setMemo(const char* c_str)      { strcpy(memo_c_str, c_str); }
 
     string 		getName()    { return name; }
@@ -176,6 +176,21 @@ void Person::copyMemo(const char* c_str)      {
 	memo_c_str = s;
 	strcpy(memo_c_str, c_str);
 	//delete []s;
+}
+
+// 생성자 또는 복사생성자에 의해 이미 한번 초기화된 주소 문자열(기존의 주소)을 다른 주소로 변경할 때 호출됨
+// 이미 멤버 address용 메모리가 할당되었기 때문에 기존 메모리를 먼저 반납해야 하고 새로 할당해야 함
+void Person::setAddress(const char* address) {
+	/*
+    TODO: 기존의 멤버 address가 nullptr이 아닌 경우
+        cout << "old address(" << this->address << ") deleted" << endl;
+        멤버 address가 포인터하는 [배열] 메모리를 반납한다. 반납시 [] 를 꼭 사용해야 한다.
+	*/
+	if(this->address != nullptr){
+		cout << "old address(" << this->address << ") deleted" << endl;
+		delete []this->address;
+	}
+    copyAddress(address); // 새로 메모리 할당받은 후 복사한다.
 }
 
 void Person::set(const string name, int id, double weight,
@@ -1317,6 +1332,21 @@ class AllocatedMember
     Person  u;
     Memo    memo;
 
+    void set_print_address(Person& p, const char* address) {
+        cout << "p.setAddress(" << (address? address : "") << ")" << endl;
+        p.setAddress(address);
+        p.println();
+        cout << endl;
+    }
+
+    void changeAddress() { // Menu Item 1
+        Person p("p", 1, 70, true, "Gwangju");
+        set_print_address(p, "short address");
+        set_print_address(p, "middle length Address, Seoul");
+        set_print_address(p, "long length Address Seoul Mapo-gu Korea");
+        set_print_address(p, u.getAddress());
+    }
+
 public:
     AllocatedMember():
         u("u", 1, 70, true, "NAMDAEMUN-RO 123, JONGNO-GU, SEOUL, KOREA") {
@@ -1324,12 +1354,12 @@ public:
     }
 
     void run() {
-        //using AM = AllocatedMember;
+        using AM = AllocatedMember;
 
         // TODO 문제 [1]: func_t, func_arr[], menuCount 선언
     	using func_t = void (AllocatedMember::*)();
     	func_t func_arr[] = {
-    			nullptr,
+    			nullptr, &AM::changeAddress,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

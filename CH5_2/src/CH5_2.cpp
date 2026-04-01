@@ -223,14 +223,23 @@ void Person::set(const string name, int id, double weight,
 }
 
 void Person::inputMembers(istream* pin)   {
-	*pin >> name >> id >> weight >> married;
+    *pin >> name >> id >> weight >> married;
+    if (!(*pin)) return;
 
-	if(!(*pin)){
-		return;
-	}
-
+    // 지역변수로 미리 큰 주소용 배열을 잡는다.
+    char address[40];    // ch5_2에서 추가됨
+    /*
+    TODO: 기존 코드를 그대로 사용해서 키보드에서 주소를 읽어 위 지역변수 address[40]에 저장한다.
+          기존 코드와 동일하지만 기존의 코드는 멤버 address에 바로 읽어 들이는 것이고,
+          여기선 위 지역변수 address[40]에 먼저 읽어 들이고 이를 멤버에 복사한다.
+	*/
 	pin->getline(address, sizeof(address), ':');
 	pin->getline(address, sizeof(address), ':');
+
+    // 아래 함수를 통해 위 지역변수 address[]에 있는 주소를 멤버 address로 복사한다.
+    // 아래 함수에서 address[]의 문자열 길이만큼 메모리를 할당(멤버 address용) 받은 후 복사한다.
+    // 멤버 address는 이전에 이미 초기화되었기 때문에 copyAddress()가 아닌 아래 함수를 사용함
+    setAddress(address); // ch5_2에서 추가됨
 }
 
 void Person::whatAreYouDoing() {
@@ -1446,6 +1455,12 @@ class AllocatedMember
         print_memo(u);
     }
 
+    void inputPerson() { // Menu item 6
+        cout << "u: "; u.println();
+        while (!UI::inputPerson(&u)) ;  // USER 11 88 false :DONG-GU, DAEGU:
+        cout << "u: "; u.println();
+    }
+
 public:
     AllocatedMember():
         u("u", 1, 70, true, "NAMDAEMUN-RO 123, JONGNO-GU, SEOUL, KOREA") {
@@ -1459,7 +1474,7 @@ public:
     	using func_t = void (AllocatedMember::*)();
     	func_t func_arr[] = {
     			nullptr, &AM::changeAddress, &AM::changeMemo, &AM::manageMemo, &AM::copyConstructor,
-				&AM::nullptrMember,
+				&AM::nullptrMember, &AM::inputPerson,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

@@ -2,7 +2,7 @@
 
 ### 초기 프로그램 실행 결과
 
-```c++
+```
 +++++++++++++++++++++ Person Structure Test Menu +++++++++++++++++++++
 + 0.Exit 1.printlnTest 2.initTest 3.getter 4.setter 5.isSameTest     +
 + 6.whatAreYouDoingTest 7.NoBoolAlphaOutput 8.BoolAlphaOutput        +

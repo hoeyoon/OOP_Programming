@@ -74,7 +74,7 @@ void printlnTest() { // Menu item 1
 ```
 
 ### 문제 1 실행결과
-```c++
+```
 +++++++++++++++++++++ Person Structure Test Menu +++++++++++++++++++++
 + 0.Exit 1.printlnTest 2.initTest 3.getter 4.setter 5.isSameTest     +
 + 6.whatAreYouDoingTest 7.NoBoolAlphaOutput 8.BoolAlphaOutput        +
@@ -115,7 +115,7 @@ void initTest() { // Menu item 2
 
 ### 문제 2 실행결과
 
-```c++
+```
 +++++++++++++ Person Structure Test Menu ++++++++++++
 + 0.Exit 1.printlnTest 2.initTest 3.getter 4.setter +
 ... // 메뉴 생략

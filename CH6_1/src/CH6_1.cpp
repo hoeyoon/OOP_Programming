@@ -1,4 +1,4 @@
-	//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // 아래 문제를 해결하는 도중 출력이 잘못되었거나 문제 설명과 출력이 일치하지 않거나 오타가 있거나 등등
 // 조금이라도 문제에 이상한 것이 있으면 주저하지 말고 jhshim@chosun.ac.kr로 알려 주시기 바랍니다.
 //----------------------------------------------------------------------------
@@ -69,24 +69,24 @@ protected:
 public:
     //Person();
     //Person(const string name);
-    Person(const string name = "", int id = 0, double weight = 0.0, bool married = false, const char *address = nullptr);
+    Person(const string& name = "", int id = 0, double weight = 0.0, bool married = false, const char *address = nullptr);
     Person(const Person& p);
     ~Person();
 
-    void set(const string name, int pid, double weight, bool married, const char *address);
+    void set(const string& name, int pid, double weight, bool married, const char *address);
     void set(int id)					 { this->id = id; }
     void set(double weight)				 { this->weight = weight; }
     void set(bool married)				 { this->married = married; }
-    void setName(const string name)      { this->name = name; }
-    void setPasswd(const string passwd)	 { this->passwd = passwd; }
+    void setName(const string& name)      { this->name = name; }
+    void setPasswd(const string& passwd)	 { this->passwd = passwd; }
     void setId(int id)                   { this->id = id; }
     void setWeight(double weight)        { this->weight = weight; }
     void setMarried(bool married)        { this->married = married; }
     void setAddress(const char* address); // 5_2에서 수정
     void setMemo(const char* c_str);      // 5_2에서 수정
 
-    string 		getName()    { return name; }
-    string		getPasswd()	 { return passwd; }
+    const string& 		getName()    { return name; }
+    const string&		getPasswd()	 { return passwd; }
     int         getId()      { return id; }
     double      getWeight()  { return weight; }  // 구현 시
     bool        getMarried() { return married; }  // 리턴 값들을
@@ -98,7 +98,7 @@ public:
     void println()            { print(cout); cout << endl; }
     void whatAreYouDoing();                          // ch3_2에서 추가
     Person& assign(const Person& p);				// ch5_2에서 추가
-    bool isSame(const string name, int id);         // ch3_2에서 추가
+    bool isSame(const string& name, int id);         // ch3_2에서 추가
 };
 
 /* Person::Person(): Person("") {
@@ -109,7 +109,7 @@ public:
 
 // Person::Person(const string name) : Person{name, 0, 0, false, ""} {}
 
-Person::Person(const string name, int id, double weight, bool married, const char* address):
+Person::Person(const string& name, int id, double weight, bool married, const char* address):
         name(name), id{id}, weight{weight}, married{married}, memo_c_str{} {
     // 생성자 서두에서 memo_c_str{}은 초기 값으로 디폴트 값인 nullptr(실제로는 주소 값 0)로 설정됨
     copyAddress(address);
@@ -188,7 +188,7 @@ void Person::setMemo(const char* c_str)      {
     copyMemo(c_str); // 새로 메모리 할당받아 복사한다.
 }
 
-void Person::set(const string name, int id, double weight,
+void Person::set(const string& name, int id, double weight,
 	bool married, const char *address) {
 	this->name = name;
 	this->id = id;
@@ -234,7 +234,7 @@ Person& Person::assign(const Person& p) {
     // 연속된 함수 호출도 가능해 진다. 즉 (c = p = backup).println()과 같은 효과
 }
 
-bool Person::isSame(const string name, int id) {
+bool Person::isSame(const string& name, int id) {
 	if(this->name == name && this->id == id){
 		return true;
 	}
@@ -257,22 +257,22 @@ private:
 
 public:
 	static bool echo_input;
-	static bool checkInputError(istream& in, const string msg);
+	static bool checkInputError(istream& in, const string& msg);
 	static bool checkDataFormatError(istream& in);
 	static bool inputPerson(Person& p);
-	static string getNext(const string msg);
-	static string getNextLine(const string msg);
-	static int getInt(const string msg);
-	static int getPositiveInt(const string msg);
-	static int getIndex(const string msg, int size);
-	static int selectMenu(const string menuStr, int menuItemCount);
+	static string getNext(const string& msg);
+	static string getNextLine(const string& msg);
+	static int getInt(const string& msg);
+	static int getPositiveInt(const string& msg);
+	static int getIndex(const string& msg, int size);
+	static int selectMenu(const string& menuStr, int menuItemCount);
 }; // namespace UI
 
 bool UI::echo_input = false;
 string UI::line, UI::emptyLine; // ""로 초기화됨
 
 // 입력에서 정수 대신 일반 문자가 입력되었는지 체크하고 에러 발생시 에러 메시지 출력
-bool UI::checkInputError(istream& in, const string msg) {
+bool UI::checkInputError(istream& in, const string& msg) {
     if (!(in)) { // 에러가 발생했다면
         cout << msg;  // 에러 메시지를 출력
         in.clear(); // 에러 발생 상태정보를 리셋함; 그래야 다음 문장에서 읽을 수 있음
@@ -298,7 +298,7 @@ bool UI::inputPerson(Person& p) {
 }
 
 // 입력장치에서 하나의 단어로 구성된 문자열을 입력 받음
-string UI::getNext(const string msg) {
+string UI::getNext(const string& msg) {
     cout << msg; // 입력용 메시지를 출력
     cin >> line; // 하나의 단어를 읽어 들임
     if (echo_input) cout << line << endl; // 자동체크 시 출력됨
@@ -307,7 +307,7 @@ string UI::getNext(const string msg) {
 }                            // 다음의 getNextLine()에서 엔터만 읽어 들일 수 있기 때문에
 
 // 입력장치에서 한 행을 입력 받음
-string UI::getNextLine(const string msg) {
+string UI::getNextLine(const string& msg) {
     cout << msg; // 입력용 메시지를 출력
     getline(cin, line); // 한 행을 읽어 들임
     if (echo_input) cout << line << endl; // 자동체크 시 출력됨
@@ -315,7 +315,7 @@ string UI::getNextLine(const string msg) {
 }
 
 // 하나의 정수를 입력 받음; 정수가 아닌 아닌 문자열 입력시 에러 메시지 출력 후 재입력 받음
-int UI::getInt(const string msg) {
+int UI::getInt(const string& msg) {
     for (int value; true; ) {
         cout << msg;
         cin >> value;
@@ -328,7 +328,7 @@ int UI::getInt(const string msg) {
 }
 
 // 하나의 양의 정수를 입력 받음; 음수 입력시 에러 메시지 출력 후 재입력 받음
-int UI::getPositiveInt(const string msg) {
+int UI::getPositiveInt(const string& msg) {
     int value;
     while ((value = getInt(msg)) < 0)
         cout << "Input a positive INTEGER." << endl;
@@ -337,7 +337,7 @@ int UI::getPositiveInt(const string msg) {
 
 // 0~(size-1)사이의 선택된 메뉴 항목 또는 리스트의 항목의 인덱스 값을 리턴함
 // 존재하지 않는 메뉴항목을 선택한 경우 에러 출력
-int UI::getIndex(const string msg, int size) {
+int UI::getIndex(const string& msg, int size) {
     while (true) {
         int index = getPositiveInt(msg);
         if (0 <= index  && index < size) return index;
@@ -347,7 +347,7 @@ int UI::getIndex(const string msg, int size) {
 }
 
 // 사용자에게 메뉴를 보여주고 사용자가 선택한 메뉴항목의 인덱스를 리턴함
-int UI::selectMenu(const string menuStr, int menuItemCount) {
+int UI::selectMenu(const string& menuStr, int menuItemCount) {
     cout << endl << menuStr;
     return getIndex("Menu item number? ", menuItemCount);
 }
@@ -360,13 +360,13 @@ class Memo
 {
     string mStr; // 메모를 저장해 두는 문자열
 
-    string get_next_line(size_t* ppos);
-    bool find_line(int line, size_t* start, size_t* next);
+    string& get_next_line(size_t& ppos, string& line);
+    bool find_line(int line, size_t& start, size_t& next);
     size_t find_last_line();
 
 public:
     Memo(const char *c_str = nullptr) : mStr(c_str == nullptr ? "" : c_str){}
-    string getNext(size_t* ppos);
+    string& getNext(size_t& ppos, string& word);
     void displayMemo();
     const char *c_str() { return mStr.c_str(); }
     void c_str(const char *c_str){ c_str == nullptr ? mStr = "" : mStr = c_str; }
@@ -383,20 +383,20 @@ public:
 
 // 메모의 현 위치(pos = *ppos)에서 그 행의 끝을 찾은 후 행 전체를 별도의 string으로 구성해서 리턴함
 // string::npos는 해당 문자를 찾지 못했을 경우의 리턴 값이며 (-1)과 동일 값임
-string Memo::get_next_line(size_t* ppos) {
-    size_t pos = *ppos, end;
+string& Memo::get_next_line(size_t& ppos, string& line) {
+    size_t pos = ppos, end;
 
     end = mStr.find('\n', pos);
 
     // 메모의 끝에 '\n'이 없을 경우: (end == string::npos)
     end = (end == string::npos)? mStr.length() : end+1;
-    *ppos = end; // 다음 행의 시작 위치를 기록해 둠
+    ppos = end; // 다음 행의 시작 위치를 기록해 둠
 
-    string subStr = mStr.substr(pos, end - pos);
-	return subStr;
+    line = mStr.substr(pos, end - pos);
+	return line;
 }
 
-bool Memo::find_line(int line_num, size_t* pstart, size_t* plen) {
+bool Memo::find_line(int line_num, size_t& pstart, size_t& plen) {
     size_t start = 0;
     for(int i = 0; i < line_num; i++){
     	start = mStr.find('\n', start);
@@ -405,14 +405,14 @@ bool Memo::find_line(int line_num, size_t* pstart, size_t* plen) {
     	}
     	start++;
     }
-    *pstart = start; // line_num 행의 시작 위치를 기록
+    pstart = start; // line_num 행의 시작 위치를 기록
 
     size_t end = mStr.find('\n', start);
     if(end == string::npos){
-    	*plen = string::npos;
+    	plen = string::npos;
     }
     else{
-    	*plen = end - start + 1;
+    	plen = end - start + 1;
     }
 
     return true; // line_num 행을 찾았다는 것을 의미함
@@ -429,8 +429,8 @@ size_t Memo::find_last_line() {
 }
 
 
-string Memo::getNext(size_t* ppos) {
-    size_t pos = *ppos, end;
+string& Memo::getNext(size_t& ppos, string& word) {
+    size_t pos = ppos, end;
     for ( ; pos < mStr.size() && isspace(mStr[pos]); ++pos) ; // 단어 앞의 공백 문자들 스킵(있을 경우)
     end = pos; // pos는 단어의 시작 위치이고 end는 단어의 끝 다음 위치이다.
     if (end < mStr.size() && ispunct(mStr[end])) // 첫 글자가 구두점일 경우
@@ -439,14 +439,9 @@ string Memo::getNext(size_t* ppos) {
         for ( ; end < mStr.size() && !isspace(mStr[end]) &&
                 !ispunct(mStr[end]); ++end) ;
     }
-    *ppos = end; // 다음 단어의 시작 위치를 기록해 둠
-    string subStr = mStr.substr(pos, end - pos);
-    if(pos == end){
-    	return "";
-    }
-    else{
-    	return subStr;
-    }
+    ppos = end; // 다음 단어의 시작 위치를 기록해 둠
+    word = mStr.substr(pos, end - pos);
+    return word;
 }
 
 void Memo::displayMemo() { // Menu item 1
@@ -475,7 +470,7 @@ void Memo::findString(){
 void Memo::compareWord() {
     string next, word = UI::getNext("Word to compare? ");
     int less = 0, same = 0, larger = 0;
-    for(size_t pos = 0; (next = getNext(&pos)) != ""; ){
+    for (size_t pos = 0; !getNext(pos, next).empty(); ) {
     	if(next < word){
     		less++;
     	}
@@ -497,7 +492,7 @@ void Memo::dispByLine() {
     cout << "--- Memo by line ---" << endl;
     string line;
     int count = 0;
-    for (size_t pos = 0; (line = get_next_line(&pos)) != ""; ) {
+    for (size_t pos = 0; (line = get_next_line(pos, line)) != ""; ) {
         cout << "[" << count << "] " << line;
         if (line.length() > 0 && line[line.length()-1] != '\n')
             cout << endl; // 메모 끝에 줄바꾸기 문자가 없을 경우 출력
@@ -508,7 +503,7 @@ void Memo::dispByLine() {
 
 void Memo::deleteLine() {
     size_t start, len, line_num = UI::getPositiveInt("Line number to delete? ");
-    if(find_line(line_num, &start, &len) == false || start == mStr.size()){
+    if(find_line(line_num, start, len) == false || start == mStr.size()){
     	cout << "Out of line range" << endl;
     	return;
     }
@@ -520,7 +515,7 @@ void Memo::deleteLine() {
 // 교체할 행 번호와 교체할 문자열을 입력 받은 후 해당 행을 입력 받은 행으로 교체함
 void Memo::replaceLine() {
     size_t start, len, line_num = UI::getPositiveInt("Line number to replace? ");
-    if(find_line(line_num, &start, &len) == false){
+    if(find_line(line_num, start, len) == false){
     	cout << "Out of line range" << endl;
     	return;
     }
@@ -535,7 +530,7 @@ void Memo::replaceLine() {
 // 즉, 첫 행(행 번호 0)을 삭제한 후 삭제된 행을 맨 마지막에 다시 추가함
 void Memo::scrollUp() {
     size_t start, len;
-    if(find_line(0, &start, &len) == true){
+    if(find_line(0, start, len) == true){
     	mStr.append(mStr, start, len);
     	mStr.erase(start, len);
     }
@@ -650,14 +645,14 @@ void CurrentUser::setter() { // Menu item 3
     rp.set(rUser.getWeight());
     rp.set(rUser.getMarried());
     rp.setAddress(rUser.getAddress());
-    cout << "pp->setMembers():"; rp.println();
+    cout << "rp.setMembers():"; rp.println();
 }
 
 void CurrentUser::set() { // Menu item 4
     Person p("rp"), &rp = p; // Person p("rp"); Person& rp = p;와 동일
     rp.set(rp.getName(), rUser.getId(), rUser.getWeight(),
               !rUser.getMarried(), rUser.getAddress());
-    cout << "pp->set():"; rp.println();
+    cout << "rp.set():"; rp.println();
 }
 
 void CurrentUser::whatAreYouDoing() {  // Menu item 5
@@ -701,7 +696,7 @@ void CurrentUser::defaultParameter() { // Menu item 10
     Memo m1; // 메모 생성자에게 인자를 넘겨 주지 않은 경우
     m1.displayMemo();
 
-    cout << "\nMemo m2(pUser->getMemo())" << endl;
+    cout << "\nMemo m2(rUser.getMemo())" << endl;
     Memo m2(rUser.getMemo()); // 메모 생성자에게 인자를 넘겨 준 경우
     m2.displayMemo();
 }

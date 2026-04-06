@@ -368,8 +368,8 @@ public:
     Memo(const char *c_str = nullptr) : mStr(c_str == nullptr ? "" : c_str){}
     string getNext(size_t* ppos);
     void displayMemo();
-    const char *get_c_str() { return mStr.c_str(); }
-    void set_c_str(const char *c_str){ c_str == nullptr ? mStr = "" : mStr = c_str; }
+    const char *c_str() { return mStr.c_str(); }
+    void c_str(const char *c_str){ c_str == nullptr ? mStr = "" : mStr = c_str; }
     void findString();
     void compareWord();
     void dispByLine();
@@ -686,9 +686,9 @@ void CurrentUser::changePasswd() {
 // 메모 메뉴에서 메모의 추가, 삭제, 교체 등의 조작이 끝나고 나면 (memo.run())
 // 반대로 memo에 있던 메모 내용을 다시 Person 객체로 복사한다.
 void CurrentUser::manageMemo() { // Menu item 9
-    memo.set_c_str(pUser->getMemo());
+    memo.c_str(pUser->getMemo());
     memo.run();
-    pUser->setMemo(memo.get_c_str());
+    pUser->setMemo(memo.c_str());
 }
 
 void CurrentUser::defaultParameter() { // Menu item 10
@@ -1437,10 +1437,10 @@ class AllocatedMember
     }
 
     void manageMemo() { // Menu item 3
-        memo.set_c_str(u.getMemo());
+        memo.c_str(u.getMemo());
         memo.run();
         cout << "\nmemo.run() returned" << endl;
-        u.setMemo(memo.get_c_str());   // 메모 메뉴에서 새로 삽입한 메모를 u에 저장
+        u.setMemo(memo.c_str());   // 메모 메뉴에서 새로 삽입한 메모를 u에 저장
         print_memo(u);
     }
 
@@ -1485,12 +1485,12 @@ class AllocatedMember
         u.println();
         print_memo(u);
 
-        cout << "memo.set_c_str(u.getMemo())" << endl;
-        memo.set_c_str(u.getMemo()); // u.getMemo() == nullptr이므로 memo의 mStr은 ""이다.
+        cout << "memo.c_str(u.getMemo())" << endl;
+        memo.c_str(u.getMemo()); // u.getMemo() == nullptr이므로 memo의 mStr은 ""이다.
         memo.displayMemo();
 
-        cout << endl << "u.setMemo(memo.get_c_str())" << endl;
-        u.setMemo(memo.get_c_str()); // memo.get_c_str() == nullptr 이므로
+        cout << endl << "u.setMemo(memo.c_str())" << endl;
+        u.setMemo(memo.c_str()); // memo.get_c_str() == nullptr 이므로
                                       // u의 memo_c_str은 nullptr로 설정
         print_memo(u);
     }

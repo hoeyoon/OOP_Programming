@@ -61,7 +61,7 @@ class Person
     char*  memo_c_str; 		// 메모장: 5_2에서 []에서 *로 변경
 
 protected:
-    void inputMembers(istream* in);
+    void inputMembers(istream& in);
     void printMembers(ostream& out);
     void copyAddress(const char* address); // 5_2에서 추가
     void copyMemo(const char* c_str);      // 5_2에서 추가
@@ -93,7 +93,7 @@ public:
     const char* getAddress() { return address; } // 수정하시오.
     const char* getMemo()    { return memo_c_str; }
 
-    void input(istream* pin)  { inputMembers(pin); } // ch3_2에서 추가
+    void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
     void print(ostream& out) { printMembers(out); }
     void println()            { print(cout); cout << endl; }
     void whatAreYouDoing();                          // ch3_2에서 추가
@@ -197,15 +197,15 @@ void Person::set(const string name, int id, double weight,
 	setAddress(address);
 }
 
-void Person::inputMembers(istream* pin)   {
-    *pin >> name >> id >> weight >> married;
-    if (!(*pin)) return;
+void Person::inputMembers(istream& in)   {
+    in >> name >> id >> weight >> married;
+    if (!(in)) return;
 
     // 지역변수로 미리 큰 주소용 배열을 잡는다.
     char address[40];    // ch5_2에서 추가됨
 
-	pin->getline(address, sizeof(address), ':');
-	pin->getline(address, sizeof(address), ':');
+	in.getline(address, sizeof(address), ':');
+	in.getline(address, sizeof(address), ':');
 
     // 아래 함수를 통해 위 지역변수 address[]에 있는 주소를 멤버 address로 복사한다.
     // 아래 함수에서 address[]의 문자열 길이만큼 메모리를 할당(멤버 address용) 받은 후 복사한다.
@@ -257,8 +257,8 @@ private:
 
 public:
 	static bool echo_input;
-	static bool checkInputError(istream* pin, const string msg);
-	static bool checkDataFormatError(istream* pin);
+	static bool checkInputError(istream& in, const string msg);
+	static bool checkDataFormatError(istream& in);
 	static bool inputPerson(Person& p);
 	static string getNext(const string msg);
 	static string getNextLine(const string msg);
@@ -272,27 +272,27 @@ bool UI::echo_input = false;
 string UI::line, UI::emptyLine; // ""로 초기화됨
 
 // 입력에서 정수 대신 일반 문자가 입력되었는지 체크하고 에러 발생시 에러 메시지 출력
-bool UI::checkInputError(istream* pin, const string msg) {
-    if (!(*pin)) { // 에러가 발생했다면
+bool UI::checkInputError(istream& in, const string msg) {
+    if (!(in)) { // 에러가 발생했다면
         cout << msg;  // 에러 메시지를 출력
-        pin->clear(); // 에러 발생 상태정보를 리셋함; 그래야 다음 문장에서 읽을 수 있음
-        getline(*pin, emptyLine); // 에러가 발생한 행 전체를 읽어 데이터를 버림
+        in.clear(); // 에러 발생 상태정보를 리셋함; 그래야 다음 문장에서 읽을 수 있음
+        getline(in, emptyLine); // 에러가 발생한 행 전체를 읽어 데이터를 버림
         return true;
     }
     return false;
 }
 
 // 정수나 실수를 입력해야 하는 곳에 일반 문자열을 입력한 경우의 에러 체크
-bool UI::checkDataFormatError(istream* pin) {
-    return checkInputError(pin, "Input-data format MISMATCHED\n");
+bool UI::checkDataFormatError(istream& in) {
+    return checkInputError(in, "Input-data format MISMATCHED\n");
 }
 
 // 한 사람의 정보 즉, 각 멤버 데이터를 순서적으로 입력 받아 p에 저장하고
 // 입력 중 입력 데이터에 오류가 있는지 확인하고 오류가 있을 시 에러 메시지를 출력한다.
 bool UI::inputPerson(Person& p) {
     cout << "input person information:" << endl;
-    p.input(&cin);
-    if (checkDataFormatError(&cin)) return false;
+    p.input(cin);
+    if (checkDataFormatError(cin)) return false;
     if (echo_input) p.println(); // 자동체크에서 사용됨
     return true;
 }
@@ -320,7 +320,7 @@ int UI::getInt(const string msg) {
         cout << msg;
         cin >> value;
         if (echo_input) cout << value << endl; // 자동체크 시 출력됨
-        if (checkInputError(&cin, "Input an INTEGER.\n"))
+        if (checkInputError(cin, "Input an INTEGER.\n"))
             continue;
         getline(cin, emptyLine); // skip [enter] after the number
         return value;
@@ -826,7 +826,7 @@ void VectorPerson::push_back(Person *p){
 
 class Factory
 {
-    static Person* checkInputFormatError(istream* in, Person* p) {
+    static Person* checkInputFormatError(istream& in, Person* p) {
         if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
             delete p;         // inputPerson(istream* in)에서 할당한 메모리 반납
             return nullptr;   // nullptr은 에러가 발생했다는 의미임
@@ -838,7 +838,7 @@ class Factory
 public:
     // 동적으로 Person 객체를 할당 받은 후 키보드로부터 새로 추가하고자 하는 사람의 인적정보를 읽어 들여
     // 해당 객체에 저장한 후 그 객체의 포인터를 반환한다.
-    static Person* inputPerson(istream* in) {
+    static Person* inputPerson(istream& in) {
         Person* p = new Person();
         p->input(in);
         return checkInputFormatError(in, p);
@@ -922,7 +922,7 @@ void PersonManager::append() { // Menu item 2
     // stoi("10") 함수: 문자열 "10"을 정수 10으로 변환
     printNotice("Input "+to_string(count), ":");
     for (int i = 0; i < count; ++i) {
-        Person* p = Factory::inputPerson(&cin); // 한 사람 정보 입력 받음
+        Person* p = Factory::inputPerson(cin); // 한 사람 정보 입력 받음
         if (p) persons.push_back(p); // if (p != nullptr) 와 동일;
         // 만약 p가 nullptr이면 이는 입력 시 에러가 발생한 것임
         // (즉, 정수를 입력해야 하는 곳에 일반 문자를 입력한 경우)

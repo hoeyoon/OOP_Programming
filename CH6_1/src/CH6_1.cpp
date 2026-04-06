@@ -123,10 +123,10 @@ Person::Person(const Person& p):
 Person::~Person() {
     cout << "Person::~Person():"; println();
 
-    if (address) cout << "address";
-    if (address && memo_c_str) cout << ", ";
-    if (memo_c_str) cout << "memo_c_str";
-    if (address || memo_c_str) cout << " deleted" << endl;
+    // if (address) cout << "address";
+    // if (address && memo_c_str) cout << ", ";
+    // if (memo_c_str) cout << "memo_c_str";
+    // if (address || memo_c_str) cout << " deleted" << endl;
     // 위 if 문장들은 i) "address deleted" 또는
     // ii) "memo_c_str deleted" 또는
     // iii) "address, memo_c_str deleted" 가 출력됨; 즉, 셋 중 하나가 출력됨

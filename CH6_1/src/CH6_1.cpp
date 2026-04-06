@@ -74,6 +74,9 @@ public:
     ~Person();
 
     void set(const string name, int pid, double weight, bool married, const char *address);
+    void set(int id)					 { this->id = id; }
+    void set(double weight)				 { this->weight = weight; }
+    void set(bool married)				 { this->married = married; }
     void setName(const string name)      { this->name = name; }
     void setPasswd(const string passwd)	 { this->passwd = passwd; }
     void setId(int id)                   { this->id = id; }
@@ -643,9 +646,9 @@ void CurrentUser::getter() { // Menu item 2
 void CurrentUser::setter() { // Menu item 3
     Person *pp = new Person("pp");
     pp->setName(pp->getName());
-    pp->setId(pUser->getId());
-    pp->setWeight(pUser->getWeight());
-    pp->setMarried(pUser->getMarried());
+    pp->set(pUser->getId());
+    pp->set(pUser->getWeight());
+    pp->set(pUser->getMarried());
     pp->setAddress(pUser->getAddress());
     cout << "pp->setMembers():"; pp->println();
     delete pp;

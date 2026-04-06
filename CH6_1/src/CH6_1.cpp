@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+	//----------------------------------------------------------------------------
 // 아래 문제를 해결하는 도중 출력이 잘못되었거나 문제 설명과 출력이 일치하지 않거나 오타가 있거나 등등
 // 조금이라도 문제에 이상한 것이 있으면 주저하지 말고 jhshim@chosun.ac.kr로 알려 주시기 바랍니다.
 //----------------------------------------------------------------------------
@@ -67,9 +67,9 @@ protected:
     void copyMemo(const char* c_str);      // 5_2에서 추가
 
 public:
-    Person();
-    Person(const string name);
-    Person(const string name, int id, double weight, bool married, const char *address);
+    //Person();
+    //Person(const string name);
+    Person(const string name = "", int id = 0, double weight = 0.0, bool married = false, const char *address = nullptr);
     Person(const Person& p);
     ~Person();
 
@@ -98,13 +98,13 @@ public:
     bool isSame(const string name, int id);         // ch3_2에서 추가
 };
 
-Person::Person(): Person("") {
+/* Person::Person(): Person("") {
     // 위 함수 서두(:와 함수 본체 사이)에서 각 멤버를 초기화하는데 이는 함수 진입하기 전에
     // 각 멤버의 값을 초기화하는 것이다. {}는 각 데이타 타입별로 디폴트 값으로 초기화하라는 의미임.
     // 즉, name[]={'\0'}="", id=0, weight=0.0, married=false, address[]={'\0'}=""
-}
+} */
 
-Person::Person(const string name) : Person{name, 0, 0, false, ""} {}
+// Person::Person(const string name) : Person{name, 0, 0, false, ""} {}
 
 Person::Person(const string name, int id, double weight, bool married, const char* address):
         name(name), id{id}, weight{weight}, married{married}, memo_c_str{} {
@@ -349,6 +349,7 @@ class Memo
     size_t find_last_line();
 
 public:
+    Memo(const char *c_str = nullptr) : mStr(c_str == nullptr ? "" : c_str){}
     string getNext(size_t* ppos);
     void displayMemo();
     const char *get_c_str() { return mStr.c_str(); }
@@ -611,6 +612,7 @@ public:
     void inputPerson();
     void changePasswd();
     void manageMemo();
+    void defaultParameter();
     void run();
 };
 
@@ -672,13 +674,30 @@ void CurrentUser::manageMemo() { // Menu item 9
     pUser->setMemo(memo.get_c_str());
 }
 
+void CurrentUser::defaultParameter() { // Menu item 10
+    Person ps1;
+    Person ps2("ps2");
+    Person ps3("ps3", 3);
+    Person ps4("ps4", 4, 70.4);
+    Person ps5("ps5", 5, 70.5, true);
+    Person ps6("ps6", 6, 70.6, true, "ps6 address");
+
+    cout << "\nMemo m1;" << endl;
+    Memo m1; // 메모 생성자에게 인자를 넘겨 주지 않은 경우
+    m1.displayMemo();
+
+    cout << "\nMemo m2(pUser->getMemo())" << endl;
+    Memo m2(pUser->getMemo()); // 메모 생성자에게 인자를 넘겨 준 경우
+    m2.displayMemo();
+}
+
 void CurrentUser::run() {
     using func_t = void (CurrentUser::*)();
     using CU = CurrentUser;
     func_t func_arr[] = {
         nullptr, &CU::display, &CU::getter, &CU::setter,
         &CU::set, &CU::whatAreYouDoing,
-        &CU::isSame, &CU::inputPerson, &CU::changePasswd, &CU::manageMemo,
+        &CU::isSame, &CU::inputPerson, &CU::changePasswd, &CU::manageMemo, &CU::defaultParameter,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 배열의 길이
     string menuStr =
@@ -713,8 +732,8 @@ class VectorPerson
     void extend_capacity();
 
 public:
-    VectorPerson() :VectorPerson{DEFAULT_SIZE} {}
-    VectorPerson(int capacity);
+    //VectorPerson() :VectorPerson{DEFAULT_SIZE} {}
+    VectorPerson(int capacity = DEFAULT_SIZE);
     ~VectorPerson();
 
     // 아래 긱 함수이름 뒤의 const는 그 함수가 클래스 멤버 변수들을 수정하지 않고 읽기만 한다는 의미임

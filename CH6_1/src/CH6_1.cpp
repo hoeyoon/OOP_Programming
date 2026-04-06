@@ -62,7 +62,7 @@ class Person
 
 protected:
     void inputMembers(istream* in);
-    void printMembers(ostream* out);
+    void printMembers(ostream& out);
     void copyAddress(const char* address); // 5_2에서 추가
     void copyMemo(const char* c_str);      // 5_2에서 추가
 
@@ -94,8 +94,8 @@ public:
     const char* getMemo()    { return memo_c_str; }
 
     void input(istream* pin)  { inputMembers(pin); } // ch3_2에서 추가
-    void print(ostream* pout) { printMembers(pout); }
-    void println()            { print(&cout); cout << endl; }
+    void print(ostream& out) { printMembers(out); }
+    void println()            { print(cout); cout << endl; }
     void whatAreYouDoing();                          // ch3_2에서 추가
     Person& assign(const Person& p);				// ch5_2에서 추가
     bool isSame(const string name, int id);         // ch3_2에서 추가
@@ -242,8 +242,8 @@ bool Person::isSame(const string name, int id) {
 }
 
 
-void Person::printMembers(ostream* pout)   {
-	*pout << name << " " << id << " " << weight << " " << married << " :" << (address == nullptr ? "" : address) << ":";
+void Person::printMembers(ostream& out)   {
+	out << name << " " << id << " " << weight << " " << married << " :" << (address == nullptr ? "" : address) << ":";
 }
 
 /******************************************************************************

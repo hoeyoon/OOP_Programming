@@ -259,7 +259,7 @@ public:
 	static bool echo_input;
 	static bool checkInputError(istream* pin, const string msg);
 	static bool checkDataFormatError(istream* pin);
-	static bool inputPerson(Person* p);
+	static bool inputPerson(Person& p);
 	static string getNext(const string msg);
 	static string getNextLine(const string msg);
 	static int getInt(const string msg);
@@ -289,11 +289,11 @@ bool UI::checkDataFormatError(istream* pin) {
 
 // 한 사람의 정보 즉, 각 멤버 데이터를 순서적으로 입력 받아 p에 저장하고
 // 입력 중 입력 데이터에 오류가 있는지 확인하고 오류가 있을 시 에러 메시지를 출력한다.
-bool UI::inputPerson(Person* p) {
+bool UI::inputPerson(Person& p) {
     cout << "input person information:" << endl;
-    p->input(&cin);
+    p.input(&cin);
     if (checkDataFormatError(&cin)) return false;
-    if (echo_input) p->println(); // 자동체크에서 사용됨
+    if (echo_input) p.println(); // 자동체크에서 사용됨
     return true;
 }
 
@@ -614,11 +614,11 @@ void Memo::run() {
 
 class CurrentUser
 {
-    Person *pUser;
+    Person& rUser;
     Memo    memo; // ch4_3에서 추가
 
 public:
-    CurrentUser(Person *pUser): pUser(pUser) { }  // user(u)는 this->user = u 와 동일한 기능
+    CurrentUser(Person& rUser): rUser(rUser) { }  // user(u)는 this->user = u 와 동일한 기능
     void display();
     void setter();
     void getter();
@@ -634,51 +634,49 @@ public:
 };
 
 void CurrentUser::display() { // Menu item 1
-    pUser->println();
+    rUser.println();
 }
 
 void CurrentUser::getter() { // Menu item 2
-    cout << "name:" << pUser->getName() << ", id:" << pUser->getId() << ", weight:" <<
-            pUser->getWeight() << ", married:" << pUser->getMarried() <<
-            ", address:" <<pUser->getAddress() << endl;
+    cout << "name:" << rUser.getName() << ", id:" << rUser.getId() << ", weight:" <<
+            rUser.getWeight() << ", married:" << rUser.getMarried() <<
+            ", address:" << rUser.getAddress() << endl;
 }
 
 void CurrentUser::setter() { // Menu item 3
-    Person *pp = new Person("pp");
-    pp->setName(pp->getName());
-    pp->set(pUser->getId());
-    pp->set(pUser->getWeight());
-    pp->set(pUser->getMarried());
-    pp->setAddress(pUser->getAddress());
-    cout << "pp->setMembers():"; pp->println();
-    delete pp;
+    Person p("rp"), &rp = p; // Person p("rp"); Person& rp = p;와 동일
+    rp.setName(rp.getName());
+    rp.set(rUser.getId());
+    rp.set(rUser.getWeight());
+    rp.set(rUser.getMarried());
+    rp.setAddress(rUser.getAddress());
+    cout << "pp->setMembers():"; rp.println();
 }
 
 void CurrentUser::set() { // Menu item 4
-    Person *pp = new Person("pp");
-    pp->set(pp->getName(), pUser->getId(), pUser->getWeight(),
-              !pUser->getMarried(), pUser->getAddress());
-    cout << "pp->set():"; pp->println();
-    delete pp;
+    Person p("rp"), &rp = p; // Person p("rp"); Person& rp = p;와 동일
+    rp.set(rp.getName(), rUser.getId(), rUser.getWeight(),
+              !rUser.getMarried(), rUser.getAddress());
+    cout << "pp->set():"; rp.println();
 }
 
 void CurrentUser::whatAreYouDoing() {  // Menu item 5
-    pUser->whatAreYouDoing();
+    rUser.whatAreYouDoing();
 }
 
 void CurrentUser::isSame() { // Menu item 6
-    pUser->println();
-    cout << "isSame(\"user\", 1): " << pUser->isSame("user", 1) << endl;
+    rUser.println();
+    cout << "isSame(\"user\", 1): " << rUser.isSame("user", 1) << endl;
 }
 
 void CurrentUser::inputPerson() { // Menu item 7
-    if (UI::inputPerson(pUser)) // GilDong 1 70.5 true :Jongno-gu, Seoul:
+    if (UI::inputPerson(rUser)) // GilDong 1 70.5 true :Jongno-gu, Seoul:
         display();              // user 1 71.1 true :Gwangju Nam-ro 21:
 }
 
 void CurrentUser::changePasswd() {
 	string passwd = UI::getNext("New password: ");
-	pUser->setPasswd(passwd);
+	rUser.setPasswd(passwd);
     cout << "Password changed" << endl;
 }
 
@@ -686,9 +684,9 @@ void CurrentUser::changePasswd() {
 // 메모 메뉴에서 메모의 추가, 삭제, 교체 등의 조작이 끝나고 나면 (memo.run())
 // 반대로 memo에 있던 메모 내용을 다시 Person 객체로 복사한다.
 void CurrentUser::manageMemo() { // Menu item 9
-    memo.c_str(pUser->getMemo());
+    memo.c_str(rUser.getMemo());
     memo.run();
-    pUser->setMemo(memo.c_str());
+    rUser.setMemo(memo.c_str());
 }
 
 void CurrentUser::defaultParameter() { // Menu item 10
@@ -704,7 +702,7 @@ void CurrentUser::defaultParameter() { // Menu item 10
     m1.displayMemo();
 
     cout << "\nMemo m2(pUser->getMemo())" << endl;
-    Memo m2(pUser->getMemo()); // 메모 생성자에게 인자를 넘겨 준 경우
+    Memo m2(rUser.getMemo()); // 메모 생성자에게 인자를 넘겨 준 경우
     m2.displayMemo();
 }
 
@@ -944,7 +942,7 @@ void PersonManager::login() {
     if (passwd != p->getPasswd()) // 비번 불일치
         cout << "WRONG password!!" << endl;
     else
-        CurrentUser(p).run();
+        CurrentUser(*p).run();
 }
 
 void PersonManager::run() {
@@ -1361,7 +1359,7 @@ public:
 
     void inputPerson() { // Menu item 7
     	cout << "u: "; u.println();
-        while (!UI::inputPerson(&u)) ;  // USER 11 88 false :DONG-GU, DAEGU:
+        while (!UI::inputPerson(u)) ;  // USER 11 88 false :DONG-GU, DAEGU:
         backup.assign(u);
         cout << "u: "; u.println();
     }
@@ -1497,7 +1495,7 @@ class AllocatedMember
 
     void inputPerson() { // Menu item 6
         cout << "u: "; u.println();
-        while (!UI::inputPerson(&u)) ;  // USER 11 88 false :DONG-GU, DAEGU:
+        while (!UI::inputPerson(u)) ;  // USER 11 88 false :DONG-GU, DAEGU:
         cout << "u: "; u.println();
     }
 

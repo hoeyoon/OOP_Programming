@@ -248,13 +248,28 @@ void Person::printMembers(ostream* pout)   {
  ******************************************************************************/
 // 기본적인 입력과 관련된 전역 함수들을 UI라는 이름공간 내부에 정의함
 
-namespace UI {
+class UI {
+private:
+	static string line, emptyLine;
 
-bool echo_input = false;
-string line, emptyLine;
+public:
+	static bool echo_input;
+	static bool checkInputError(istream* pin, const string msg);
+	static bool checkDataFormatError(istream* pin);
+	static bool inputPerson(Person* p);
+	static string getNext(const string msg);
+	static string getNextLine(const string msg);
+	static int getInt(const string msg);
+	static int getPositiveInt(const string msg);
+	static int getIndex(const string msg, int size);
+	static int selectMenu(const string menuStr, int menuItemCount);
+}; // namespace UI
+
+bool UI::echo_input = false;
+string UI::line, UI::emptyLine; // ""로 초기화됨
 
 // 입력에서 정수 대신 일반 문자가 입력되었는지 체크하고 에러 발생시 에러 메시지 출력
-bool checkInputError(istream* pin, const string msg) {
+bool UI::checkInputError(istream* pin, const string msg) {
     if (!(*pin)) { // 에러가 발생했다면
         cout << msg;  // 에러 메시지를 출력
         pin->clear(); // 에러 발생 상태정보를 리셋함; 그래야 다음 문장에서 읽을 수 있음
@@ -265,13 +280,13 @@ bool checkInputError(istream* pin, const string msg) {
 }
 
 // 정수나 실수를 입력해야 하는 곳에 일반 문자열을 입력한 경우의 에러 체크
-bool checkDataFormatError(istream* pin) {
+bool UI::checkDataFormatError(istream* pin) {
     return checkInputError(pin, "Input-data format MISMATCHED\n");
 }
 
 // 한 사람의 정보 즉, 각 멤버 데이터를 순서적으로 입력 받아 p에 저장하고
 // 입력 중 입력 데이터에 오류가 있는지 확인하고 오류가 있을 시 에러 메시지를 출력한다.
-bool inputPerson(Person* p) {
+bool UI::inputPerson(Person* p) {
     cout << "input person information:" << endl;
     p->input(&cin);
     if (checkDataFormatError(&cin)) return false;
@@ -280,7 +295,7 @@ bool inputPerson(Person* p) {
 }
 
 // 입력장치에서 하나의 단어로 구성된 문자열을 입력 받음
-string getNext(const string msg) {
+string UI::getNext(const string msg) {
     cout << msg; // 입력용 메시지를 출력
     cin >> line; // 하나의 단어를 읽어 들임
     if (echo_input) cout << line << endl; // 자동체크 시 출력됨
@@ -289,7 +304,7 @@ string getNext(const string msg) {
 }                            // 다음의 getNextLine()에서 엔터만 읽어 들일 수 있기 때문에
 
 // 입력장치에서 한 행을 입력 받음
-string getNextLine(const string msg) {
+string UI::getNextLine(const string msg) {
     cout << msg; // 입력용 메시지를 출력
     getline(cin, line); // 한 행을 읽어 들임
     if (echo_input) cout << line << endl; // 자동체크 시 출력됨
@@ -297,7 +312,7 @@ string getNextLine(const string msg) {
 }
 
 // 하나의 정수를 입력 받음; 정수가 아닌 아닌 문자열 입력시 에러 메시지 출력 후 재입력 받음
-int getInt(const string msg) {
+int UI::getInt(const string msg) {
     for (int value; true; ) {
         cout << msg;
         cin >> value;
@@ -310,7 +325,7 @@ int getInt(const string msg) {
 }
 
 // 하나의 양의 정수를 입력 받음; 음수 입력시 에러 메시지 출력 후 재입력 받음
-int getPositiveInt(const string msg) {
+int UI::getPositiveInt(const string msg) {
     int value;
     while ((value = getInt(msg)) < 0)
         cout << "Input a positive INTEGER." << endl;
@@ -319,7 +334,7 @@ int getPositiveInt(const string msg) {
 
 // 0~(size-1)사이의 선택된 메뉴 항목 또는 리스트의 항목의 인덱스 값을 리턴함
 // 존재하지 않는 메뉴항목을 선택한 경우 에러 출력
-int getIndex(const string msg, int size) {
+int UI::getIndex(const string msg, int size) {
     while (true) {
         int index = getPositiveInt(msg);
         if (0 <= index  && index < size) return index;
@@ -329,12 +344,10 @@ int getIndex(const string msg, int size) {
 }
 
 // 사용자에게 메뉴를 보여주고 사용자가 선택한 메뉴항목의 인덱스를 리턴함
-int selectMenu(const string menuStr, int menuItemCount) {
+int UI::selectMenu(const string menuStr, int menuItemCount) {
     cout << endl << menuStr;
     return getIndex("Menu item number? ", menuItemCount);
 }
-
-} // namespace UI
 
 /******************************************************************************
  * ch4_3: string and Memo class
@@ -613,6 +626,7 @@ public:
     void changePasswd();
     void manageMemo();
     void defaultParameter();
+    void staticMember();
     void run();
 };
 
@@ -691,6 +705,23 @@ void CurrentUser::defaultParameter() { // Menu item 10
     m2.displayMemo();
 }
 
+void CurrentUser::staticMember() { // Menu item 11
+	/*
+    TODO: string 변수 word1을 선언하고 클래스 이름을 사용하여 UI의
+          getNext("Input a word: ")를 호출한 후 리턴 값으로 word1 변수를 초기화하라.
+	*/
+	string word1 = UI::getNext("Input a word: ");
+    cout << "UI::getNext(): " << word1 << endl << endl;
+
+    UI ui;
+    /*
+    TODO: string 변수 word2을 선언하고 UI의 객체인 ui 이름으로
+          getNext("Input a word: ")를 호출한 후 리턴 값으로 word2 변수를 초기화하라.
+	*/
+	string word2 = ui.getNext("Input a word: ");
+    cout << "ui.getNext() : " << word2 << endl;
+}
+
 void CurrentUser::run() {
     using func_t = void (CurrentUser::*)();
     using CU = CurrentUser;
@@ -698,6 +729,7 @@ void CurrentUser::run() {
         nullptr, &CU::display, &CU::getter, &CU::setter,
         &CU::set, &CU::whatAreYouDoing,
         &CU::isSame, &CU::inputPerson, &CU::changePasswd, &CU::manageMemo, &CU::defaultParameter,
+		&CU::staticMember,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 배열의 길이
     string menuStr =
@@ -793,7 +825,7 @@ void VectorPerson::push_back(Person *p){
 
 class Factory
 {
-    Person* checkInputFormatError(istream* in, Person* p) {
+    static Person* checkInputFormatError(istream* in, Person* p) {
         if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
             delete p;         // inputPerson(istream* in)에서 할당한 메모리 반납
             return nullptr;   // nullptr은 에러가 발생했다는 의미임
@@ -805,7 +837,7 @@ class Factory
 public:
     // 동적으로 Person 객체를 할당 받은 후 키보드로부터 새로 추가하고자 하는 사람의 인적정보를 읽어 들여
     // 해당 객체에 저장한 후 그 객체의 포인터를 반환한다.
-    Person* inputPerson(istream* in) {
+    static Person* inputPerson(istream* in) {
         Person* p = new Person();
         p->input(in);
         return checkInputFormatError(in, p);
@@ -819,7 +851,7 @@ public:
 class PersonManager
 {
     VectorPerson persons;
-    Factory factory;
+    // Factory factory;
 
     void deleteElemets();
     void printNotice(const string preMessage, const string postMessage);
@@ -889,7 +921,7 @@ void PersonManager::append() { // Menu item 2
     // stoi("10") 함수: 문자열 "10"을 정수 10으로 변환
     printNotice("Input "+to_string(count), ":");
     for (int i = 0; i < count; ++i) {
-        Person* p = factory.inputPerson(&cin); // 한 사람 정보 입력 받음
+        Person* p = Factory::inputPerson(&cin); // 한 사람 정보 입력 받음
         if (p) persons.push_back(p); // if (p != nullptr) 와 동일;
         // 만약 p가 nullptr이면 이는 입력 시 에러가 발생한 것임
         // (즉, 정수를 입력해야 하는 곳에 일반 문자를 입력한 경우)

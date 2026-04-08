@@ -1200,9 +1200,34 @@ class ClassAndObject
         // 객체의 참조로 선언되어 있으므로 해당 함수에서 p2를 수정하지 않는다는 것을 보장한다. OK
     }
 
+    void temporaryParameter() {
+        cout << "temporaryParameter()" << endl;
+
+        // 요점: 아래의 Person("Person-name")는 임시객체가 생성되며,
+        //      이 임시객체는 컴파일러에 의해 const로 취급된다.
+        //      따라서 이 임시객체는 위 [문제 10]의 const p2와 동일하게 취급된다.
+
+        cp.normalValue(Person("Person-name"));       // 불필요한 객체 복사 일어남
+        cp.constValue(Person("Person-name"));        // 불필요한 객체 복사 일어남
+        //cp.normalReference(Person("Person-name")); // 컴파일 에러 발생
+        cp.constReference(Person("Person-name"));    // 임시 객체 참조만 넘어감
+
+        // 결론: 일반적으로 객체는 함수의 매개변수로 value로 복사해서 넘기지 않고 객체의 참조를 넘긴다.
+        //      이유는 객체의 크기가 커지면 복사 오버헤드가 발생하기 때문이다.
+        //      그런데 함수의 매개변수가 const가 아닌 일반 참조 변수로 선언된 경우
+        //      그 함수에서 이 참조변수를 통해 원본 객체를 수정할 수 있기 때문에
+        //      const p2 또는 위 임시객체(const 취급)와 같은 객체들을 함수 인자로 넘길 수 없다.
+        //      따라서 [만약 함수 내에서 매개변수인 객체를 수정하지 않는다면]
+        //      일반 & 매개변수로 선언하기 보다는 const &로 습관적으로 선언하는 것이 유리하다.
+        //      (이렇게 선언하면 위 cp.constReference()처럼
+        //       임시객체의 참조를 함수의 매개변수로 바로 넘길 수 있다.)
+    }
+
+
     void parameters() { // Menu item 6
         normalParameter();
         constParameter(); cout << endl;
+        temporaryParameter(); cout << endl;
     }
 
     // 기본 생성자가 있지만 아무것도 실행하지 않는다.

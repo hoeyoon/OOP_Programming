@@ -1179,8 +1179,30 @@ class ClassAndObject
         cp.constReference(p1);  // 매개변수 p에 단순히 p1의 참조만 넘겨 줌
     }
 
+    void constParameter() {
+        cout << "constParameter()" << endl;
+        cout << "const Person p2(\"const-p2-name\")" << endl;
+
+        // 요점: p2처럼 상수(const) 객체일 경우
+        //      매개변수 타입 선언에 따라 인자로 넘겨 줄 수 없는 함수가 있다.
+        const Person p2("const-p2-name"); // p2는 상수이므로 수정되어서는 안된다.
+
+        // 아래 인자 p2가 일반 매개변수 p에 복사되므로
+        // 매개변수 p는 수정될지언정 원래 인자 p2는 수정되지 않는다. OK
+        cp.normalValue(p2);
+        // 아래 인자 p2가 상수 매개변수 p에 복사되므로 원래 인자 p2는 수정되지 않는다. OK
+        cp.constValue(p2);
+        //cp.normalReference(p2);
+        // 위 함수의 일반 참조 매개변수 p는 p2와 메모리를 공유하므로 해당 함수에서 상수인 p2를
+        // 수정할 가능성이 있다.(const로 선언되지 않았으므로)
+        // 이런 경우 상수 객체 p2을 normalReference()의 인자로 줄 수 없다. 컴파일 에러.
+        cp.constReference(p2); // 상수 참조 매개변수 p는 p2와 메모리를 공유하지만 p가 상수
+        // 객체의 참조로 선언되어 있으므로 해당 함수에서 p2를 수정하지 않는다는 것을 보장한다. OK
+    }
+
     void parameters() { // Menu item 6
         normalParameter();
+        constParameter(); cout << endl;
     }
 
     // 기본 생성자가 있지만 아무것도 실행하지 않는다.

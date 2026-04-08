@@ -1144,9 +1144,9 @@ class ClassAndObject
         Init1().print(); cout << endl;
         Init2().print(); cout << endl;
         Init3().print(); cout << endl;
-        //Init4().print(); cout << endl;
-        //Init5().print(); cout << endl;
-        //Init6().print();
+        Init4().print(); cout << endl;
+        Init5().print(); cout << endl;
+        Init6().print();
     }
 
     // 기본 생성자가 있지만 아무것도 실행하지 않는다.
@@ -1183,6 +1183,54 @@ class ClassAndObject
             cout << "Init3 i: " << i << ", j: " << j << ", d: " << d << endl;
         }
     };
+
+    // 생성자의 서두에서 멤버 초기화(p{"p-Init4-head"})가 있을 경우 멤버 변수 선언 때 즉,
+    // Person p는 초기화(생성자 실행 X)하지 않고 생성자의 서두에서 멤버 p와 i를 초기화 한다.
+    // 이처럼 생성자 서두에서 멤버를 초기화하는 것이 일반적인 방법이다.
+    class Init4 {
+        Person p;
+        int i, j;
+        double d;
+    public:
+        Init4(): p{"p-Init4-head"}, i{4} { j = 6; d = 0; }
+         // 위 함수 서두에서는 p("p-Init4-head") 로 초기화해도 됨; 그러나 i = 4는 안됨
+        void print() {
+            cout << "Init4 i: " << i << ", j: " << j << ", d: " << d << endl;
+        }
+    };
+
+    // 멤버 선언 때도 초기화하고, 생성자 서두에서도 초기화를 하면 생성자가 두번 실행될까?
+    // 정답은 생성자 서두에 있는 멤버 초기화만 한번 실행된다. 멤버 선언 때의 초기화는 무시된다.
+    class Init5 {
+        Person p { "p-Init5" };
+        int i{4}, j;
+        double d;
+    public:
+        Init5(): p{ "p-Init5-head" }, i{5} { j = 6; d = 0; }
+        void print() {
+            cout << "Init5 i: " << i << ", j: " << j << ", d: " << d << endl;
+        }
+    };
+
+    // 멤버 선언과 생성자 서두에서 객체를 초기화 하지 않으면 객체 p의 기본 생성자가 자동으로 무조건 한 번 실행된다.
+    // 생성자 함수 본체 Init6() { } 에서는 객체 p의 생성자를 호출할 수는 없고 set() 함수를 호출하여 초기화해야 한다.
+    // 그래서 생성자 Init6()의 생성자 본체 { } 에서 p.set()을 호출하면 객체 p 멤버들은 두 번 초기화되는 것이다.
+    //----------------------------------------------------------------------------
+    // 중요: 결국 객체 멤버(p)는 생성자의 서두에서 초기화하는 것이 가장 좋으며,
+    //      기본 데이타 타입(int, double 등)의 경우 생성자 본체 또는 서두에서 초기화해도 상관없다.
+    //      어차피 기본 데이타 타입은 멤버 변수 선언 때 자동으로 초기화되지 않으니까.
+    class Init6 {
+        Person p;
+        int i, j;
+        double d;
+    public:
+        // 여기서는 p.set(...) 대신 편의상 p.setName(...)을 호출했다.
+        Init6() { i = j = 6; d = 0; p.setName("p-Init6-body"); p.println(); }
+        void print() {
+            cout << "Init6 i: " << i << ", j: " << j << ", d: " << d << endl;
+        }
+    };
+
 
 
 public:

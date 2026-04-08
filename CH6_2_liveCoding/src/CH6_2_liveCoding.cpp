@@ -1,5 +1,5 @@
-#include
-#include
+#include <iostream>
+#include <string>
 using namespace std;
 
 struct Infofood {
@@ -8,15 +8,36 @@ struct Infofood {
 };
 
 class CalFood {
+	public:
+		static int cnt;
+		static Infofood food[100];
+		static int totalCalories;
 
+		static void addFood(Infofood _eatfood);
+		static void printTotalCalories();
 };
+
+int CalFood::cnt = 0;
+Infofood CalFood::food[100];
+int CalFood::totalCalories = 0;
 
 void CalFood::addFood(Infofood _eatfood) {
-
+	food[cnt] = _eatfood;
+	totalCalories += _eatfood.calories;
+	cnt++;
 }
+
 class Person {
+	Infofood food;
+
+	public:
+		void setfood(Infofood f);
 
 };
+
+void Person::setfood(Infofood f){
+	CalFood::addFood(f);
+}
 
 void CalFood::printTotalCalories() {
     int i = 0;

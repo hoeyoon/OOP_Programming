@@ -797,7 +797,22 @@ void VectorPerson::push_back(Person *p){
 }
 
 void VectorPerson::erase(int index) {
+	/*
+    index가 음수이거나 마지막 원소보다 큰 인덱인 경우 바로 리턴하라.
+    pVector[index] 원소를 삭제하라.
+        즉, for 문을 이용하여
+               [index+1] 원소부터 마지막 원소까지 모두 왼쪽으로 한칸씩 이동시켜라.
+    pVector에 삽입된 원소의 개수를 하나 줄인다.
+	*/
 
+	if(index < 0 && size() > index){
+		return;
+	}
+
+	for(int i = 0; i < size() - 1; i++){
+		pVector[i] = pVector[i + 1];
+	}
+	count--;
 }
 
 void VectorPerson::insert(int index, Person* p) {
@@ -935,6 +950,24 @@ void PersonManager::insert() { // Menu item 5
 }
 
 void PersonManager::remove() { // Menu item 6
+	/*
+    벡터 persons가 비어 있을 경우 아래 메시지만 출력하고 바로 리턴하라.
+        cout << "No entry to remove" << endl;
+    UI::getIndex("Index to delete? ", persons.size())를 호출하여 삭제할
+    Person 객체의 인덱스를 사용자로부터 입력 받는다.
+    persons의 index 위치에 저장된 포인터가 포인트하는 Person 객체의 메모리를 반납한다.
+    persons의 위 VectorPerson::erase(...)를 호출하여 index 원소를 삭제하라.
+    */
+	if(persons.empty() == 1){
+		cout << "No entry to remove" << endl;
+		return;
+	}
+	int index = UI::getIndex("Index to delete? ", persons.size());
+	cout << "idx = " << index << endl;
+	Person* p = persons.at(index);
+	delete p;
+	persons.erase(index);
+    display();
 }
 
 

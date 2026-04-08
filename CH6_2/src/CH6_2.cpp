@@ -816,7 +816,21 @@ void VectorPerson::erase(int index) {
 }
 
 void VectorPerson::insert(int index, Person* p) {
-
+	/*
+	현재 벡터 내에 삽입된 원소의 개수가 할당된 원소의 개수와 같거나 큰 경우
+		기존 함수를 호출하여 pVector의 용량을 먼저 확장한다. [push_back() 참조]
+	for문을 이용하여 pVector의 마지막 원소에서부터 index까지 모두 한칸씩 오른쪽으로 이동시킨 후
+	index 위치에 p를 저장한다.
+	삽입된 원소 개수를 하나 늘린다.
+	*/
+	if(count >= allocSize){
+		extend_capacity();
+	}
+	for(int i = size(); i > index; i--){
+		pVector[i] = pVector[i - 1];
+	}
+	pVector[index] = p;
+	count++;
 }
 
 /******************************************************************************
@@ -947,6 +961,29 @@ void PersonManager::login() {
 }
 
 void PersonManager::insert() { // Menu item 5
+	/*
+    persons 벡터가 비어 있을 경우 삽입할 index 위치를 무조건 0으로 설정하고
+    그렇지 않은 경우 UI::getIndex()를 호출하여 사용자로부터 입력할 위치(index)를 입력 받아라.
+        주의: 기존 원소의 맨 끝에 추가하는 것도 가능해야 한다.(인덱스 값의 범위에 주의)
+             UI::getIndex() 호출 시 출력할 메시지는 실행 결과를 참조하라.
+    printNotice(...); // 호출 시 이 함수 인자는 append()와 실행 결과를 참조하여 완성하라.
+    새로운 Person 객체를 할당받고 인적정보를 입력 받은 후 새 변수 p에 저장
+       (위 문장은 append() 함수 참조)
+    if (p == nullptr) return;
+    persons 벡터의 index 위치에 p를 삽입하라.
+    */
+	int index;
+	if(persons.empty() == 1){
+		index = 0;
+	}
+	else{
+		index = UI::getIndex("Index to insert in front? ", persons.size() + 1);
+	}
+	printNotice("Input", "to insert:");
+	Person* p = Factory::inputPerson(cin);
+	if (p == nullptr) return;
+	persons.insert(index, p);
+    display();
 }
 
 void PersonManager::remove() { // Menu item 6

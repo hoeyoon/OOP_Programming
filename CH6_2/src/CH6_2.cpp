@@ -1223,11 +1223,30 @@ class ClassAndObject
         //       임시객체의 참조를 함수의 매개변수로 바로 넘길 수 있다.)
     }
 
+    void stringParameter() {
+        cout << "stringParameter()" << endl;
+
+        string s("name1"); // string s = "name1"; 과 동일
+
+        cp.printStr(s);
+        cp.printConstStr(s);
+        // 아래는 임시 string 객체 생성 (임시객체는 항상 const): 컴파일 에러
+        //cp.printStr(string("name"));
+        cp.printConstStr(string("name2")); // const 임시 객체 생성
+        // 아래 "name"은 자동으로 임시 string("name") 객체 생성: 컴파일 에러
+        //cp.printStr("name");
+        cp.printConstStr("name3"); // const 임시 객체 생성
+        // 결론: 함수의 매개변수로 "name3"처럼 문자열을 직접 넘겨 주고 싶으면
+        //      함수 매개변수를 const string& 으로 선언해야 한다. string&로 선언시 에러.
+        //      함수 내에서 매개변수 객체를 수정하지 않을 경우 습관적으로 항상 이렇게 선언하라.
+        // 매개변수를 const string으로 선언해도 되지만 이 경우 문자열 전체가 복사되므로 비효율적임
+    }
 
     void parameters() { // Menu item 6
         normalParameter();
         constParameter(); cout << endl;
         temporaryParameter(); cout << endl;
+        stringParameter(); cout << endl;
     }
 
     // 기본 생성자가 있지만 아무것도 실행하지 않는다.

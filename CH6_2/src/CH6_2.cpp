@@ -64,13 +64,13 @@ public:
     void setAddress(const char* address); // 5_2에서 수정
     void setMemo(const char* c_str);      // 5_2에서 수정
 
-    const string& 		getName()    { return name; }
-    const string&		getPasswd()	 { return passwd; }
-    int         getId()      { return id; }
-    double      getWeight()  { return weight; }  // 구현 시
-    bool        getMarried() { return married; }  // 리턴 값들을
-    const char* getAddress() { return address; } // 수정하시오.
-    const char* getMemo()    { return memo_c_str; }
+    const string& 		getName()    const { return name; }
+    const string&		getPasswd()	 const { return passwd; }
+    int         getId()      const { return id; }
+    double      getWeight()  const { return weight; }  // 구현 시
+    bool        getMarried() const { return married; }  // 리턴 값들을
+    const char* getAddress() const { return address; } // 수정하시오.
+    const char* getMemo()    const { return memo_c_str; }
 
     void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
     void print(ostream& out) { printMembers(out); }
@@ -1161,6 +1161,21 @@ class ClassAndObject
 
         void printStr(string& s)             { cout << "printStr(string& s): " << s << endl; }
         void printConstStr(const string& s)  { cout << "printConstStr(const string& s): " << s << endl; }
+        void printPerson(const Person& p) { // const Person p로 선언해도 동일한 결과가 나옴
+            cout << "printPerson(const Person& p)" << endl;
+            // 위 const Person& p 선언의 의미: 이 함수에서 객체 p를 수정하지 않겠다는 의미임
+            // 따라서 아래의 p.setName("const-value")처럼 p의 멤버함수를 호출하면 에러로 처리함;
+            // 이유는 이 함수가 const 객체인 p의 멤버 name를 수정하기기 때문에.
+
+            // p.setName("const-value"); // 명백히 이름을 수정하는 것이므로 컴파일 에러 발생
+            cout << p.getName() << " " << p.getId() << " " << p.getWeight() << " " <<
+                    p.getMarried() << " :" << ((p.getAddress()==nullptr)?"":p.getAddress()) <<
+                    ":" << endl;
+
+            // 주석을 풀 경우 발생하는 컴파일 에러는 매개변수가 const로 선언되었기 때문에
+            // 발생하는 것이다. 컴파일러 입장에서는 위 멤버함수들이 p의 멤버를 수정하는지 아니면
+            // 읽기만하는지 알 수 없기 때문에 컴파일 시 에러로 처리함;
+        }
     };
 
     Parameter cp;
@@ -1247,6 +1262,8 @@ class ClassAndObject
         constParameter(); cout << endl;
         temporaryParameter(); cout << endl;
         stringParameter(); cout << endl;
+        cp.printPerson(Person("name", 10, 77.7, true, "address"));
+        // 임시 Person 객체의 참조 전달 (임시 객체는 항상 const)
     }
 
     // 기본 생성자가 있지만 아무것도 실행하지 않는다.

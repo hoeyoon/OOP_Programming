@@ -1000,7 +1000,6 @@ void PersonManager::remove() { // Menu item 6
 		return;
 	}
 	int index = UI::getIndex("Index to delete? ", persons.size());
-	cout << "idx = " << index << endl;
 	Person* p = persons.at(index);
 	delete p;
 	persons.erase(index);

@@ -1143,7 +1143,7 @@ class ClassAndObject
         // 임시객체 생성 후 print()를 호출하고 바로 소멸된다.
         Init1().print(); cout << endl;
         Init2().print(); cout << endl;
-        //Init3().print(); cout << endl;
+        Init3().print(); cout << endl;
         //Init4().print(); cout << endl;
         //Init5().print(); cout << endl;
         //Init6().print();
@@ -1161,6 +1161,26 @@ class ClassAndObject
         Init2() { i = j = 6; d = 0; }  // 컴파일 시 j, d가 초기화되지 않았다는 경고 메시지 나올 수도 있음
         void print() {
             cout << "Init2 i: " << i << ", j: " << j << ", d: " << d << endl;
+        }
+    };
+
+    // 기본 생성자가 있지만 아무것도 실행하지 않는다.
+    // 그러나 멤버 변수 선언 시에 멤버 p와 i처럼 선언과 동시에 초기화를 할 수 있다.
+    // 멤버를 초기화하는 한 방법이지만 추천하고 싶은 방법은 아니다.
+    // (일부 컴파일러는 이를 지원하지 않을 수 있는데 그럴경우 class Init4처럼 수정하라.)
+    class Init3 {
+        Person p { "p-Init3" };
+        // Person p("p-Init3");와 동일한 기능이나 이렇게 표현하면 컴파일 에러가 발생할 것이다.
+        // 즉, 함수 리턴 타입이 Person이고 함수 이름 p, 매개변수가 "p-Init3"인 새로운
+        // [함수 선언]으로 컴파일러가 오해하여 에러 메시지(매개변수가 잘못되었다는)를 출력한다.
+        // 컴파일러는 함수 선언인지 객체변수 선언인지 구분할 수 없기 때문이다.
+        // 그래서 { }를 사용한다. { }는 객체 변수 선언이며 생성자 함수 인자를 의미한다.
+        int i {3}, j;  // i {3}는 i = 3으로 표현해도 됨; 그러나 i(3)은 에러
+        double d;      // i는 초기화되지만 j, d는 초기화되지 않음
+    public:
+        Init3() { j = 6; d = 0; } // 컴파일 시 j, d가 초기화되지 않았다는 경고 메시지 출력될 수 있음
+        void print() {
+            cout << "Init3 i: " << i << ", j: " << j << ", d: " << d << endl;
         }
     };
 

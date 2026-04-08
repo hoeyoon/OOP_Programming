@@ -1149,6 +1149,40 @@ class ClassAndObject
         Init6().print();
     }
 
+    class Parameter {
+    public:
+        // 아래 각 함수 선언에서 const가 있는 매개변수는 해당 함수에서 객체 p를 수정하지 않는다는 의미이고,
+        // const가 없는 매개변수는 해당 함수에서 객체 p를 수정할 수 있다는 의미임
+        // 함수 호출한 곳에서 함수의 실행 결과를 매개변수를 통해 넘겨 받아야 하는 경우는 const가 없어야 함
+        void normalValue(Person p)           { cout << "normalValue(Person p)" << endl; }
+        void constValue(const Person p)      { cout << "constValue(const Person p)" << endl; }
+        void normalReference(Person& p)      { cout << "normalReference(Person& p)" << endl; }
+        void constReference(const Person& p) { cout << "constReference(const Person& p)" << endl; }
+
+        void printStr(string& s)             { cout << "printStr(string& s): " << s << endl; }
+        void printConstStr(const string& s)  { cout << "printConstStr(const string& s): " << s << endl; }
+    };
+
+    Parameter cp;
+
+    void normalParameter() {
+        cout << "normalParameter()" << endl;
+        cout << "Person p1(\"p1-name\")" << endl;
+
+        // 요점: 아래 Person p1처럼 p1이 일반적인 객체일 경우
+        //      함수의 매개변수 타입에 상관없이 이 객체를 함수 인자로 넘겨 줄 수 있다.
+        Person p1("p1-name");
+
+        cp.normalValue(p1);     // 복사생성자 통해 매개변수 p에 p1을 복사해서 넘겨 줌
+        cp.constValue(p1);      // 복사생성자 통해 매개변수 p에 p1을 복사해서 넘겨 줌
+        cp.normalReference(p1); // 매개변수 p에 단순히 p1의 참조만 넘겨 줌
+        cp.constReference(p1);  // 매개변수 p에 단순히 p1의 참조만 넘겨 줌
+    }
+
+    void parameters() { // Menu item 6
+        normalParameter();
+    }
+
     // 기본 생성자가 있지만 아무것도 실행하지 않는다.
     // 이럴 경우 객체 멤버들(여기선 p)은 자동으로 기본 생성자가 실행되어 초기화된다.
     // 하지만 기본 데이타 타입 변수(i, j, d)들은 자동으로 초기화되지 않는다.
@@ -1251,7 +1285,7 @@ public:
         func_t func_arr[] = { // 메뉴항목을 실행하는 멤버 함수를 배열에 미리 저장(등록)해 둠
             nullptr, &CO::defualConstructor, &CO::constructor,
             &CO::construcorDestructor, &CO::globalStaticLocalObjects,
-			&CO::memberInitialization,
+			&CO::memberInitialization, &CO::parameters,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         // func_arr[]의 원소의 개수 = 배열 전체 크기 / 한 배열 원소의 크기
@@ -1261,7 +1295,7 @@ public:
             "+++++++++++ Person Class And Object Menu ++++++++++++\n"
             "+ 0.Exit 1.DefualConstructor 2.Constructor          +\n"
             "+ 3.ConstrucorDestructor 4.GlobalStaticLocalObjects +\n"
-            "+ 5.MemberInitialization                            +\n"
+			"+ 5.MemberInitialization 6.constParameter           +\n"
             "+++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
         while (true) {

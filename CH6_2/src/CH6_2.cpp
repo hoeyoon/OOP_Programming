@@ -1120,11 +1120,42 @@ class ClassAndObject
         cout << "--- global_static_local_objects_inner() returned ---" << endl;
     }
 
+    // 이 클래스는 기본 생성자 Init1()가 없기 때문에 컴파일러가 자동으로 기본 생성자를 생성해 준다.
+    // 이 기본 생성자에 의해 여기서는 다행히 모든 멤버가 0으로 초기화되는데
+    // 이는 컴파일러마다 다르게 실행될 수 있다.
+    // 따라서 사용자가 직접 생성자를 만들어 초기화시켜 주는 습관을 가지는 것이 좋다.
+    class Init1 { // ch6_2 추가
+        Person p;
+        int i, j;
+        double d;
+        char name[5];
+    public:
+        void print() {
+            // d = i = j = 0;
+            cout << "Init1 i: " << i << ", j: " << j <<
+                    ", d: " << d << ", name: " << name << endl;
+        }
+    };
+
+    void memberInitialization() { // Menu item 5
+        int i = 0, i2 = i; i = i2; // 의미 없는 문장이지만, 삭제하지 말 것
+
+        // 임시객체 생성 후 print()를 호출하고 바로 소멸된다.
+        Init1().print(); cout << endl;
+        //Init2().print(); cout << endl;
+        //Init3().print(); cout << endl;
+        //Init4().print(); cout << endl;
+        //Init5().print(); cout << endl;
+        //Init6().print();
+    }
+
+
 public:
     // 사용자가 선택한 메뉴 항목을 실행하는 멤버 함수(func_arr[menuItem]에 등록된 함수)를 호출
     void run() {
         // ClassAndObject의 멤버 함수에 대한 포인터 타입인 새로운 데이타 타입 func_t를 정의함
         using func_t = void (ClassAndObject::*)();
+        using CO = ClassAndObject;
         // 위 using 문은 ClassAndObject 클래스의 멤버 함수(리턴 타입이 void 이면서 매개변수가 없는)에
         // 대한 포인터 타입을 앞으로는 간단히 func_t로 사용하겠다는 의미이다.
 
@@ -1135,8 +1166,9 @@ public:
         //     (즉, 함수 주소로 jump 해 가서 함수를 실행함)
 
         func_t func_arr[] = { // 메뉴항목을 실행하는 멤버 함수를 배열에 미리 저장(등록)해 둠
-            nullptr, &ClassAndObject::defualConstructor, &ClassAndObject::constructor,
-            &ClassAndObject::construcorDestructor, &ClassAndObject::globalStaticLocalObjects,
+            nullptr, &CO::defualConstructor, &CO::constructor,
+            &CO::construcorDestructor, &CO::globalStaticLocalObjects,
+			&CO::memberInitialization,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         // func_arr[]의 원소의 개수 = 배열 전체 크기 / 한 배열 원소의 크기
@@ -1146,6 +1178,7 @@ public:
             "+++++++++++ Person Class And Object Menu ++++++++++++\n"
             "+ 0.Exit 1.DefualConstructor 2.Constructor          +\n"
             "+ 3.ConstrucorDestructor 4.GlobalStaticLocalObjects +\n"
+            "+ 5.MemberInitialization                            +\n"
             "+++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
         while (true) {

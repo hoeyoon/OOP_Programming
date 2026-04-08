@@ -28,6 +28,61 @@ public:
 // 위에 코드는 수정 불가
 
 // 여기에 ArrayUtility2 멤버 함수 코드 작성
+int* ArrayUtility2::create(int &size){
+	cout << "Enter number of integer : ";
+	cin >> size;
+	int *arr = new int[size];
+	if(arr == nullptr){
+		exit(1);
+	}
+	cout << "Enter " << size << " integer(s) : ";
+	for(int i = 0; i < size; i++){
+		cin >> arr[i];
+	}
+	return arr;
+}
+
+void ArrayUtility2::print(int s[], int size){
+	for(int i = 0; i < size; i++){
+		cout << s[i] << " ";
+	}
+	cout << endl;
+}
+
+int* ArrayUtility2::concat(int s1[], int s2[], int size_s1, int size_s2){
+	int *arr = new int[size_s1 + size_s2];
+	for(int i = 0; i < size_s1; i++){
+		arr[i] = s1[i];
+	}
+	for(int i = 0; i < size_s2; i++){
+		arr[size_s1 + i] = s2[i];
+	}
+	return arr;
+}
+
+int* ArrayUtility2::remove(int s1[], int s2[], int size_s1, int size_s2, int&retSize){
+	int *p = new int[size_s1 + size_s2];
+	retSize = 0;
+	bool chk = false;
+	for(int i = 0; i < size_s1; i++){
+		chk = false;
+		for(int j = 0; j < size_s2; j++){
+			if(s1[i] == s2[j]){
+				chk = true;
+				break;
+			}
+		}
+		if(!chk){
+			p[retSize++] = s1[i];
+		}
+	}
+	int *q = new int[retSize];
+	for(int i = 0; i < retSize; i++){
+		q[i] = p[i];
+	}
+	delete []p;
+	return q;
+}
 
 // 아래 코드 수정 불가
 

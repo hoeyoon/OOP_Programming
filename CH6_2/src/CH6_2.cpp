@@ -1142,12 +1142,27 @@ class ClassAndObject
 
         // 임시객체 생성 후 print()를 호출하고 바로 소멸된다.
         Init1().print(); cout << endl;
-        //Init2().print(); cout << endl;
+        Init2().print(); cout << endl;
         //Init3().print(); cout << endl;
         //Init4().print(); cout << endl;
         //Init5().print(); cout << endl;
         //Init6().print();
     }
+
+    // 기본 생성자가 있지만 아무것도 실행하지 않는다.
+    // 이럴 경우 객체 멤버들(여기선 p)은 자동으로 기본 생성자가 실행되어 초기화된다.
+    // 하지만 기본 데이타 타입 변수(i, j, d)들은 자동으로 초기화되지 않는다.
+    // 따라서 필요한 경우 기본 데이타 타입 변수들은 생성자 내에서 반드시 초기화 해 주어야 한다.
+    class Init2 {
+        Person p;
+        int i, j;
+        double d;
+    public:
+        Init2() { i = j = 6; d = 0; }  // 컴파일 시 j, d가 초기화되지 않았다는 경고 메시지 나올 수도 있음
+        void print() {
+            cout << "Init2 i: " << i << ", j: " << j << ", d: " << d << endl;
+        }
+    };
 
 
 public:

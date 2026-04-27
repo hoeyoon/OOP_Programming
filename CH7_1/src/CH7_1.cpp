@@ -77,6 +77,8 @@ public:
     bool operator == (const Person &p);
     friend Person operator + (const Person &p, double weight);
     friend Person operator + (double weight, const Person &p);
+    Person& operator++();
+    Person  operator++(int x);
 };
 
 /* Person::Person(): Person("") {
@@ -238,6 +240,16 @@ Person operator + (double weight, const Person &p){
 	return temp;
 }
 
+Person& Person::operator++(){
+	this->weight++;
+	return *this;
+}
+
+Person  Person::operator++(int x){
+	Person temp = *this;
+	this->weight++;
+	return temp;
+}
 
 void Person::printMembers(ostream& out)   {
 	out << name << " " << id << " " << weight << " " << married << " :" << (address == nullptr ? "" : address) << ":";
@@ -1928,6 +1940,34 @@ class OperatorOverload
         cout << "p == p3 : " << (p == p3) << endl;
     }
 
+    void personIncrement() { // Memu item 5
+        Person p1(p); p1.setAddress("");
+        cout << "p1  : "; p1.println();
+        cout << "++p1: "; (++p1).println(); // operator ++()
+        cout << "p1++: "; (p1++).println(); // operator ++(int)
+        cout << "p1  : "; p1.println();
+        cout << "p2 = p1++" << endl;
+        Person p2 = p1++; // copy constructor
+        cout << "p2  : "; p2.println();
+        cout << "p1  : "; p1.println();
+        cout << "p2 = (++p1)++" << endl;
+        p2 = (++p1)++;
+        cout << "p2  : "; p2.println();
+        cout << "p1  : "; p1.println();
+        cout << "p2 = ++(p1++)" << endl;
+        p2 = ++(p1++);
+        cout << "p2  : "; p2.println();
+        cout << "p1  : "; p1.println();
+        cout << "p2 = ++p1++" << endl;
+        p2 = ++p1++;
+        cout << "p2  : "; p2.println();
+        cout << "p1  : "; p1.println();
+        cout << "(p2 = 2.0 + ++p1++ + 3.0) == p : "
+             << ((p2 = 2.0 + ++p1++ + 3.0) == p) << endl;
+        cout << "p2  : "; p2.println();
+        cout << "p1  : "; p1.println();
+    }
+
 public:
     OperatorOverload():
         p("p",  1, 65.4, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
@@ -1940,6 +1980,7 @@ public:
         using func_t = void (OperatorOverload::*)();
         func_t func_arr[] = {
         		nullptr, &OOL::memoAdd, &OOL::personEqual, &OOL::personAdd, &OOL::personAssign,
+				&OOL::personIncrement,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         string menuStr =

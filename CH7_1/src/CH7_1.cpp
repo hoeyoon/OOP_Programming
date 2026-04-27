@@ -79,6 +79,12 @@ public:
     friend Person operator + (double weight, const Person &p);
     Person& operator++();
     Person  operator++(int x);
+    Person& operator << (const string& name); // setName()과 동일
+    Person& operator << (const char* name);   // setName()과 동일
+    Person& operator << (int id);             // set(int id)와 동일
+    Person& operator >> (string& name); // 멤버 name을 매개변수 name에 저장
+    Person& operator >> (int& id);      // 멤버 id을 매개변수 id에 저장
+    Person& operator >> (char* name);   // 멤버 name의 C-스트링을 매개변수 name에 복사
 };
 
 /* Person::Person(): Person("") {
@@ -249,6 +255,36 @@ Person  Person::operator++(int x){
 	Person temp = *this;
 	this->weight++;
 	return temp;
+}
+
+Person& Person::operator << (const string& name){	// setName()과 동일
+	this->name = name;
+	return *this;
+}
+
+Person& Person::operator << (const char* name){   // setName()과 동일
+	this->name = name;
+	return *this;
+}
+
+Person& Person::operator << (int id){             // set(int id)와 동일
+	this->id = id;
+	return *this;
+}
+
+Person& Person::operator >> (string& name){ // 멤버 name을 매개변수 name에 저장
+	name = this->name;
+	return *this;
+}
+
+Person& Person::operator >> (int& id){      // 멤버 id을 매개변수 id에 저장
+	id = this->id;
+	return *this;
+}
+
+Person& Person::operator >> (char* name){   // 멤버 name의 C-스트링을 매개변수 name에 복사
+	strcpy(name, this->name.c_str());
+	return *this;
 }
 
 void Person::printMembers(ostream& out)   {
@@ -1968,6 +2004,34 @@ class OperatorOverload
         cout << "p1  : "; p1.println();
     }
 
+    void personShift() { // Memu item 6
+        Person p1(p); p1.setAddress("");
+        cout << "p1: "; p1.println();
+        cout << "p1 << \"p1\" << 11" << endl;
+        // operator << (const char *), operator << (int)
+        p1 << "p1";
+        p1 << 11;
+        cout << "p1: "; p1.println();
+
+        cout << "p1 << name << 12" << endl;
+        string name("p1-12");
+        // operator << (const string&), operator << (int)
+        p1 << name << 12;
+        cout << "p1: "; p1.println();
+
+        cout << "p1 >> name >> id >> c_name" << endl;
+        int id;
+        char c_name[40];
+        name = "";
+        // operator >> (string), operator >> (int), operator >> (char *)
+        p1 >> name >> id >> c_name;
+        cout << "name:" << name << ", id:" << id << ", c_name:" << c_name << endl;
+
+        cout << "(p1 << \"p\" << 1) == p : " << ((p1 << "p" << 1) == p) << endl;
+        cout << "p1: "; p1.println();
+        cout << "p : "; p.println();
+    }
+
 public:
     OperatorOverload():
         p("p",  1, 65.4, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
@@ -1980,7 +2044,7 @@ public:
         using func_t = void (OperatorOverload::*)();
         func_t func_arr[] = {
         		nullptr, &OOL::memoAdd, &OOL::personEqual, &OOL::personAdd, &OOL::personAssign,
-				&OOL::personIncrement,
+				&OOL::personIncrement, &OOL::personShift,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         string menuStr =

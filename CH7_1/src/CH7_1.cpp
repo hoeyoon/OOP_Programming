@@ -73,6 +73,8 @@ public:
     void whatAreYouDoing();                          // ch3_2에서 추가
     Person& assign(const Person& p);				// ch5_2에서 추가
     bool isSame(const string& name, int id);         // ch3_2에서 추가
+
+    bool operator == (const Person &p);
 };
 
 /* Person::Person(): Person("") {
@@ -215,6 +217,12 @@ bool Person::isSame(const string& name, int id) {
 	return false; // 구현 시 수정하라.
 }
 
+bool Person::operator == (const Person &p){
+	if(this->isSame(p.name, p.id)){
+		return true;
+	}
+	return false;
+}
 
 void Person::printMembers(ostream& out)   {
 	out << name << " " << id << " " << weight << " " << married << " :" << (address == nullptr ? "" : address) << ":";
@@ -1861,6 +1869,19 @@ class OperatorOverload
         disp_memo("m3 = m3 + m2 + Memo(...)", m3);
     }
 
+    void personEqual() { // Memu item 2
+        Person p1(p), p2(p);
+        cout << "p1: "; p1.println();
+        cout << "p2: "; p2.println();
+        cout << "p1 == p2 : " << (p1 == p2) << endl;
+        p2.set(2);  // p2는 p1과 비교해 이름은 같고 id는 다름
+        cout << "p2: "; p2.println();
+        cout << "p1 == p2 : " << (p1 == p2) << endl;
+        p2.set(1); p2.setName("user"); // p2는 p1과 비교해 이름은 다르고 id는 동일
+        cout << "p2: "; p2.println();
+        cout << "p1 == p2 : " << (p1 == p2) << endl;
+    }
+
 public:
     OperatorOverload():
         p("p",  1, 65.4, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
@@ -1872,7 +1893,7 @@ public:
 
         using func_t = void (OperatorOverload::*)();
         func_t func_arr[] = {
-        		nullptr, &OOL::memoAdd,
+        		nullptr, &OOL::memoAdd, &OOL::personEqual,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         string menuStr =

@@ -85,6 +85,8 @@ public:
     Person& operator >> (string& name); // 멤버 name을 매개변수 name에 저장
     Person& operator >> (int& id);      // 멤버 id을 매개변수 id에 저장
     Person& operator >> (char* name);   // 멤버 name의 C-스트링을 매개변수 name에 복사
+    operator string() { return this->name; }
+    operator int()    { return this->id; }
 };
 
 /* Person::Person(): Person("") {
@@ -2032,6 +2034,41 @@ class OperatorOverload
         cout << "p : "; p.println();
     }
 
+    void print_name_id(string name, int id) {
+        cout << "print_name_id() name:" << name << ", id:" << id << endl;
+    }
+
+    void typeConversion() { // Memu item 7
+        Person p1(p), p2(p);
+        p1 << "Hong" << 1; // 이름과 id를 객체 p1에 설정함
+        p2 << "Dong" << 2;
+        cout << "p1: "; p1.println();
+        cout << "p2: "; p2.println();
+
+        // 아래 문장은 int id = (int)p1; 과 동일; 컴파일러가 id와 동일한 타입인 int로
+        // 타입을 변경하는 operator int()를 자동으로 호출하여 리턴 값을 id에 저장
+        int id = p1;
+
+        // 아래 문장은 (string)p1 와 동일; 컴파일러가 name과 동일한 타입인 string로
+        // 타입을 변경하는 operator string()를 자동으로 호출하여 리턴 값을 name에 저장
+        string name = p1;
+
+        cout << "p1 name:" << name << ", id:" << id << endl;
+        p2 >> id >> name; // 객체 p2로부터 id와 이름을 얻어옴
+        cout << "p2 name:" << name << ", id:" << id << endl;
+
+        // 아래 함수호출 시 컴파일러가 알아서 자동으로 함수 매개변수와 동일한 타입으로 변환해 주는
+        // operator string()과  operator int()를 호출하여 리턴 값을 함수인자로 넘겨 줌
+        print_name_id(p1, p1);
+        print_name_id(p2, p2);
+
+        // 아래 문장은 사용자가 출력할 데이타 타입을 정확히 지정해 주면
+        // 컴파일러가 상응하는 operator string()과  operator int()를 호출한다.
+        cout << "p2 name:" << (string)p2 << ", id:" << (int)p2 << endl;
+        cout << "p1+p2 name:" << (string)p1+name << ", id:" << (int)p1+id << endl;
+    }
+
+
 public:
     OperatorOverload():
         p("p",  1, 65.4, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
@@ -2044,7 +2081,7 @@ public:
         using func_t = void (OperatorOverload::*)();
         func_t func_arr[] = {
         		nullptr, &OOL::memoAdd, &OOL::personEqual, &OOL::personAdd, &OOL::personAssign,
-				&OOL::personIncrement, &OOL::personShift,
+				&OOL::personIncrement, &OOL::personShift, &OOL::typeConversion,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         string menuStr =

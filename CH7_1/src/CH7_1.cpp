@@ -75,6 +75,8 @@ public:
     bool isSame(const string& name, int id);         // ch3_2에서 추가
 
     bool operator == (const Person &p);
+    friend Person operator + (const Person &p, double weight);
+    friend Person operator + (double weight, const Person &p);
 };
 
 /* Person::Person(): Person("") {
@@ -222,6 +224,18 @@ bool Person::operator == (const Person &p){
 		return true;
 	}
 	return false;
+}
+
+Person operator + (const Person &p, double weight){
+	Person temp(p);
+	temp.weight += weight;
+	return temp;
+}
+
+Person operator + (double weight, const Person &p){
+	Person temp(p);
+	temp.weight += weight;
+	return temp;
 }
 
 void Person::printMembers(ostream& out)   {
@@ -1882,6 +1896,23 @@ class OperatorOverload
         cout << "p1 == p2 : " << (p1 == p2) << endl;
     }
 
+    void personAdd() { // Memu item 3
+        Person p1(p); p1.setAddress("");
+        cout << "p1:  "; p1.println();
+        cout << "p2 = p1 + 5.0" << endl;
+        Person p2 = p1 + 5.0;
+        cout << "p2:  "; p2.println();
+        cout << "(p2 + 10.0).println()" << endl;
+        cout << "tmp: "; (p2 + 10.0).println();
+        cout << "p2:  "; p2.println();
+        cout << "p3 = 15.0 + p1" << endl;
+        Person p3 = 15.0 + p1;
+        cout << "p3:  "; p3.println();
+        cout << "(20.0 + p3).println()" << endl;
+        cout << "tmp: "; (20.0 + p3).println();
+        cout << "p3:  "; p3.println();
+    }
+
 public:
     OperatorOverload():
         p("p",  1, 65.4, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
@@ -1893,7 +1924,7 @@ public:
 
         using func_t = void (OperatorOverload::*)();
         func_t func_arr[] = {
-        		nullptr, &OOL::memoAdd, &OOL::personEqual,
+        		nullptr, &OOL::memoAdd, &OOL::personEqual, &OOL::personAdd,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         string menuStr =

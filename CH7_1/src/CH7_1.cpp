@@ -340,6 +340,8 @@ class Memo
 
 public:
     Memo(const char *c_str = nullptr) : mStr(c_str == nullptr ? "" : c_str){}
+    Memo  operator +  (const Memo& m); // ch7_1 추가
+    Memo& operator += (const Memo& m); // ch7_1 추가
     string& getNext(size_t& ppos, string& word);
     void displayMemo();
     const char *c_str() { return mStr.c_str(); }
@@ -354,6 +356,17 @@ public:
     void inputMemo();
     void run();
 };
+
+Memo Memo::operator + (const Memo& m){
+	Memo temp;
+	temp.mStr = this->mStr + m.mStr;
+	return temp;
+}
+
+Memo& Memo::operator += (const Memo& m){
+	this->mStr += m.mStr;
+	return *this;
+}
 
 // 메모의 현 위치(pos = *ppos)에서 그 행의 끝을 찾은 후 행 전체를 별도의 string으로 구성해서 리턴함
 // string::npos는 해당 문자를 찾지 못했을 경우의 리턴 값이며 (-1)과 동일 값임
@@ -1828,6 +1841,26 @@ class OperatorOverload
     Person p;
     Memo   m;
 
+    void disp_memo(const string& name, Memo& m) {
+        cout << name << endl; m.displayMemo(); cout << endl;
+    }
+
+    void memoAdd() { // Memu item 1
+        Memo m1(m);
+        Memo m2("James Fenimore Cooper\n");
+        disp_memo("m1", m1);
+        disp_memo("m2", m2);
+        // operator +
+        Memo m3 = m1 + m2;
+        disp_memo("m3 = m1 + m2", m3);
+        // operator +=
+        m3 += Memo("1st const added memo line.\n");
+        disp_memo("m3 += Memo(...)", m3);
+        // operator +
+        m3 = m3 + m2 + Memo("2nd const added memo line.\n");
+        disp_memo("m3 = m3 + m2 + Memo(...)", m3);
+    }
+
 public:
     OperatorOverload():
         p("p",  1, 65.4, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
@@ -1839,7 +1872,7 @@ public:
 
         using func_t = void (OperatorOverload::*)();
         func_t func_arr[] = {
-        		nullptr,
+        		nullptr, &OOL::memoAdd,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         string menuStr =

@@ -71,7 +71,7 @@ public:
     void print(ostream& out) { printMembers(out); }
     void println()            { print(cout); cout << endl; }
     void whatAreYouDoing();                          // ch3_2에서 추가
-    Person& assign(const Person& p);				// ch5_2에서 추가
+    Person& operator = (const Person& p);				// ch7_1에서 추가
     bool isSame(const string& name, int id);         // ch3_2에서 추가
 
     bool operator == (const Person &p);
@@ -195,7 +195,7 @@ void Person::whatAreYouDoing() {
 	cout << name << "is taking a rest." << endl;
 }
 
-Person& Person::assign(const Person& p) {
+Person& Person::operator = (const Person& p) {
 	this->name = p.name;
 	this->passwd = p.passwd;
 	this->id = p.id;
@@ -237,6 +237,7 @@ Person operator + (double weight, const Person &p){
 	temp.weight += weight;
 	return temp;
 }
+
 
 void Person::printMembers(ostream& out)   {
 	out << name << " " << id << " " << weight << " " << married << " :" << (address == nullptr ? "" : address) << ":";
@@ -1574,7 +1575,7 @@ public:
         p.set("p", 2, 80, false, "Seoul");
         cout << "p: "; p.println();   // p와 u은 동일한 객체 메모리를 공유하므로 항상 내용이 동일함
         cout << "u: "; u.println();
-        u.assign(backup);       // u 값을 원래 값으로 복구
+        u = backup;       // u 값을 원래 값으로 복구
         // 매개변수 p는 참조이므로 함수 리턴 시 소멸자가 호출되지 않음
     }
 
@@ -1585,7 +1586,7 @@ public:
         p->set("p", 2, 80, false, "Seoul");
         cout << "p: "; p->println();   // p는 u 메모리를 포인터하므로 항상 동일한 내용이 출력됨
         cout << "u: "; u.println();
-        u.assign(backup);       // u 값을 원래 값으로 복구
+        u = backup;       // u 값을 원래 값으로 복구
         // 매개변수 p는 포인터이므로 함수 리턴 시 소멸자가 호출되지 않음
     }
 
@@ -1651,7 +1652,7 @@ public:
 		r.set("r", 2, 80, false, "Seoul");
 		cout << "r: "; r.println();
 		cout << "u: "; u.println();
-		u.assign(backup);
+		u = backup;
 		// 함수 리턴 시 지역 객체 p의 경우 소멸자 함수가 호출되지만
 		//           참조 변수 r는 소멸자가 호출되지 않음
 	}
@@ -1673,7 +1674,7 @@ public:
 		p->set("p", 2, 80, false, "Seoul"); // p는 u 객체를 포인터하므로 u과 동일한 메모리를 공유함
 		cout << "p: "; p->println();
 		cout << "u: "; u.println();
-		u.assign(backup);
+		u = backup;
 		// 함수 리턴 시 p는 포인터 변수이므로 소멸자가 호출되지 않음
 	}
 
@@ -1686,7 +1687,7 @@ public:
     void inputPerson() { // Menu item 7
     	cout << "u: "; u.println();
         while (!UI::inputPerson(u)) ;  // USER 11 88 false :DONG-GU, DAEGU:
-        backup.assign(u);
+        backup = u;
         cout << "u: "; u.println();
     }
 
@@ -1913,6 +1914,20 @@ class OperatorOverload
         cout << "p3:  "; p3.println();
     }
 
+    void personAssign() { // Memu item 4
+        cout << "p:  "; p.println();
+        Person p2; // 기본 생성자에 의해 초기화
+        cout << "p2 = p" << endl;
+        p2 = p;
+        cout << "p2: "; p2.println();
+        Person p3("Hong",  0, 72.1, false, "Gwangju Nam-gu Bongseon-dong 21");
+        cout << "p3: "; p3.println();
+        cout << "p3 = 20.0 + p2 + 30.5" << endl;
+        p3 = 20.0 + p2 + 30.5;
+        cout << "p3: "; p3.println();
+        cout << "p == p3 : " << (p == p3) << endl;
+    }
+
 public:
     OperatorOverload():
         p("p",  1, 65.4, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
@@ -1924,7 +1939,7 @@ public:
 
         using func_t = void (OperatorOverload::*)();
         func_t func_arr[] = {
-        		nullptr, &OOL::memoAdd, &OOL::personEqual, &OOL::personAdd,
+        		nullptr, &OOL::memoAdd, &OOL::personEqual, &OOL::personAdd, &OOL::personAssign,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         string menuStr =

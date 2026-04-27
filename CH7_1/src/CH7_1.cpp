@@ -2068,6 +2068,13 @@ class OperatorOverload
         cout << "p1+p2 name:" << (string)p1+name << ", id:" << (int)p1+id << endl;
     }
 
+    void currentUser() { // Memu item 8
+        CurrentUser(p).run();
+        m.c_str(p.getMemo());
+        cout << "p: "; p.println();
+        m.displayMemo();
+    }
+
 
 public:
     OperatorOverload():
@@ -2081,7 +2088,7 @@ public:
         using func_t = void (OperatorOverload::*)();
         func_t func_arr[] = {
         		nullptr, &OOL::memoAdd, &OOL::personEqual, &OOL::personAdd, &OOL::personAssign,
-				&OOL::personIncrement, &OOL::personShift, &OOL::typeConversion,
+				&OOL::personIncrement, &OOL::personShift, &OOL::typeConversion, &OOL::currentUser,
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
         string menuStr =

@@ -842,6 +842,8 @@ public:
     void push_back(Person* p);
     void erase(int index);
     void insert(int index, Person* p);
+
+    Person* operator [] (int index) const;
 };
 
 void VectorPerson::extend_capacity() {
@@ -912,6 +914,10 @@ void VectorPerson::insert(int index, Person* p) {
 	count++;
 }
 
+Person* VectorPerson::operator [] (int index) const{
+	return pVector[index];
+}
+
 /******************************************************************************
  * ch4_2: Factory class
  ******************************************************************************/
@@ -977,7 +983,7 @@ PersonManager::~PersonManager() {
 
 void PersonManager::deleteElemets() {
 	for(int i = 0; i < persons.size(); i++){
-		Person *temp = persons.at(i);
+		Person *temp = persons[i];
 
 		delete temp;
 	}
@@ -991,8 +997,8 @@ void PersonManager::printNotice(const string preMessage, const string postMessag
 
 Person* PersonManager::findByName(const string name) {
 	for(int i = 0; i < persons.size(); i++){
-		if(name == persons.at(i)->getName()){
-			return persons.at(i);
+		if(name == persons[i]->getName()){
+			return persons[i];
 		}
 	}
 	cout << name + ": NOT found" << endl;
@@ -1004,7 +1010,7 @@ void PersonManager::display() { // Menu item 1
     cout << "display(): count " << count << endl;
     for (int i = 0; i < count; ++i) {
         cout << "[" << i << "] ";
-        persons.at(i)->println();
+        persons[i]->println();
     }
 //    cout << "empty():" << persons.empty() << ", size():" << persons.size()
 //         << ", capacity():" << persons.capacity() << endl;
@@ -1079,7 +1085,7 @@ void PersonManager::remove() { // Menu item 6
 		return;
 	}
 	int index = UI::getIndex("Index to delete? ", persons.size());
-	Person* p = persons.at(index);
+	Person* p = persons[index];
 	delete p;
 	persons.erase(index);
     display();
@@ -1924,7 +1930,7 @@ class VectorOperator
         int count = pv.size();
         cout << "count " << count << endl;
         for (int i = 0; i < count; ++i) {
-            cout << "[" << i << "] "; pv.at(i)->println();
+            cout << "[" << i << "] "; pv[i]->println();
         }
         cout << endl;
     }
@@ -1941,13 +1947,18 @@ public:
         cout << "pv2: "; disp_vector(pv2);
     }
 
+    void operatorIndex() { // Memu item 1
+        MultiManager().run();
+        // display(), remove(), clear(), login()에서 [index] 연산자 사용
+    }
+
     void run() {
-        //using VO = VectorOperator;
+        using VO = VectorOperator;
 
     	using func_t = void (VectorOperator::*)();
 
     	func_t func_arr[] = {
-    			nullptr,
+    			nullptr, &VO::operatorIndex,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

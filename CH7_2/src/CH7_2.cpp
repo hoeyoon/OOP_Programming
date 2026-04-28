@@ -820,6 +820,7 @@ class VectorPerson
 public:
     //VectorPerson() :VectorPerson{DEFAULT_SIZE} {}
     VectorPerson(int capacity = DEFAULT_SIZE);
+    VectorPerson(const VectorPerson& vp);
     ~VectorPerson();
 
     // 아래 긱 함수이름 뒤의 const는 그 함수가 클래스 멤버 변수들을 수정하지 않고 읽기만 한다는 의미임
@@ -863,6 +864,16 @@ void VectorPerson::extend_capacity() {
 VectorPerson::VectorPerson(int capacity) : count{0}, allocSize{capacity} {
     //cout << "VectorPerson::VectorPerson(" << allocSize << ")" << endl;
     pVector = new Person*[allocSize]; // Person* 들의 배열을 위한 동적 메모리 할당
+}
+
+VectorPerson::VectorPerson(const VectorPerson& vp){
+    cout << "VectorPerson::VectorPerson(const VectorPerson& vp)" << endl;
+    allocSize = vp.allocSize;
+    count = vp.count;
+    pVector = new Person*[allocSize];
+    for(int i = 0; i < count; i++){
+    	pVector[i] = vp.pVector[i];
+    }
 }
 
 VectorPerson::~VectorPerson() {
@@ -1990,13 +2001,35 @@ public:
         // pv[0]는 동적으로 할당받은 주소가 아니므로, 즉 배열 원소 pa[0]의 주소이므로 반납하지 않아도 됨
     }
 
+    VectorPerson call_return_value(VectorPerson pv) {
+        cout << "pv: "; disp_vector(pv);
+        cout << "return pv1 " << endl;
+        return pv1;
+    }
+
+    void copyConstructor() { // Memu item 3
+        cout << "VectorPerson pv3 = pv2" << endl;
+        VectorPerson pv3 = pv2;  // 묵시적 복사생성자 호출; VectorPerson pv3(pv2)와 동일
+        cout << "pv3: "; disp_vector(pv3);
+        pv3.erase(0);
+        cout << "pv3.erase(0)" << endl;
+        cout << "pv3: "; disp_vector(pv3);
+        cout << "pv2: "; disp_vector(pv2);
+        cout << "disp_vector(call_return_value(vp2))" << endl;
+        // 아래 함수 호출에서 pv2 인자를 복사생성자를 이용하여 call_return_value()의
+        // 매개변수 pv에 복사하고 함수에서 리턴되는 pv1 또한 복사생성자를 통해 임시객체에 복사된다.
+        // 그 후 disp_vector()를 호출하여 리턴된 임시객체를 보여줌
+        disp_vector(call_return_value(pv2)); // 임시객체와 아래 pv1의 출력이 같아야 함
+        cout << "pv1: "; disp_vector(pv1);
+    }
+
     void run() {
         using VO = VectorOperator;
 
     	using func_t = void (VectorOperator::*)();
 
     	func_t func_arr[] = {
-    			nullptr, &VO::operatorIndex, &VO::operatorNot,
+    			nullptr, &VO::operatorIndex, &VO::operatorNot, &VO::copyConstructor,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

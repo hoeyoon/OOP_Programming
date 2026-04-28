@@ -847,6 +847,7 @@ public:
     Person* operator [] (int index) const;
     bool operator ! ();
     operator bool ();
+    VectorPerson& operator = (const VectorPerson& vp);
 };
 
 void VectorPerson::extend_capacity() {
@@ -939,6 +940,19 @@ VectorPerson::operator bool (){
 	return !empty();
 }
 
+VectorPerson& VectorPerson::operator = (const VectorPerson& vp){
+	if(vp.count > allocSize){
+		delete []pVector;
+		allocSize = vp.allocSize;
+		pVector = new Person*[allocSize];
+        cout << "VectorPerson::operator = : capacity extended to " << allocSize << endl;
+	}
+	count = vp.count;
+	for(int i = 0; i < count; i++){
+		pVector[i] = vp.pVector[i];
+	}
+	return *this;
+}
 
 /******************************************************************************
  * ch4_2: Factory class
@@ -2023,13 +2037,30 @@ public:
         cout << "pv1: "; disp_vector(pv1);
     }
 
+    void operatorAssign() { // Memu item 4
+        cout << "VectorPerson pv3 = pv2" << endl;
+        VectorPerson pv3 = pv2;
+        cout << "pv3: "; disp_vector(pv3);
+        cout << "pv3 = pv1" << endl;
+        pv3 = pv1; // 대입 연산자
+        cout << "pv3: "; disp_vector(pv3);
+        cout << "repeat 9 times: pv3.push_back(pa+2)" << endl;
+        for (int i = 0; i < 9; ++i) // 원소개수가 11개 이상이면 pv3 메모리가 확장되어야 함
+            pv3.push_back(pa+2);
+        cout << "pv3: "; disp_vector(pv3);
+        VectorPerson pv4;
+        cout << "pv4 = pv3" << endl;
+        pv4 = pv3; // 대입 연산자: 원소개수가 11개 이상이면 pv4의 메모리가 확장되어야 함
+        cout << "pv4: "; disp_vector(pv4);
+    }
+
     void run() {
         using VO = VectorOperator;
 
     	using func_t = void (VectorOperator::*)();
 
     	func_t func_arr[] = {
-    			nullptr, &VO::operatorIndex, &VO::operatorNot, &VO::copyConstructor,
+    			nullptr, &VO::operatorIndex, &VO::operatorNot, &VO::copyConstructor, &VO::operatorAssign,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

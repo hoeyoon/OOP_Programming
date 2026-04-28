@@ -844,6 +844,8 @@ public:
     void insert(int index, Person* p);
 
     Person* operator [] (int index) const;
+    bool operator ! ();
+    operator bool ();
 };
 
 void VectorPerson::extend_capacity() {
@@ -917,6 +919,15 @@ void VectorPerson::insert(int index, Person* p) {
 Person* VectorPerson::operator [] (int index) const{
 	return pVector[index];
 }
+
+bool VectorPerson::operator ! (){
+	return empty();
+}
+
+VectorPerson::operator bool (){
+	return !empty();
+}
+
 
 /******************************************************************************
  * ch4_2: Factory class
@@ -1952,13 +1963,40 @@ public:
         // display(), remove(), clear(), login()에서 [index] 연산자 사용
     }
 
+    void operatorNot() { // Memu item 2
+        VectorPerson pv;
+        disp_vector(pv);
+
+        // operator bool() 호출
+        if (pv) cout << "if(pv): true" << endl;
+        else    cout << "if(pv): false" << endl;
+        cout << "operator bool(): " << (bool)pv << endl;
+
+        // operator !() 호출
+        if (!pv) cout << "if(!pv): true" << endl;
+        else     cout << "if(!pv): false" << endl;
+        cout << "operator !(): " << !pv << endl;
+
+        pv.push_back(pa);
+        disp_vector(pv);
+        cout << "(pv? true: false) " << (pv? true: false) << endl;// operator bool() 호출
+        pv.push_back(new Person("Chung", 2, 67.8, true,  nullptr));
+        disp_vector(pv);
+
+        // operator []
+        cout << "pv[0]: "; pv[0]->println();
+        cout << "delete pv[1];" << endl;
+        delete pv[1];
+        // pv[0]는 동적으로 할당받은 주소가 아니므로, 즉 배열 원소 pa[0]의 주소이므로 반납하지 않아도 됨
+    }
+
     void run() {
         using VO = VectorOperator;
 
     	using func_t = void (VectorOperator::*)();
 
     	func_t func_arr[] = {
-    			nullptr, &VO::operatorIndex,
+    			nullptr, &VO::operatorIndex, &VO::operatorNot,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

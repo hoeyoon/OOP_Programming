@@ -848,6 +848,7 @@ public:
     bool operator ! ();
     operator bool ();
     VectorPerson& operator = (const VectorPerson& vp);
+    VectorPerson  operator + (const VectorPerson& vp);
 };
 
 void VectorPerson::extend_capacity() {
@@ -952,6 +953,18 @@ VectorPerson& VectorPerson::operator = (const VectorPerson& vp){
 		pVector[i] = vp.pVector[i];
 	}
 	return *this;
+}
+
+VectorPerson VectorPerson::operator + (const VectorPerson& vp){
+	VectorPerson tmp(this->count + vp.count);
+	for(int i = 0; i < count; i++){
+		tmp.pVector[i] = pVector[i];
+	}
+	for(int i = 0; i < vp.count; i++){
+		tmp.pVector[i + count] = vp.pVector[i];
+	}
+	tmp.count = count + vp.count;
+	return tmp;
 }
 
 /******************************************************************************
@@ -2054,6 +2067,16 @@ public:
         cout << "pv4: "; disp_vector(pv4);
     }
 
+    void operatorAdd() { // Memu item 5
+        VectorPerson pv3;
+        cout << "pv3 = pv1 + pv2" << endl;
+        pv3 = pv1 + pv2;
+        cout << "pv3: "; disp_vector(pv3);
+        cout << "pv3 = pv2 + pv2 + pv3" << endl;
+        pv3 = pv2 + pv2 + pv3; // + 연산자: pv3의 메모리가 확장
+        cout << "pv3: "; disp_vector(pv3);
+    }
+
     void run() {
         using VO = VectorOperator;
 
@@ -2061,6 +2084,7 @@ public:
 
     	func_t func_arr[] = {
     			nullptr, &VO::operatorIndex, &VO::operatorNot, &VO::copyConstructor, &VO::operatorAssign,
+				&VO::operatorAdd,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

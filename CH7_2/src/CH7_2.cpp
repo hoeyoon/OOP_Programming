@@ -815,7 +815,7 @@ class VectorPerson
     int count;        // pVector 배열에 현재 삽입된 객체 포인터의 개수
     int allocSize;    // 할당 받의 pVector의 총 배열 원소의 개수
 
-    void extend_capacity();
+    void extend_capacity(int capacity);
 
 public:
     //VectorPerson() :VectorPerson{DEFAULT_SIZE} {}
@@ -849,11 +849,12 @@ public:
     operator bool ();
     VectorPerson& operator = (const VectorPerson& vp);
     VectorPerson  operator + (const VectorPerson& vp);
+    VectorPerson& operator += (const VectorPerson& vp);
 };
 
-void VectorPerson::extend_capacity() {
+void VectorPerson::extend_capacity(int capacity) {
     Person **saved_persons = pVector; // 기존의 pVector를 백업함
-    allocSize *= 2;
+    allocSize = capacity;
     pVector = new Person*[allocSize];
     for(int i = 0; i < count; i++){
     	pVector[i] = saved_persons[i];
@@ -887,7 +888,7 @@ void VectorPerson::push_back(Person *p){
 		pVector[count++] = p;
 	}
 	else{
-		extend_capacity();
+		extend_capacity(allocSize + count);
 		pVector[count++] = p;
 	}
 }
@@ -920,7 +921,7 @@ void VectorPerson::insert(int index, Person* p) {
 	삽입된 원소 개수를 하나 늘린다.
 	*/
 	if(count >= allocSize){
-		extend_capacity();
+		extend_capacity(allocSize + count);
 	}
 	for(int i = size(); i > index; i--){
 		pVector[i] = pVector[i - 1];
@@ -965,6 +966,17 @@ VectorPerson VectorPerson::operator + (const VectorPerson& vp){
 	}
 	tmp.count = count + vp.count;
 	return tmp;
+}
+
+VectorPerson& VectorPerson::operator += (const VectorPerson& vp){
+	if((vp.count + count) > allocSize){
+		extend_capacity(vp.allocSize + allocSize);
+	}
+	for(int i = 0; i < vp.count; i++){
+		pVector[count + i] = vp.pVector[i];
+	}
+	count += vp.count;
+	return *this;
 }
 
 /******************************************************************************
@@ -2077,6 +2089,18 @@ public:
         cout << "pv3: "; disp_vector(pv3);
     }
 
+    void operatorAddAssign() { // Memu item 6
+        cout << "VectorPerson pv4 = pv1: " << endl;
+        VectorPerson pv4 = pv1;   // 묵시적 복사생성자 호출
+        cout << "pv4: "; disp_vector(pv4);
+        cout << "pv4 += pv2" << endl;
+        pv4 += pv2; // += 연산자
+        cout << "pv4: "; disp_vector(pv4);
+        cout << "pv4 += pv2 + pv2" << endl;
+        pv4 += pv2 + pv2;       // 원소개수가 11개 이상이면 메모리 확장해야 함
+        cout << "pv4: "; disp_vector(pv4);
+    }
+
     void run() {
         using VO = VectorOperator;
 
@@ -2084,7 +2108,7 @@ public:
 
     	func_t func_arr[] = {
     			nullptr, &VO::operatorIndex, &VO::operatorNot, &VO::copyConstructor, &VO::operatorAssign,
-				&VO::operatorAdd,
+				&VO::operatorAdd, &VO::operatorAddAssign,
     	};
     	int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
 

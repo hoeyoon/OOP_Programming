@@ -19,6 +19,7 @@ public:
     int operator () ();
     Person& operator = (const Person &p);
     friend Person operator + (const Person &p, int x);
+    friend Person operator + (int x, const Person &p);
 };
 
 Person::Person(const string& name, int id, int hours) {
@@ -63,6 +64,13 @@ Person operator + (const Person &p, int x){
 	return tmp;
 }
 
+Person operator + (int x, const Person &p){
+	Person tmp;
+	tmp = p;
+	tmp.hours += x;
+	return tmp;
+}
+
 /******************************************************************************
  * menu_switch() 함수: 선택된 메인 메뉴 항목을 실행함
  ******************************************************************************/
@@ -100,6 +108,11 @@ void menu_switch(int menu)
         cout << "p1        : " << p1 << endl;
         cout << "p1 + 3 + 4: " << p1 + 3 + 4 << endl;
         cout << "p1        : " << p1 << endl;
+        break;
+    case 6:
+        cout << "p1          : " << p1 << endl;
+        cout << "5 + (2 + p1): " << 5 + (2 + p1) << endl;
+        cout << "p1          : " << p1 << endl;
         break;
     }
     cout << endl;

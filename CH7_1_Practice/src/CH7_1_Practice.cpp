@@ -17,6 +17,7 @@ public:
     friend ostream& operator << (ostream& out, const Person &p);
     Person& operator += (int t);
     int operator () ();
+    Person& operator = (const Person &p);
 };
 
 Person::Person(const string& name, int id, int hours) {
@@ -47,6 +48,13 @@ int Person::operator () (){
 	return 8600 * hours;
 }
 
+Person& Person::operator = (const Person &p){
+	id = p.id;
+	hours = p.hours;
+	*name = *p.name;
+	return *this;
+}
+
 /******************************************************************************
  * menu_switch() 함수: 선택된 메인 메뉴 항목을 실행함
  ******************************************************************************/
@@ -74,6 +82,11 @@ void menu_switch(int menu)
     case 3:
         cout << "p1  : " << p1   << endl;
         cout << "p1(): " << p1() << endl;
+        break;
+    case 4:
+        cout << "p1     : " << p1 << endl;
+        cout << "p2 = p1: " << (p2 = p1) << endl;
+        cout << "p2     : " << p2 << endl;
         break;
     }
     cout << endl;

@@ -45,7 +45,7 @@ public:
     Person(const string& name = "", int id = 0, double weight = 0.0, bool married = false, const char *address = nullptr);
     Person(const Person& p);
     ~Person();
-    Person* clone() { return this; } // ch7_3에서 추가
+    Person* clone() { return new Person(*this); } // ch7_3에서 추가
 
     void set(const string& name, int pid, double weight, bool married, const char *address);
     void set(int id)					 { this->id = id; }
@@ -1016,6 +1016,7 @@ class PersonManager
     // Factory factory;
     Person** array;     // ch7_3 추가
     int arrLen;         // ch7_3 추가
+    int cpCount;        // ch7_3 추가
 
     void pushArray();   // ch7_3 추가
 
@@ -1037,10 +1038,8 @@ public:
     void run();
 };
 
-PersonManager::PersonManager(Person* array[], int len) {
+PersonManager::PersonManager(Person* array[], int len) : array(array), arrLen(len), cpCount(0) {
     //cout << "PersonManager::PersonManager(array[], len)" << endl;
-	this->array = array;
-	arrLen = len;
 	pushArray();
     display();
 }
@@ -1062,6 +1061,7 @@ void PersonManager::deleteElemets() {
 		delete temp;
 	}
 	persons.clear();
+	cpCount = 0;
 }
 
 void PersonManager::printNotice(const string preMessage, const string postMessage) {
@@ -1166,6 +1166,28 @@ void PersonManager::remove() { // Menu item 6
 }
 
 void PersonManager::copyPersons() { // Menu item 7
+    cpCount++;
+    for (unsigned i = 0, size = persons.size(); i < size; ++i) {
+        //Person *p = TODO: clone()을 이용해 persons[i]를 복제한 새 객체의 주소 저장;
+        //string name = TODO: 객체 p의 이름을 구해 옴;
+    	Person *p = persons[i]->clone();
+    	string name = p->getName();
+        for (int j = 0; j < cpCount; ++j)
+            name = name[0] + name;  // 이름 변경
+        //TODO: 객체 p의 이름을 새 이름인 name으로 변경함;
+        //TODO: 객체 p의 id을 (기존 id 값에 20 * cpCount를 더한 값)으로 변경함;
+        //TODO: 객체 p의 weight을 (기존 weight 값에 cpCount를 더한 값)으로 변경함;
+        //TODO: cpCount가 홀수이면 (cpCount % 2)
+              //객체 p의 married 값을 반대(!p->getMarried())로 설정함;
+        p->setName(name);
+        p->setId(p->getId() + cpCount * 20);
+        p->setWeight(p->getWeight() + cpCount);
+        if(cpCount % 2 == 1){
+        	p->setMarried(!p->getMarried());
+        }
+        persons.push_back(p);
+    }
+    display();
 }
 
 void PersonManager::reset() { // Menu item 8

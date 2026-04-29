@@ -1013,6 +1013,10 @@ class PersonManager
 {
     VectorPerson persons;
     // Factory factory;
+    Person** array;     // ch7_3 추가
+    int arrLen;         // ch7_3 추가
+
+    void pushArray();   // ch7_3 추가
 
     void deleteElemets();
     void printNotice(const string preMessage, const string postMessage);
@@ -1034,15 +1038,21 @@ public:
 
 PersonManager::PersonManager(Person* array[], int len) {
     //cout << "PersonManager::PersonManager(array[], len)" << endl;
-    for(int i = 0; i < len; i++){
-    	Person *temp = new Person(*array[i]);
-    	persons.push_back(temp);
-    }
+	this->array = array;
+	arrLen = len;
+	pushArray();
     display();
 }
 
 PersonManager::~PersonManager() {
     deleteElemets();
+}
+
+void PersonManager::pushArray(){
+	for(int i = 0; i < arrLen; i++){
+		Person *temp = new Person(*array[i]);
+		persons.push_back(temp);
+	}
 }
 
 void PersonManager::deleteElemets() {
@@ -1159,6 +1169,9 @@ void PersonManager::copyPersons() { // Menu item 7
 }
 
 void PersonManager::reset() { // Menu item 8
+    deleteElemets();
+    pushArray();
+    display();
 }
 
 void PersonManager::run() {

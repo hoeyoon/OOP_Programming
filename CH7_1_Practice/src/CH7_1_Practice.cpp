@@ -20,6 +20,7 @@ public:
     Person& operator = (const Person &p);
     friend Person operator + (const Person &p, int x);
     friend Person operator + (int x, const Person &p);
+    bool operator == (const Person &p);
 };
 
 Person::Person(const string& name, int id, int hours) {
@@ -71,6 +72,13 @@ Person operator + (int x, const Person &p){
 	return tmp;
 }
 
+bool Person::operator == (const Person &p){
+	if(id == p.id){
+		return true;
+	}
+	return false;
+}
+
 /******************************************************************************
  * menu_switch() 함수: 선택된 메인 메뉴 항목을 실행함
  ******************************************************************************/
@@ -114,6 +122,16 @@ void menu_switch(int menu)
         cout << "5 + (2 + p1): " << 5 + (2 + p1) << endl;
         cout << "p1          : " << p1 << endl;
         break;
+    case 7:
+        //TODO: boolean 값이 true or false로 출력되게 설정하라.
+    	cout << boolalpha;
+        cout << "p1      : " << p1 << endl;
+        cout << "p2      : " << p2 << endl;
+        cout << "p1 == p2: " << (p1 == p2) << endl;
+        cout << "(p2 = p1) == p1: " << ((p2=p1) == p1) << endl;
+        cout << "p2      : " << p2 << endl;
+        break;
+
     }
     cout << endl;
 }

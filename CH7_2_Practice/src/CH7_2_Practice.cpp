@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 class MyStack {
@@ -21,6 +22,11 @@ public:
 
     // TODO: 1) 새로 추가된 멤버 연산자 선언
     // TODO: 2) friend 함수 선언
+	MyStack& operator << (string item);
+	MyStack& operator >> (string &item);
+	bool operator ! ();
+	MyStack& operator = (const MyStack &s);
+	friend MyStack operator + (const MyStack &s1, const MyStack &s2);
 };
 
 MyStack::MyStack(int size = 10) {
@@ -81,26 +87,49 @@ void MyStack::print_stack() {
 //   기존의 push() 함수 호출
 //   이 객체의 참조 리턴, 예제 7-14 참조
 //}
-//
+
+MyStack& MyStack::operator << (string item){
+	push(item);
+	return *this;
+}
+
 //MyStack::operator >> 함수 구현 : 매개 변수 선언은 pop() 참조, 이 객체의 참조를 리턴하라.
 //{
 //   기존의 pop() 함수 호출
 //   이 객체의 참조 리턴
 //}
-//
+
+MyStack& MyStack::operator >> (string &item){
+	pop(item);
+	return *this;
+}
+
 //MyStack::operator ! 함수 구현 : 예제 7-9 참조
 //{
 //   스택이 비어 있으면 true 리턴, 스택의 빈 상태 체크는 pop() 함수 참조
 //   그렇지 않으면 false 리턴
 //}
-//
+
+bool MyStack::operator ! (){
+	if(tos == -1){
+		return true;
+	}
+	return false;
+}
+
 //MyStack::operator = 함수 구현: 매개변수는 const로 선언해야 하며, 이 객체의 참조자가 리턴됨
 //   소멸자 함수 참고하여 element가 가리키는 메모리 반환
 //   복사 생성자 함수의 내용을 그대로 복사해서 넣을 것
 //   이 객체의 참조 리턴
 //}
-//
-//// 외부 함수임
+
+MyStack& MyStack::operator = (const MyStack &s){
+	delete []element;
+	copy(s);
+	return *this;
+}
+
+// 외부 함수임
 //operator + (const MyStack& s1, const MyStack& s2) : 예제 7-12 참고, 두 매개변수 타입 유의할 것
 //   MyStack 타입의 지역변수 tmp(스택_크기) 선언; 예제 7-12 참고
 //   이때 새로운 스택_크기는 s1 스택 크기와 s2 스택 크기를 합친 크기여야 함
@@ -109,6 +138,17 @@ void MyStack::print_stack() {
 //   각 스택의 실제 원소의 개수까지만 복사하라.
 //   tmp를 리턴함
 //}
+
+MyStack operator + (const MyStack &s1, const MyStack &s2){
+	MyStack tmp(s1.size + s2.size);
+	for(int i = 0; i <= s1.tos; i++){
+		tmp.element[++tmp.tos] = s1.element[i];
+	}
+	for(int i = 0; i <= s2.tos; i++){
+		tmp.element[++tmp.tos] = s2.element[i];
+	}
+	return tmp;
+}
 
 int main() {
 	int size, half;

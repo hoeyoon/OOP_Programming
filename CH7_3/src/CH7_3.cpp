@@ -45,6 +45,7 @@ public:
     Person(const string& name = "", int id = 0, double weight = 0.0, bool married = false, const char *address = nullptr);
     Person(const Person& p);
     ~Person();
+    Person* clone() { return this; } // ch7_3에서 추가
 
     void set(const string& name, int pid, double weight, bool married, const char *address);
     void set(int id)					 { this->id = id; }
@@ -1050,8 +1051,7 @@ PersonManager::~PersonManager() {
 
 void PersonManager::pushArray(){
 	for(int i = 0; i < arrLen; i++){
-		Person *temp = new Person(*array[i]);
-		persons.push_back(temp);
+        persons.push_back(array[i]->clone());
 	}
 }
 

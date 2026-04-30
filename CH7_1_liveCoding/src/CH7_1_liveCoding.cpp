@@ -20,6 +20,7 @@ public:
     }
     char operator [] (int idx) { return address[idx]; }
     bool operator ! ();
+    friend Person operator + (const char c, const Person &p);
 };
 
 // 여기에 필요한 연산자를 구현하시오.
@@ -28,6 +29,13 @@ bool Person::operator ! (){
 		return true;
 	}
 	return false;
+}
+
+Person operator + (const char c, const Person &p){
+	Person temp;
+	temp.name = c + ("+" + p.name);
+	temp.address = c + p.address;
+	return temp;
 }
 
 
@@ -57,9 +65,9 @@ int main()
             if (!p3) p1 = p2;
         }
         else if (menu == 2) {
-            //(p2[0] + p1).show();
-            //(p2[0] + (p2[1] + p1)).show();
-            //(p2[0] + (p2[1] + (p2[2] + p1))).show();
+            (p2[0] + p1).show();
+            (p2[0] + (p2[1] + p1)).show();
+            (p2[0] + (p2[1] + (p2[2] + p1))).show();
         }
         else if (menu == 3) {
             //(p1 << p2[0]).show();

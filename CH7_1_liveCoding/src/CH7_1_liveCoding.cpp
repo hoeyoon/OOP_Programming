@@ -22,6 +22,7 @@ public:
     bool operator ! ();
     friend Person operator + (const char c, const Person &p);
     Person& operator << (const char c);
+    Person operator -- (int x);
 };
 
 // 여기에 필요한 연산자를 구현하시오.
@@ -43,6 +44,13 @@ Person& Person::operator << (const char c){
 	(name += " << ") += c;
 	address += c;
 	return *this;
+}
+
+Person Person::operator -- (int x){
+	Person temp = *this;
+	name += "--";
+	address.erase(address.length() - 1);
+	return temp;
 }
 
 
@@ -82,10 +90,10 @@ int main()
             (p1 << p2[2]).show();
         }
         else if (menu == 4) {
-            //(p1--).show();
+            (p1--).show();
             p1.show();
             cout << "***" << endl;
-            //(p1--).show();
+            (p1--).show();
         }
         else if (menu == 5) {
             cin.ignore();

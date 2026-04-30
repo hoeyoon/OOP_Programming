@@ -19,9 +19,16 @@ public:
         cout << name << ": " << address << endl;
     }
     char operator [] (int idx) { return address[idx]; }
+    bool operator ! ();
 };
 
 // 여기에 필요한 연산자를 구현하시오.
+bool Person::operator ! (){
+	if(name == "" && address == ""){
+		return true;
+	}
+	return false;
+}
 
 
 //------------------------------------------------------
@@ -44,10 +51,10 @@ int main()
         p2.show();
         cout << "+++++++++" << endl;
         if (menu == 1) {
-            //if (!p1) p1 = p2;
+            if (!p1) p1 = p2;
             p1.show();
             Person p3;
-            //if (!p3) p1 = p2;
+            if (!p3) p1 = p2;
         }
         else if (menu == 2) {
             //(p2[0] + p1).show();

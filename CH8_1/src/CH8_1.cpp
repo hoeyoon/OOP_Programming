@@ -405,18 +405,18 @@ public:
             const string& company={}, const string& position={});
     Worker(const Worker& w); // copy constructor
     ~Worker();
-    Person* clone();
+    Person* clone() { return new Worker(*this); }
 
     // Getter and Setter
-    const string& getCompany()  const;
-    const string& getPosition() const;
+    const string& getCompany()  const { return company; }
+    const string& getPosition() const { return position; }
 
-    void setCompany(const string& company);
-    void setPosition(const string& position);
+    void setCompany(const string& company) { this->company = company; }
+    void setPosition(const string& position) { this->position = position; }
 
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
-    void input(istream& in);
-    void print(ostream& out);
+    void input(istream& in){ Person::inputMembers(cin); inputMembers(cin); }
+    void print(ostream& out){ Person::printMembers(cout); printMembers(cout); }
     void println() { print(cout); cout << endl; }
 
     bool operator==(const Worker& w);
@@ -435,12 +435,33 @@ Worker::Worker(const string& name, int id, double weight,
     cout << "Worker::Worker(...):"; printMembers(cout); cout << endl;
 }
 
+Worker::Worker(const Worker& w) :
+	Person(w), company(w.company), position(w.position)
+{
+    cout << "Worker::Worker(const Worker& w):"; printMembers(cout); cout << endl;
+}
+
 Worker::~Worker() {
     cout << "Worker::~Worker():"; printMembers(cout); cout << endl;
 }
 
+void Worker::inputMembers(istream& in){
+	in >> company >> position;
+
+	if(!(in)){
+		return;
+	}
+}
+
 void Worker::printMembers(ostream& out)   {
     out << " " << company << " " << position;
+}
+
+bool Worker::operator == (const Worker& w){
+	if(company == w.company && position == w.position){
+		return true;
+	}
+	return false;
 }
 
 void Worker::whatAreYouDoing() {
@@ -450,8 +471,13 @@ void Worker::whatAreYouDoing() {
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 }
 
-void Worker::work() { }
-void Worker::goOnVacation() { }
+void Worker::work() {
+	cout << getName() << " works in " << company << " as " << position << endl;
+}
+
+void Worker::goOnVacation() {
+	cout << getName() << " is now enjoying his(her) vacation" << endl;
+}
 
 /******************************************************************************
  * User Interface
@@ -2573,6 +2599,35 @@ class Inheritance
     }
 
     void worker() {
+        Worker w1(w); // 복사생성자
+        cout << "w1: "; w1.println();
+        Worker w2 = w1;
+        cout << "w2: "; w2.println();
+        cout << "w1 == w2 : " << (w1 == w2) << endl;
+
+        w2.setName("w2");
+        w2.set(w1.getId()+1);
+        w2.set(w1.getWeight() * 1.1);
+        w2.set(!w1.getMarried());
+        w2.setCompany(w1.getCompany()+"-Hyundai");
+        w2.setPosition(w1.getPosition()+"-Manager");
+        cout << "w2: "; w2.println();;
+        cout << "w1 == w2 : " << (w1 == w2) << endl;
+
+        w2.whatAreYouDoing();
+
+        Worker *w3 = (Worker *)w1.clone();
+        cout << "w3: "; w3->println();
+        cout << "w1: "; w1.println();;
+        cout << "w3 == w1 : " << (*w3 == w1) << endl;
+        delete w3;
+
+        cout << "input worker: ";
+        w2.input(cin); // w1 3 44.4 true :Jongno-gu Seoul: Samsung Director
+        if (UI::echo_input) w2.println(); // 자동체크에서 사용됨
+        cout << "w2: "; w2.println();
+        cout << "w1: "; w1.println();;
+        cout << "w2 == w1 : " << (w2 == w1) << endl;
     }
 
 public:

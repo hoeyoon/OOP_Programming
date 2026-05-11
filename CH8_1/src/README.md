@@ -423,3 +423,112 @@ s2: s1 1 66.6 false :Kangnam-gu Seoul: Physics 3 1
 s1: s1 1 65.4 true :Jongno-gu Seoul: Physics 3.8 1
 s2 == s1 : true
 ```
+
+### 문제 8 설명
+```
+1) Inheritance::worker() 함수에 아래 코드를 삽입하라.
+```
+```c++
+    void worker() {
+        Worker w1(w); // 복사생성자
+        cout << "w1: "; w1.println();
+        Worker w2 = w1;
+        cout << "w2: "; w2.println();
+        cout << "w1 == w2 : " << (w1 == w2) << endl;
+
+        w2.setName("w2");
+        w2.set(w1.getId()+1);
+        w2.set(w1.getWeight() * 1.1);
+        w2.set(!w1.getMarried());
+        w2.setCompany(w1.getCompany()+"-Hyundai");
+        w2.setPosition(w1.getPosition()+"-Manager");
+        cout << "w2: "; w2.println();;
+        cout << "w1 == w2 : " << (w1 == w2) << endl;
+
+        w2.whatAreYouDoing();
+
+        Worker *w3 = (Worker *)w1.clone();
+        cout << "w3: "; w3->println();
+        cout << "w1: "; w1.println();;
+        cout << "w3 == w1 : " << (*w3 == w1) << endl;
+        delete w3;
+
+        cout << "input worker: ";
+        w2.input(cin); // w1 3 44.4 true :Jongno-gu Seoul: Samsung Director
+        if (UI::echo_input) w2.println(); // 자동체크에서 사용됨
+        cout << "w2: "; w2.println();
+        cout << "w1: "; w1.println();;
+        cout << "w2 == w1 : " << (w2 == w1) << endl;
+    }
+```
+```
+2) 위 코드가 정상적으로 실행될 수 있도록 아래 실행 결과와 Student 클래스의 멤버 함수들을 참고하여 
+   Worker의 필요한 모든 멤버함수들을 구현하라.
+   단, operator== 구현시 
+      현 객체의 부모(Person)와 매개변수 w의 부모가 같고, 즉 *(Person*)this == w이고,
+      현 객체의 회사 및 직급이 각각 w 객체의 회사 및 직급과 같으면 true를 반환하면 된다. 
+```
+
+### 문제 8 실행 결과
+```
+******************************* Main Menu *********************************
+* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8)                             *
+* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *
+* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8)                            *
+***************************************************************************
+Menu item number? 6
+Person::Person(...):s1 1 65.4 true :Jongno-gu Seoul:
+Student::Student(...): Physics 3.8 1
+Person::Person(...):w1 3 33.3 false :Kangnam-gu Seoul:
+Worker::Worker(...): Samsung Director
+
++++++++++++++ Inheritance Menu ++++++++++++++
++ 0.Exit 1.Student 2.Worker                 +
++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 2
+Person::Person(const Person&):w1 3 33.3 false :Kangnam-gu Seoul:
+Worker::Worker(const Worker& w): Samsung Director
+w1: w1 3 33.3 false :Kangnam-gu Seoul: Samsung Director
+Person::Person(const Person&):w1 3 33.3 false :Kangnam-gu Seoul:
+Worker::Worker(const Worker& w): Samsung Director
+w2: w1 3 33.3 false :Kangnam-gu Seoul: Samsung Director
+w1 == w2 : true
+w2: w2 4 36.63 true :Kangnam-gu Seoul: Samsung-Hyundai Director-Manager
+w1 == w2 : false
+!!!!!!!!!!!!!!!! Worker::whatAreYouDoing()!!!!!!!!!!!!!!!!!
+w2 works in Samsung-Hyundai as Director-Manager
+w2 is now enjoying his(her) vacation
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Person::Person(const Person&):w1 3 33.3 false :Kangnam-gu Seoul:
+Worker::Worker(const Worker& w): Samsung Director
+w3: w1 3 33.3 false :Kangnam-gu Seoul: Samsung Director
+w1: w1 3 33.3 false :Kangnam-gu Seoul: Samsung Director
+w3 == w1 : true
+Worker::~Worker(): Samsung Director
+Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
+input worker: w1 3 44.4 true :Jongno-gu Seoul: Samsung Director
+w2: w1 3 44.4 true :Jongno-gu Seoul: Samsung Director
+w1: w1 3 33.3 false :Kangnam-gu Seoul: Samsung Director
+w2 == w1 : true
+Worker::~Worker(): Samsung Director
+Person::~Person():w1 3 44.4 true :Jongno-gu Seoul:
+Worker::~Worker(): Samsung Director
+Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
+
++++++++++++++ Inheritance Menu ++++++++++++++
++ 0.Exit 1.Student 2.Worker                 +
++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 0
+Worker::~Worker(): Samsung Director
+Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
+Student::~Student(): Physics 3.8 1
+Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
+
+******************************* Main Menu *********************************
+* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8)                             *
+* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *
+* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8)                            *
+***************************************************************************
+Menu item number? 0
+Good bye!!
+```

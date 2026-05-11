@@ -325,7 +325,7 @@ public:
     void setGPA(double GPA)						{ this->GPA = GPA; }
 
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
-    void input(istream& in);
+    void input(istream& in){ Person::inputMembers(cin); inputMembers(cin); }
     void print(ostream& out){ Person::printMembers(cout); printMembers(cout); }
     void println() { print(cout); cout << endl; }
 
@@ -353,6 +353,12 @@ Student::Student(const Student& s) :
 
 Student::~Student() {
     cout << "Student::~Student():"; printMembers(cout); cout << endl;
+}
+
+void Student::inputMembers(istream& in){
+	in >> department >> GPA >> year;
+
+	if(!(in))	return;
 }
 
 void Student::printMembers(ostream& out)   {             // 멤버 출력
@@ -2558,6 +2564,12 @@ class Inheritance
         cout << "s1: "; s1.println();;
         cout << "s3 == s1 : " << (*s3 == s1) << endl;
         delete s3;
+        cout << "input student: ";
+        s2.input(cin); // s1 1 66.6 false :Kangnam-gu Seoul: Physics 3.0 1
+        if (UI::echo_input) s2.println(); // 자동체크에서 사용됨
+        cout << "s2: "; s2.println();
+        cout << "s1: "; s1.println();;
+        cout << "s2 == s1 : " << (s2 == s1) << endl;
     }
 
     void worker() {

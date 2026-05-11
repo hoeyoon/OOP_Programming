@@ -391,3 +391,35 @@ s3 == s1 : true
 Student::~Student(): Physics 3.8 1
 Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
 ```
+
+### 문제 7 설명
+```
+1) Inheritance::student() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        cout << "input student: ";
+        s2.input(cin); // s1 1 66.6 false :Kangnam-gu Seoul: Physics 3.0 1
+        if (UI::echo_input) s2.println(); // 자동체크에서 사용됨
+        cout << "s2: "; s2.println();
+        cout << "s1: "; s1.println();;
+        cout << "s2 == s1 : " << (s2 == s1) << endl;
+```
+```
+2) 위 코드가 정상적으로 실행될 수 있도록 Student::input(istream& in) 함수를 구현하라.
+   이 함수 구현 시 (Student::print() 구현을 참고할 것)
+      먼저 부모 클래스의 Person::inputMembers()를 호출하여 부모 클래스의 모든 멤버들을 입력 받고
+      if (!in) return; // 입력시 에러 발생, 예) 정수 입력할 곳에 일반 문자열 입력한 경우 리턴
+      Student의 inputMembers()를 호출하여 Student의 멤버들을 입력 받는다.
+---------------------------------------------------------------------------
+3) 아래 실행 결과를 참고하여 Student::inputMembers(istream& in)를 구현하라.
+   이 함수는 입력 스트림 in에서 학과, GPA, 학년 순서로 멤버들을 입력 받으면 된다.
+   Person::inputMembers()를 참고할 것.
+```
+
+### 문제 7 실행 결과
+```
+input student: s1 1 66.6 false :Kangnam-gu Seoul: Physics 3.0 1
+s2: s1 1 66.6 false :Kangnam-gu Seoul: Physics 3 1
+s1: s1 1 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+s2 == s1 : true
+```

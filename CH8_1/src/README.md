@@ -293,3 +293,24 @@ Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
 Student::~Student(): Physics 3.8 1  // s1 소멸자
 Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
 ```
+
+### 문제 3 설명
+```
+Inheritance::student() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        cout << "s1 == s2 : " << (s1 == s2) << endl;
+```
+```
+위 코드가 정상적으로 실행될 수 있도록 Student 클래스의 == 연산자를 구현하라.
+구현 시 현 객체의 부모(Person)와 매개변수 s의 부모가 같고, 즉 *(Person*)this == s이고,
+      현 객체의 학년과 학과가 각각 s 객체의 학년과 학과와 같으면 true를 반환하면 된다.
+      이 중 하나라도 같지 않으면 false를 반환한다. 
+      위 *(Person*)this == s 경우 *(Person*)this에 의해 Person의 ==가 호출되며 
+      이 함수 호출 시 매개변수로는 s가 자동으로 const Person&로 변환되어 호출된다.   
+```
+
+### 문제 3 실행 결과
+```
+s1 == s2 : true
+```

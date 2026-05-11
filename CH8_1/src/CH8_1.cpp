@@ -326,7 +326,7 @@ public:
 
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
     void input(istream& in);
-    void print(ostream& out){ Person::printMembers(cout); printMembers(cout);}
+    void print(ostream& out){ Person::printMembers(cout); printMembers(cout); }
     void println() { print(cout); cout << endl; }
 
     bool operator==(const Student& s);
@@ -357,6 +357,13 @@ Student::~Student() {
 
 void Student::printMembers(ostream& out)   {             // 멤버 출력
     out << " " << department << " " << GPA << " " << year;
+}
+
+bool Student::operator == (const Student& s){
+	if(year == s.year && department == s.department){
+		return true;
+	}
+	return false;
 }
 
 void Student::whatAreYouDoing() {
@@ -2530,6 +2537,7 @@ class Inheritance
         cout << "s1: "; s1.println();
         Student s2 = s1; // 묵시적 복사생성자 호출
         cout << "s2: "; s2.println();
+        cout << "s1 == s2 : " << (s1 == s2) << endl;
     }
 
     void worker() {

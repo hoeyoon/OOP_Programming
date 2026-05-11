@@ -313,7 +313,7 @@ public:
             const string& department={}, double GPA={}, int year={});
     Student(const Student& s); // copy constructor
     ~Student();
-    Person* clone();  // 자동 업캐스팅
+    Person* clone(){ return new Student(*this); }  // 자동 업캐스팅
 
     // Getter and Setter
     int           getYear()       const { return year; }
@@ -2553,6 +2553,11 @@ class Inheritance
         cout << "s2: "; s2.println();;
         cout << "s1 == s2 : " << (s1 == s2) << endl;
         s2.whatAreYouDoing();
+        Student *s3 = (Student *)s1.clone();  // 다운 캐스팅
+        cout << "s3: "; s3->println();
+        cout << "s1: "; s1.println();;
+        cout << "s3 == s1 : " << (*s3 == s1) << endl;
+        delete s3;
     }
 
     void worker() {

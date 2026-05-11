@@ -361,3 +361,33 @@ s2 is studying as a 2-year student in Physics-Electronics
 s2 took several courses and got GPA 4.8
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
+
+### 문제 6 설명
+```
+1) Inheritance::student() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        Student *s3 = (Student *)s1.clone();  // 다운 캐스팅
+        cout << "s3: "; s3->println();
+        cout << "s1: "; s1.println();;
+        cout << "s3 == s1 : " << (*s3 == s1) << endl;
+        delete s3;
+```
+```
+2) 위 코드가 정상적으로 실행될 수 있도록 아래 실행 결과와 Person::clone()을 참고하여 
+   Person* Student::clone()을 구현하라. 
+   이 함수는 새로운 객체를 동적으로 생성하되 복사생성자를 활용하여 자기(this) 자신을 복제한다.
+   복제된 것은 Student 객체일지라도 Person*를 반환해야 한다.
+   Student*를 반환해도 컴파일러가 자동으로 Person*로 [업캐스팅]해서 반환한다.
+```
+
+### 문제 6 실행 결과
+```
+Person::Person(const Person&):s1 1 65.4 true :Jongno-gu Seoul:
+Student::Student(const Student& s): Physics 3.8 1
+s3: s1 1 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+s1: s1 1 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+s3 == s1 : true
+Student::~Student(): Physics 3.8 1
+Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
+```

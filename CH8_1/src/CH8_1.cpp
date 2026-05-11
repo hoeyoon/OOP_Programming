@@ -409,7 +409,9 @@ public:
 
 Worker::Worker(const string& name, int id, double weight,
         bool married, const char* address,
-        const string& company, const string& position) {
+        const string& company, const string& position) :
+		Person(name, id, weight, married, address), company(company), position(position)
+{
     cout << "Worker::Worker(...):"; printMembers(cout); cout << endl;
 }
 

@@ -233,3 +233,24 @@ Student::~Student(): Physics 3.8 1                 // Student s 멤버의 소멸
 Person::~Person():s1 1 65.4 true :Jongno-gu Seoul: // Student의 부모 클래스 소멸자
 ```
 
+### 문제 1 설명
+```
+Student 클래스의 생성자를 참고하여 Worker의 생성자를 완성하시오.
+```
+
+### 문제 1 실행 결과
+```
+******************************* Main Menu ...
+Menu item number? 6
+Person::Person(...):s1 1 65.4 true :Jongno-gu Seoul:
+Student::Student(...): Physics 3.8 1
+Person::Person(...):w1 3 33.3 false :Kangnam-gu Seoul:
+Worker::Worker(...): Samsung Director
+
++++++++++++++ Inheritance Menu ...
+Menu item number? 0
+Worker::~Worker(): Samsung Director
+Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
+Student::~Student(): Physics 3.8 1
+Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
+```

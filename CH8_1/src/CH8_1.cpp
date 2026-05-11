@@ -316,13 +316,13 @@ public:
     Person* clone();  // 자동 업캐스팅
 
     // Getter and Setter
-    int           getYear()       const;
-    double        getGPA()        const;
-    const string& getDepartment() const;
+    int           getYear()       const { return year; }
+    double        getGPA()        const { return GPA; }
+    const string& getDepartment() const { return department; }
 
-    void setDepartment(const string& department);
-    void setYear(int year);
-    void setGPA(double GPA);
+    void setDepartment(const string& department){ this->department = department; }
+    void setYear(int year)						{ this->year = year; }
+    void setGPA(double GPA)						{ this->GPA = GPA; }
 
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
     void input(istream& in);
@@ -2537,6 +2537,15 @@ class Inheritance
         cout << "s1: "; s1.println();
         Student s2 = s1; // 묵시적 복사생성자 호출
         cout << "s2: "; s2.println();
+        cout << "s1 == s2 : " << (s1 == s2) << endl;
+        s2.setName("s2");
+        s2.set(s1.getId()+1);
+        s2.set(s1.getWeight() * 1.1);
+        s2.set(!s1.getMarried());
+        s2.setDepartment(s1.getDepartment()+"-Electronics");
+        s2.setGPA(s1.getGPA()+1);
+        s2.setYear(s1.getYear()+1);
+        cout << "s2: "; s2.println();;
         cout << "s1 == s2 : " << (s1 == s2) << endl;
     }
 

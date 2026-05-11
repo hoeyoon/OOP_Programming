@@ -314,3 +314,30 @@ Inheritance::student() 함수 마지막에 아래 코드를 추가하라.
 ```
 s1 == s2 : true
 ```
+
+### 문제 4 설명
+```
+Inheritance::student() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        s2.setName("s2");
+        s2.set(s1.getId()+1);
+        s2.set(s1.getWeight() * 1.1);
+        s2.set(!s1.getMarried());
+        s2.setDepartment(s1.getDepartment()+"-Electronics");
+        s2.setGPA(s1.getGPA()+1);
+        s2.setYear(s1.getYear()+1);
+        cout << "s2: "; s2.println();;
+        cout << "s1 == s2 : " << (s1 == s2) << endl;
+```
+```
+위 코드가 정상적으로 실행될 수 있도록 Student 클래스의 새로운 멤버함수들인
+setDepartment(), setGPA(), setYear()와
+getDepartment(), getGPA(), getYear() 등을 구현하라.
+```
+
+### 문제 4 실행 결과
+```
+s2: s2 2 71.94 false :Jongno-gu Seoul: Physics-Electronics 4.8 2
+s1 == s2 : false
+```

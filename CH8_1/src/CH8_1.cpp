@@ -373,8 +373,13 @@ void Student::whatAreYouDoing() {
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 }
 
-void Student::study() { }
-void Student::takeClass() { }
+void Student::study() {
+	cout << getName() << " is studying as a " << year << "-year student in " << department << endl;
+}
+
+void Student::takeClass() {
+	cout << getName() << " took several courses and got GPA " << GPA << endl;
+}
 
 /******************************************************************************
  * ch8_1: Worker class
@@ -2547,6 +2552,7 @@ class Inheritance
         s2.setYear(s1.getYear()+1);
         cout << "s2: "; s2.println();;
         cout << "s1 == s2 : " << (s1 == s2) << endl;
+        s2.whatAreYouDoing();
     }
 
     void worker() {

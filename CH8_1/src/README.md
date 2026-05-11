@@ -341,3 +341,23 @@ getDepartment(), getGPA(), getYear() 등을 구현하라.
 s2: s2 2 71.94 false :Jongno-gu Seoul: Physics-Electronics 4.8 2
 s1 == s2 : false
 ```
+
+### 문제 5 설명
+```
+Inheritance::student() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        s2.whatAreYouDoing();
+```
+```
+위 코드가 정상적으로 실행될 수 있도록 아래 실행 결과를 참고하여 
+Student::study(), Student::takeClass()를 구현하라.
+```
+
+### 문제 5 실행 결과
+```
+~~~~~~~~~~~~~~~~ Student::whatAreYouDoing() ~~~~~~~~~~~~~~~~
+s2 is studying as a 2-year student in Physics-Electronics
+s2 took several courses and got GPA 4.8
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```

@@ -254,3 +254,42 @@ Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
 Student::~Student(): Physics 3.8 1
 Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
 ```
+
+### 문제 2 설명
+```
+Inheritance::student()에 아래 코드를 삽입하라.
+```
+```c++
+        Student s1(s); // 복사생성자 호출
+        cout << "s1: "; s1.println();
+        Student s2 = s1; // 묵시적 복사생성자 호출
+        cout << "s2: "; s2.println();
+```
+```
+1) 위 코드가 정상적으로 실행될 수 있도록 Student의 복사 생성자를 완성하라.
+   구현 시 Student의 생성자처럼 함수 서두에서 부모 클래스의 [복사 생성자]를 먼저 호출한 후
+   Student 멤버들을 매개변수 s의 상응하는 멤버들의 값으로 초기화시키면 된다. 
+2) Student::print() 함수도 구현하라. 
+   구현 시 먼저 부모 클래스의 Person::printMembers()를 호출하여 
+   부모 클래스의 모든 멤버들을 먼저 출력한 후 Student의 printMembers()를 호출하여 
+   Student의 멤버들만 출력하면 된다.
+```
+
+### 문제 2 실행 결과
+```
+=============================================================================== 
++++++++++++++ Inheritance Menu ...
+Menu item number? 1
+// s1(s): Student s1의 부모 클래스 Person의 복사생성자
+Person::Person(const Person&):s1 1 65.4 true :Jongno-gu Seoul: 
+Student::Student(const Student& s): Physics 3.8 1   // Student s1의 복사생성자
+s1: s1 1 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+// s2 = s: Student s2의 부모 클래스 Person의 복사생성자
+Person::Person(const Person&):s1 1 65.4 true :Jongno-gu Seoul:
+Student::Student(const Student& s): Physics 3.8 1
+s2: s1 1 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+Student::~Student(): Physics 3.8 1  // s2 소멸자
+Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
+Student::~Student(): Physics 3.8 1  // s1 소멸자
+Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
+```

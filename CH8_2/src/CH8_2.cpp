@@ -579,7 +579,10 @@ bool StudentWorker::operator == (const StudentWorker& a){
 
 void StudentWorker::whatAreYouDoing() {
     cout << "########### StudentWorker::whatAreYouDoing() ##############\n";
-    /* TODO: 출력결과를 참고하여 Student와 Worker의 적절한 함수를 순서적으로 호출하라. */
+    Student::study();
+    Worker::work();
+    Student::takeClass();
+    Worker::goOnVacation();
     cout << "###########################################################\n";
 }
 
@@ -2760,6 +2763,7 @@ class Inheritance
         cout << "sw2: "; sw2.println();;
         cout << "sw1: "; sw1.println();
         cout << "sw1 == sw2 : " << (sw1 == sw2) << endl;
+        sw2.whatAreYouDoing();
     }
 
 public:

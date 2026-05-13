@@ -334,3 +334,28 @@ sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,S
 sw1 == sw2 : false
 ...
 ```
+
+### 문제 5 설명
+```
+1) Inheritance::studentWorker() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        sw2.whatAreYouDoing();
+```
+```
+2) 위 코드가 정상적으로 실행될 수 있도록 아래 실행 결과를 참고하여 
+   부모 클래스인 Student와 Worker의 적절한 멤버 함수들을 순서적으로 호출하라.
+```
+
+### 문제 5 실행 결과
+```
+// Main Menu item 6: Inheritance Menu item: 3 실행
+...
+########### StudentWorker::whatAreYouDoing() ##############
+a2 is studying as a 3-year student in Computer-Electronics
+a2 works in Hyundai-Hyundai as Labor-Manager
+a2 took several courses and got GPA 4.5
+a2 is now enjoying his(her) vacation
+###########################################################
+...
+```

@@ -567,7 +567,8 @@ void StudentWorker::inputMembers(istream& in) {
     /* TODO: 이번엔 경력의 뒤쪽 ':'까지 또 읽어서 career에 저장
              (':'는 입력 버퍼에서는 읽어 내지만 career에는 저장되지 않아 자동 제거됨)
              남여 성별 값을 읽어 male에 저장; */
-    in >> career >> male;
+    getline(cin, career, ':');
+    in >> male;
 }
 
 void StudentWorker::printMembers(ostream& out)   {
@@ -1284,22 +1285,52 @@ VectorPerson& VectorPerson::operator += (const VectorPerson& vp){
 
 class Factory
 {
-    static Person* checkInputFormatError(istream& in, Person* p) {
-        if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
-            delete p;         // inputPerson(istream* in)에서 할당한 메모리 반납
-            return nullptr;   // nullptr은 에러가 발생했다는 의미임
-        }
-        if (UI::echo_input) p->println(); // 자동체크에서 사용됨
-        return p;
-    }
-
 public:
-    // 동적으로 Person 객체를 할당 받은 후 키보드로부터 새로 추가하고자 하는 사람의 인적정보를 읽어 들여
-    // 해당 객체에 저장한 후 그 객체의 포인터를 반환한다.
+    // 동적으로 Person 객체를 할당 받은 후 키보드로부터 새로 추가하고자 하는 사람의
+    // 인적정보를 읽어 들여 해당 객체에 저장한 후 그 객체의 포인터를 반환한다.
     static Person* inputPerson(istream& in) {
-        Person* p = new Person();
-        p->input(in);
-        return checkInputFormatError(in, p);
+        Person* p;
+        string delimiter;
+
+        in >> delimiter;              // 입력장치에서 사람구분자를 입력 받음
+
+        if (in.eof())                 // 파일(입력장치가 파일인 경우)의 끝일 경우
+        	return nullptr;
+        else if (delimiter == "P") {
+            p = new Person();  p->input(in);
+        }
+        else if (delimiter == "S") {
+            Student* s = new Student();
+            s->input(in);
+            p = s;
+        }
+        else if (delimiter == "W") {
+            Worker* w = new Worker();
+            w->input(in);
+            p = w;
+        }
+        else if (delimiter == "A") {
+            StudentWorker* sw = new StudentWorker();
+            sw->input(in);
+            p = sw;
+        }
+        else {
+            cout << delimiter << ": WRONG delimiter" << endl;
+            getline(in, delimiter); // 엉뚱한 구분자일 경우 행 전체를 읽어서 버림
+            return nullptr;
+        }
+
+        // p->input(in);  // 멤버들을 입력 받음: 9장에서 이 주석을 다시 해제할 예정이다.
+
+        if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
+            delete p;         // 할당된 메모리 반납
+            return nullptr;   // nullptr 반환은 에러가 발생했다는 의미임
+        }
+        if (UI::echo_input) {  // 자동체크에서 사용됨
+            cout << delimiter << " ";
+            p->println();
+        }
+        return p;
     }
 };
 
@@ -1338,7 +1369,7 @@ public:
 PersonManager::PersonManager(Person* array[], int len) : array(array), arrLen(len), cpCount(0) {
     //cout << "PersonManager::PersonManager(array[], len)" << endl;
 	pushArray();
-    display();
+    //display();
 }
 
 PersonManager::~PersonManager() {
@@ -1363,7 +1394,7 @@ void PersonManager::deleteElemets() {
 
 void PersonManager::printNotice(const string preMessage, const string postMessage) {
     cout << preMessage;
-    cout << " [person information] " << postMessage << endl;
+    cout << " [delimiter(P, S, W, or A)] [person information] ";
 }
 
 Person* PersonManager::findByName(const string name) {
@@ -1528,10 +1559,33 @@ class MultiManager
         Person("p4", 14, 64.4, false, "88 Gongpyeong-ro, Jung-gu, Daegu"),
     };
     // new를 이용해 동적으로 할당할 경우 소멸자 함수를 만들어 거기서 delete 해 주어야 함
+    
+    static const int studentCount = 2;
+    Student students[studentCount] = {
+        Student("s1", 1, 65.4, true,  "Jongno-gu Seoul", "Physics", 3.8, 1),
+        Student("s2", 2, 54.3, false, "Yeonje-gu Busan", "Electronics", 2.5, 4),
+    };
 
-    static const int allPersonCount = personCount;
+    static const int workerCount = 2;
+    Worker workers[workerCount] = {
+        Worker("w1", 3, 33.3, false, "Kangnam-gu Seoul",  "Samsung", "Director"),
+        Worker("w2", 4, 44.4, true,  "Dobong-gu Kwangju", "Hyundai", "Manager"),
+    };
+
+    static const int albaCount = 2;
+    StudentWorker albas[albaCount] = {
+        StudentWorker("a1", 5, 55.5, true, "Dong-gu Incheon",
+                      "Computer", 3.5, 2, "Hyundai", "Labor",
+                      "CU KangNam,Seven Eleven,GSStore Suwon", false),
+        StudentWorker("a2", 6, 66.6, false, "Sasang-gu Sejong",
+                      "History", 3.1, 1, "Kia", "CEO",
+                      "Seven Eveven,eMart Jinju,CU Bongsun", true),
+    };
+
+    static const int allPersonCount = 8;
     Person* allPersons[allPersonCount] = {
-        &persons[0], &persons[1], &persons[2], &persons[3], &persons[4],
+            &persons[0], &persons[1], &students[0], &students[1],
+            &workers[0], &workers[1], &albas[0],    &albas[1],
     };
 
     PersonManager personMng { allPersons, allPersonCount };

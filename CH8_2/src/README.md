@@ -443,3 +443,256 @@ sw2 == sw1 : true   // sw1과 sw2의 모든 멤버가 같은 것은 아님;
                     // 이름,id,학과,학년,부서,직급,남녀들 중 하나라도 다르면 false가 나와야 함
 ...
 ```
+
+### 코드 추가 및 변경 3
+```
+1) 아래 코드를 MultiManager 클래스의 Person persons[personCount] 뒤쪽에 삽입하라.
+```
+```c++
+// 1) 아래 코드를 MultiManager 클래스의 Person persons[personCount] 뒤쪽에 삽입하라.
+//----------------------------------------------------------------------------
+    static const int studentCount = 2;
+    Student students[studentCount] = {
+        Student("s1", 1, 65.4, true,  "Jongno-gu Seoul", "Physics", 3.8, 1),
+        Student("s2", 2, 54.3, false, "Yeonje-gu Busan", "Electronics", 2.5, 4),
+    };
+
+    static const int workerCount = 2;
+    Worker workers[workerCount] = {
+        Worker("w1", 3, 33.3, false, "Kangnam-gu Seoul",  "Samsung", "Director"),
+        Worker("w2", 4, 44.4, true,  "Dobong-gu Kwangju", "Hyundai", "Manager"),
+    };
+
+    static const int albaCount = 2;
+    StudentWorker albas[albaCount] = {
+        StudentWorker("a1", 5, 55.5, true, "Dong-gu Incheon",
+                      "Computer", 3.5, 2, "Hyundai", "Labor",
+                      "CU KangNam,Seven Eleven,GSStore Suwon", false),
+        StudentWorker("a2", 6, 66.6, false, "Sasang-gu Sejong",
+                      "History", 3.1, 1, "Kia", "CEO",
+                      "Seven Eveven,eMart Jinju,CU Bongsun", true),
+    };
+```
+```
+2) MultiManager 클래스의 기존 allPersons[allPersonCount] 배열 원소를 아래 원소들로 교체하라.
+```
+```c++
+    static const int allPersonCount = 8;
+    Person* allPersons[allPersonCount] = {
+            &persons[0], &persons[1], &students[0], &students[1],
+            &workers[0], &workers[1], &albas[0],    &albas[1],
+    };
+```
+```
+3) PersonManager(Person* array[], int len) 생성자에서 // display();를 주석처리하라.
+```
+
+### 문제점
+```
+MainMenu에서 PersonManager에 들어가 보자.
+```
+```
+******************************* Main Menu ...
+Menu item number? 1
+Person::Person(...):p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+Person::Person(...):p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+Person::Person(...):p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+Person::Person(...):p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+Person::Person(...):p4 14 64.4 false :88 Gongpyeong-ro, Jung-gu, Daegu:
+// 이상은 MultiManager::persons[]의 각 원소의 생성자 실행
+Person::Person(...):s1 1 65.4 true :Jongno-gu Seoul:
+Student::Student(...): Physics 3.8 1
+Person::Person(...):s2 2 54.3 false :Yeonje-gu Busan:
+Student::Student(...): Electronics 2.5 4
+// 이상은 MultiManager::students[] 의 각 원소의 생성자 실행
+Person::Person(...):w1 3 33.3 false :Kangnam-gu Seoul:
+Worker::Worker(...): Samsung Director
+Person::Person(...):w2 4 44.4 true :Dobong-gu Kwangju:
+Worker::Worker(...): Hyundai Manager
+// 이상은 MultiManager::workers[] 의 각 원소의 생성자 실행
+Person::Person(...):a1 5 55.5 true :Dong-gu Incheon:
+Student::Student(...): Computer 3.5 2
+Worker::Worker(...): Hyundai Labor
+StudentWorker::StudentWorker(...): :CU KangNam,Seven Eleven,GSStore Suwon: false
+Person::Person(...):a2 6 66.6 false :Sasang-gu Sejong:
+Student::Student(...): History 3.1 1
+Worker::Worker(...): Kia CEO
+StudentWorker::StudentWorker(...): :Seven Eveven,eMart Jinju,CU Bongsun: true
+// 이상은 MultiManager::albas[] 의 각 원소의 생성자 실행
+```
+```
+아래는 PersonManager::PersonManager(생성자)의 
+pushArray() 내의 array[i]->clone()에 의해 객체생성시 복사생성자의 실행결과이다.
+```
+```
+Person::Person(const Person&):p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+Person::Person(const Person&):p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+Person::Person(const Person&):s1 1 65.4 true :Jongno-gu Seoul:
+Person::Person(const Person&):s2 2 54.3 false :Yeonje-gu Busan:
+Person::Person(const Person&):w1 3 33.3 false :Kangnam-gu Seoul:
+Person::Person(const Person&):w2 4 44.4 true :Dobong-gu Kwangju:
+Person::Person(const Person&):a1 5 55.5 true :Dong-gu Incheon:
+Person::Person(const Person&):a2 6 66.6 false :Sasang-gu Sejong:
+PersonManager::run() starts
+```
+```
+문제점: array[i]가 Person* 이므로 Person 클래스의 clone()이 실행되어 Student, Worker, 
+  StudentWorker 객체의 전체가 복제되는 것이 아니라, 각 객체의 상위 클래스인 Person 객체만
+  복제되어 생성된다는 것이다. 
+해결: 이러한 문제는 9장에서 가상함수를 통해 해결될 것이다.
+---------------------------------------------------------------------------
+PersonManger의 1.Display 메뉴를 실행시켜도 아래처럼 Person 객체의 정보만 출력된다.
+---------------------------------------------------------------------------
+```
+```
+====================== Person Management Menu ...
+Menu item number? 1
+display(): count 8
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[1] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[2] s1 1 65.4 true :Jongno-gu Seoul:
+[3] s2 2 54.3 false :Yeonje-gu Busan:
+[4] w1 3 33.3 false :Kangnam-gu Seoul:
+[5] w2 4 44.4 true :Dobong-gu Kwangju:
+[6] a1 5 55.5 true :Dong-gu Incheon:
+[7] a2 6 66.6 false :Sasang-gu Sejong:
+```
+```
+이 역시 PersonManager::display() 내의 persons[i]->println()에 의해 출력되었는데
+persons[i]가 Person* 이므로 Person 클래스의 println()이 실행되어 Person 객체의 정보만 
+출력되었다. 이 문제 역시 9장에서 가상함수를 통해 해결될 것이다.
+참고로 persons[i]는 VectorPerson::pVector[i]와 동일한다.
+```
+
+### 문제 8 설명
+```
+지금까지는 PersonManager 메뉴의 2.Append 메뉴를 통해 Person 객체만 입력할 수 있었다.
+이제 2.Append 메뉴에서 Person, Student, Worker, StudentWorker 객체 모두의 인적정보를
+입력 받을 수 있게 수정해 보자.
+```
+```
+1) 기존 PersonManager::printNotice(...)의 cout << " [person information] "을
+   아래 문장으로 대체하라. 추가할 사람 구분자를 먼저 입력하고 인적정보를 입력하라는 메시지이다.
+```
+```c++
+    cout << " [delimiter(P, S, W, or A)] [person information] ";
+```
+```
+PersonManager::append() 함수를 보면 factory.inputPerson(cin)을 호출하여 새로운
+객체를 생성하고 인적정보를 입력 받는다. 
+아래의 기존 Factory::inputPerson(istream& in)은 
+        Person* p = new Person();
+        p->input(in);
+를 통해 직접 new Person()을 호출하여 무조건 Person 객체를 생성하였고, 
+또한 Person의 인적정보만 입력 받을 수 있었다.
+---------------------------------------------------------------------------
+그런데 이제는 사용자가 다양한 클래스의 인적정보를 입력할 수 있으므로 인적정보를 입력하기 전에 
+먼저 어떤 사람의 정보를 입력할지 [구분자]를 먼저 입력해 주어야 한다. 
+즉, Person, Student, Worker, StudentWorker를 구분하는 [구분자]로 각각 P, S, W, A를 
+먼저 입력한 후 그 다음에 해당 클래스의 인적정보를 입력해야 한다. 
+예를 들어, 아래와 같이 입력해야 한다.
+---------------------------------------------------------------------------
+P p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+S s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21: Computer 3.3 2
+W w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul: Kia CEO
+A a3 14 54 false :Dong-gu, Incheon: Physics 3.8 1 Kakao Manager :SK, LG, KAI: true
+---------------------------------------------------------------------------
+2) Factory 클래스를 아래와 같이 수정하라.
+   아래 inputPerson()은 무조건 Person 객체를 생성하지 않고 클래스 구분자에 따라 
+   각각의 클래스의 새로운 객체를 동적으로 생성하고 생성된 객체의 input(in) 함수을 호출한다. 
+   즉, 클래스별 전용 입력 함수 input(in)를 호출하여 해당 클래스의 멤버 정보를 입력 받는다.
+---------------------------------------------------------------------------
+```
+```c++
+class Factory
+{
+public:
+    // 동적으로 Person 객체를 할당 받은 후 키보드로부터 새로 추가하고자 하는 사람의
+    // 인적정보를 읽어 들여 해당 객체에 저장한 후 그 객체의 포인터를 반환한다.
+    static Person* inputPerson(istream& in) {
+        Person* p;
+        string delimiter;
+
+        in >> delimiter;              // 입력장치에서 사람구분자를 입력 받음
+
+        if (in.eof())                 // 파일(입력장치가 파일인 경우)의 끝일 경우
+        	return nullptr;
+        else if (delimiter == "P") {
+            p = new Person();  p->input(in);
+        }
+        else if (delimiter == "S") {
+            Student* s = new Student();
+            s->input(in);
+            p = s;
+        }
+        else if (delimiter == "W") {
+            Worker* w = new Worker();
+            w->input(in);
+            p = w;
+        }
+        else if (delimiter == "A") {
+            StudentWorker* sw = new StudentWorker();
+            sw->input(in);
+            p = sw;
+        }
+        else {
+            cout << delimiter << ": WRONG delimiter" << endl;
+            getline(in, delimiter); // 엉뚱한 구분자일 경우 행 전체를 읽어서 버림
+            return nullptr;
+        }
+
+        // p->input(in);  // 멤버들을 입력 받음: 9장에서 이 주석을 다시 해제할 예정이다.
+
+        if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
+            delete p;         // 할당된 메모리 반납
+            return nullptr;   // nullptr 반환은 에러가 발생했다는 의미임
+        }
+        if (UI::echo_input) {  // 자동체크에서 사용됨
+            cout << delimiter << " ";
+            p->println();
+        }
+        return p;
+    }
+};
+```
+
+### 문제 8 실행 결과
+```
+...
+====================== Person Management Menu ...
+Menu item number? 2
+The number of persons to append? 7
+Input 7 [delimiter(P, S, W, or A)] [person information] : 
+//----------------------------------------------------------------------------
+// 위 출력문이 새로 변경되었음; "[delimiter(P, S, W, or A)] "가 추가 되었음
+// 아래 7개의 인적 정보를 한번에 복사해서 입력할 것
+// 입력시 항상 사람 구분자를 먼저 입력하고 그에 상응하는 인적정보를 입력해야 한다.
+//----------------------------------------------------------------------------
+P p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+S s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21: Computer 3.3 2
+W w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul: Kia CEO
+A a3 14 54 false :Dong-gu, Incheon: Physics 3.8 1 Kakao Manager :SK, LG, KAI: true
+S s4 15 80 true :1001, Jungang-daero, Yeonje-gu, Busan: Biology 3.8 3
+W w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul: Naver Department-Head
+A a4 17 88 true :Kangdong-gu, Daejeon: Electronics 3.4 2 NC Developer :CU, GS: false
+// 아래는 Factory::newPerson(istream& in)의 new 에 의해 각 객체가 생성될 때 생성자에 의해 출력됨
+Person::Person(...): 0 0 false :: 
+...
+StudentWorker::StudentWorker(...): :: false
+// 아래는 PersonManager::append() 내의 마지막 문장 display()
+display(): count 15
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+...
+[7] a2 6 66.6 false :Sasang-gu Sejong:
+[8] p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[9] s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21:
+[10] w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[11] a3 14 54 false :Dong-gu, Incheon:
+[12] s4 15 80 true :1001, Jungang-daero, Yeonje-gu, Busan:
+[13] w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul:
+[14] a4 17 88 true :Kangdong-gu, Daejeon:
+// 위의 [8] ~ [14]까지 새로 입력된 7개의 객체는 정상적으로 생성되고 입력된 것이며, 다만 출력시 
+// Person 클래스의 인적사항만 출력된 것임; 이유는 display()의 persons[i]가 Person*이므로.
+// 이 역시 9장에서 정상 출력될 것임
+...
+```

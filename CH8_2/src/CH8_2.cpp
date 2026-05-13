@@ -298,7 +298,7 @@ void Person::printMembers(ostream& out)   {
  * ch8_1: Student class
  ******************************************************************************/
 
-class Student : public Person {
+class Student : virtual public Person {
     string department; // 학과
     double GPA;        // 평균평점
     int    year;       // 학년
@@ -391,7 +391,7 @@ void Student::takeClass() {
  * ch8_1: Worker class
  ******************************************************************************/
 
-class Worker : public Person {
+class Worker : virtual public Person {
     string company;    // 회사명
     string position;   // 직급
 
@@ -488,7 +488,7 @@ void Worker::goOnVacation() {
 //                  \      /
 //                 StudentWorker
 
-class StudentWorker /* TODO: [문제 1]Student와 Worker 클래스들을 다중 상속 받아라. */
+class StudentWorker : public Student, public Worker
 {
     string career;      // 알바경력
     bool   male;        // 남:true, 여:false
@@ -531,8 +531,12 @@ StudentWorker::StudentWorker(
     bool married, const char* address,
     const string& department, double GPA, int year,
     const string& company, const string& position,
-    const string& career, bool male)
-    /* TODO: 함수 서두에서 Person, Student, Worker 생성자 호출하기, 각 멤버 초기화 */ {
+    const string& career, bool male) : 
+    		Person(name, id, weight, married, address), 
+			Student(name, id, weight, married, address, department, GPA, year),
+			Worker(name, id, weight, married, address, company, position),
+			career(career), male(male)
+{
     cout << "StudentWorker::StudentWorker(...):";
     printMembers(cout); cout << endl;
 }

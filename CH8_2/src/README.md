@@ -177,3 +177,46 @@ Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
 Student::~Student(): Physics 3.8 1
 Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
 ```
+
+### 문제 1 설명
+```
+1) StudentWorker 클래스 선언의 시작 부분에 있는 /* TODO: */를 적절히 수정하여
+   Student와 Worker 클래스를 다중 상속 받도록 하라.
+2) Student와 Worker 둘 다 Person을 상속 받기 때문에 StudentWorker는 Person을 중복하여 상속
+   받게 되는 문제를 가지게 된다. Student와 Worker 클래스 선언할 때 
+   Person을 [가상 상속]을 받도록 하여 중복 상속 문제를 해결하라. [교제 p.408 참고]
+   가상상속 시 주의점: 가상상속을 받을 경우 위 [코드 추가 3] 4)처럼 포인터 변수를 다운 캐스팅할 경우 
+                  컴파일 문제가 발생할 수 있는데 이 문제는 9장에서 해결된다.
+3) Student와 Worker 클래스의 생성자를 참고하여 StudentWorker의 생성자를 완성하시오.
+   생성자 서두에서 부모 클래스인 Person, Student, Worker의 생성자를 순서적으로 호출하고
+   또한 서두에서 StudentWorker 멤버 변수들도 초기화하라.
+```
+
+### 문제 1 실행 결과
+```
+******************************* Main Menu ...
+Menu item number? 6
+// Inheritance의 멤버 Student s와 Worker w의 생성자에 의한 출력임
+Person::Person(...):s1 1 65.4 true :Jongno-gu Seoul:
+Student::Student(...): Physics 3.8 1
+Person::Person(...):w1 3 33.3 false :Kangnam-gu Seoul:
+Worker::Worker(...): Samsung Director
+// 여기서부터 Inheritance의 멤버 StudentWorker sw의 생성자에 의한 출력임
+Person::Person(...):a1 5 55.5 true :Dong-gu Incheon: 
+Student::Student(...): Computer 3.5 2
+Worker::Worker(...): Hyundai Labor
+StudentWorker::StudentWorker(...): :CU KangNam,Seven Eleven,GSStore Suwon: false
+
++++++++++++++ Inheritance Menu ...
+Menu item number? 0
+StudentWorker::~StudentWorker(): :CU KangNam,Seven Eleven,GSStore Suwon: false
+Worker::~Worker(): Hyundai Labor
+Student::~Student(): Computer 3.5 2
+Person::~Person():a1 5 55.5 true :Dong-gu Incheon: 
+// 여기까지가 Inheritance의 멤버 StudentWorker sw 소멸자에 의한 출력임
+// 아래는 멤버 Worker w와 Student s의 소멸자에 의한 출력임
+Worker::~Worker(): Samsung Director
+Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
+Student::~Student(): Physics 3.8 1
+Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
+```

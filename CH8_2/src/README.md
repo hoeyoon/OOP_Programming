@@ -273,3 +273,28 @@ Student::~Student(): Computer 3.5 2
 Person::~Person():a1 5 55.5 true :Dong-gu Incheon:
 // 이상은 sw1 소멸자 실행 결과
 ```
+
+### 문제 3 설명
+```
+Inheritance::studentWorker() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        cout << "sw1 == sw2 : " << (sw1 == sw2) << endl;
+```
+```
+위 코드가 정상적으로 실행될 수 있도록 StudentWorker 클래스의 == 연산자를 구현하라. 이 연산자
+구현 시 (현 객체의 부모 클래스인 Student 객체와 매개변수 a의 부모 Student 클래스 객체가 같고 
+       현 객체의 부모 클래스인 Worker  객체와 매개변수 a의 부모 Worker  클래스 객체가 같고 
+       현 객체의 성별과 a 객체의 성별이 같으면) true를 반환하면 된다.
+      예를 들어, 부모 클래스 Student 객체를 서로 비교할 때는 *(Student*)this == a 로 
+      하면 된다. 이 경우 *(Student*)this에 의해 Student의 연산자 ==가 호출된다.
+      또 다른 부모 클래스인 Worker의 경우에도 이처럼 비교하라.
+```
+
+### 문제 3 실행 결과
+```
+// Main Menu item 6: Inheritance Menu item: 3 실행
+...
+sw1 == sw2 : true
+...
+```

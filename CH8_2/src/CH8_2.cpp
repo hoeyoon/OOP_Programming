@@ -570,6 +570,13 @@ void StudentWorker::printMembers(ostream& out)   {
     out << " :" << career << ": " << male;
 }
 
+bool StudentWorker::operator == (const StudentWorker& a){
+	if(*(Student*)this == a && *(Worker*)this == a && male == a.male){
+		return true;
+	}
+	return false;
+}
+
 void StudentWorker::whatAreYouDoing() {
     cout << "########### StudentWorker::whatAreYouDoing() ##############\n";
     /* TODO: 출력결과를 참고하여 Student와 Worker의 적절한 함수를 순서적으로 호출하라. */
@@ -2737,6 +2744,7 @@ class Inheritance
         cout << "sw1: " ; sw1.println();
         StudentWorker sw2 = sw1; // 묵시적으로 복사생성자 호출
         cout << "sw2: "; sw2.println();
+        cout << "sw1 == sw2 : " << (sw1 == sw2) << endl;
     }
 
 public:

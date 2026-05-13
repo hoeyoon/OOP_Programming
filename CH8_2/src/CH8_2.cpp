@@ -508,7 +508,7 @@ public:
 
     StudentWorker(const StudentWorker& a); // copy constructor
     ~StudentWorker();
-    Person* clone();
+    Person* clone() { return new StudentWorker(*this); }
 
     // Getter and Setter
     const string& getCareer()  const { return career; }
@@ -2764,6 +2764,14 @@ class Inheritance
         cout << "sw1: "; sw1.println();
         cout << "sw1 == sw2 : " << (sw1 == sw2) << endl;
         sw2.whatAreYouDoing();
+        Person* p3 = sw1.clone();
+        cout << "p3 : "; p3->println();
+        cout << "sw1: "; sw1.println();
+        cout << "p3 == sw1 : " << (*p3 == sw1) << endl; // Person 정보만 비교함
+        // 위의 경우 p3가 Person* 이므로 Person 클래스의 ==연산자가 호출된다.
+        //delete p3; 
+        // 위 문장의 주석은 p3가 Person에 대한 포인터이므로 메모리 반납시 프로그램이 비 정상적으로 
+        // 종료될 수 있어서 주석 처리한 것임; 9장에서 해결
     }
 
 public:

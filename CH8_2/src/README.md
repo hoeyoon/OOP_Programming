@@ -359,3 +359,43 @@ a2 is now enjoying his(her) vacation
 ###########################################################
 ...
 ```
+
+### 문제 6 설명
+```
+Inheritance::studentWorker() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        Person* p3 = sw1.clone();
+        cout << "p3 : "; p3->println();
+        cout << "sw1: "; sw1.println();
+        cout << "p3 == sw1 : " << (*p3 == sw1) << endl; // Person 정보만 비교함
+        // 위의 경우 p3가 Person* 이므로 Person 클래스의 ==연산자가 호출된다.
+        //delete p3; 
+        // 위 문장의 주석은 p3가 Person에 대한 포인터이므로 메모리 반납시 프로그램이 비 정상적으로 
+        // 종료될 수 있어서 주석 처리한 것임; 9장에서 해결
+```
+```
+2) 위 코드가 정상적으로 실행될 수 있도록 아래 실행 결과와 Student::clone()을 참고하여 
+   Person* StudentWorker::clone()을 구현하라. 
+   ------------------------------------------------------------------------
+   이 함수는 새로운 객체를 동적으로 생성하되 복사생성자를 활용하여 자기(*this) 자신을 복제한다.
+   복제된 것은 StudentWorker 객체일지라도 Person*를 반환해야 한다.
+   StudentWorker*를 반환해도 컴파일러가 자동으로 Person*로 [업캐스팅]해서 반환한다.
+```
+
+### 문제 6 실행 결과
+```
+// Main Menu item 6: Inheritance Menu item: 3 실행
+...
+Person::Person(const Person&):a1 5 55.5 true :Dong-gu Incheon:
+Student::Student(const Student& s): Computer 3.5 2
+Worker::Worker(const Worker& w): Hyundai Labor
+StudentWorker::StudentWorker(const StudentWorker& a): :CU KangNam,Seven Eleven,GSStore Suwon: false
+// 이상는 Person* p3 = sw1.clone() 실행 시 복사생성자 실행 결과임
+p3 : a1 5 55.5 true :Dong-gu Incheon:
+sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+p3 == sw1 : true // p3가 Person* 이므로 Person의 ==연산자가 호출되어 Person의 멤버들만 비교한 것임
+Person::~Person():a1 5 55.5 true :Dong-gu Incheon: // Person의 소멸자만 실행되었음
+                                                   // 9장에서는 모두 정상 수행될 것임
+...
+```

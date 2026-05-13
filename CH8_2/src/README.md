@@ -220,3 +220,56 @@ Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
 Student::~Student(): Physics 3.8 1
 Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
 ```
+
+### 문제 2 설명
+```
+Inheritance::studentWorker()에 아래 코드를 삽입하라.
+```
+```c++
+        StudentWorker sw1(sw); // 복사생성자
+        cout << "sw1: " ; sw1.println();
+        StudentWorker sw2 = sw1; // 묵시적으로 복사생성자 호출
+        cout << "sw2: "; sw2.println();
+```
+```
+1) 위 코드가 정상적으로 실행될 수 있도록 StudentWorker의 복사 생성자를 완성하라.
+   구현 시 StudentWorker의 생성자처럼 [함수 서두]에서 조부모, 부모 클래스의 [복사 생성자]를 
+   먼저 호출하고 각 멤버를 매개변수 a의 상응하는 멤버로 초기화시키면 된다. 
+2) StudentWorker::print() 함수도 구현하라. 
+   구현 시 먼저 상위 클래스인 Person, Student, Worker의 ::printMembers()를 호출하여
+   상위 클래스의 모든 멤버들을 출력한 후 StudentWorker의 모든 멤버들을 출력하면 된다.
+```
+
+### 문제 2 실행 결과
+```
+// Main Menu item 6 실행 후
+
++++++++++++++ Inheritance Menu ++++++++++++++
++ 0.Exit 1.Student 2.Worker 3.StudentWorker +
++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 3
+Person::Person(const Person&):a1 5 55.5 true :Dong-gu Incheon:
+Student::Student(const Student& s): Computer 3.5 2
+Worker::Worker(const Worker& w): Hyundai Labor
+StudentWorker::StudentWorker(const StudentWorker& a): :CU KangNam,Seven Eleven,GSStore Suwon: false
+// 이상은 StudentWorker sw1(sw)에 의한 복사생성자 실행 결과
+sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+// 이상은 sw1.println() 실행 결과
+Person::Person(const Person&):a1 5 55.5 true :Dong-gu Incheon:
+Student::Student(const Student& s): Computer 3.5 2
+Worker::Worker(const Worker& w): Hyundai Labor
+StudentWorker::StudentWorker(const StudentWorker& a): :CU KangNam,Seven Eleven,GSStore Suwon: false
+// 이상은 StudentWorker sw2 = sw1에 의한 복사생성자 실행 결과
+sw2: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+// 이상은 sw2.println() 실행 결과
+StudentWorker::~StudentWorker(): :CU KangNam,Seven Eleven,GSStore Suwon: false
+Worker::~Worker(): Hyundai Labor
+Student::~Student(): Computer 3.5 2
+Person::~Person():a1 5 55.5 true :Dong-gu Incheon:
+// 이상은 sw2 소멸자 실행 결과
+StudentWorker::~StudentWorker(): :CU KangNam,Seven Eleven,GSStore Suwon: false
+Worker::~Worker(): Hyundai Labor
+Student::~Student(): Computer 3.5 2
+Person::~Person():a1 5 55.5 true :Dong-gu Incheon:
+// 이상은 sw1 소멸자 실행 결과
+```

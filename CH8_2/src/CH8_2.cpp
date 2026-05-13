@@ -519,7 +519,10 @@ public:
 
     // Redefined member functions
     void input(istream& in);
-    void print(ostream& out);
+    void print(ostream& out){ 
+    	Person::printMembers(out); Student::printMembers(out); 
+    	Worker::printMembers(out); printMembers(out); 
+    }
     void println() { print(cout); cout << endl; }
 
     bool operator==(const StudentWorker& a);
@@ -541,9 +544,9 @@ StudentWorker::StudentWorker(
     printMembers(cout); cout << endl;
 }
 
-StudentWorker::StudentWorker(const StudentWorker& a)
-    /* TODO: 함수 서두에서 Person, Student, Worker의 [복사 생성자] 호출하기,
-             a의 각 멤버를 this의 멤버에 복사하여 초기화 */ { // 기존의 복사 생성자 참고할 것
+StudentWorker::StudentWorker(const StudentWorker& a) :
+		Person(a), Student(a), Worker(a), career(a.career), male(a.male)
+{ // 기존의 복사 생성자 참고할 것
     cout << "StudentWorker::StudentWorker(const StudentWorker& a):";
     printMembers(cout); cout << endl;
 }
@@ -2730,13 +2733,17 @@ class Inheritance
     }
 
     void studentWorker() {
+        StudentWorker sw1(sw); // 복사생성자
+        cout << "sw1: " ; sw1.println();
+        StudentWorker sw2 = sw1; // 묵시적으로 복사생성자 호출
+        cout << "sw2: "; sw2.println();
     }
 
 public:
     void run() {
         using func_t = void (Inheritance::*)();
         func_t func_arr[] = {
-            nullptr, &Inheritance::student, &Inheritance::worker,
+            nullptr, &Inheritance::student, &Inheritance::worker, &Inheritance::studentWorker, 
         };
         int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
         string menuStr =

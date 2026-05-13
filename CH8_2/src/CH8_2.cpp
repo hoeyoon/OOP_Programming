@@ -518,7 +518,10 @@ public:
     void setMale(bool male) { this->male = male; }
 
     // Redefined member functions
-    void input(istream& in);
+    void input(istream& in){
+    	Person::inputMembers(in); Student::inputMembers(in);
+    	Worker::inputMembers(in); inputMembers(in);
+    }
     void print(ostream& out){ 
     	Person::printMembers(out); Student::printMembers(out); 
     	Worker::printMembers(out); printMembers(out); 
@@ -564,6 +567,7 @@ void StudentWorker::inputMembers(istream& in) {
     /* TODO: 이번엔 경력의 뒤쪽 ':'까지 또 읽어서 career에 저장
              (':'는 입력 버퍼에서는 읽어 내지만 career에는 저장되지 않아 자동 제거됨)
              남여 성별 값을 읽어 male에 저장; */
+    in >> career >> male;
 }
 
 void StudentWorker::printMembers(ostream& out)   {
@@ -2772,6 +2776,13 @@ class Inheritance
         //delete p3; 
         // 위 문장의 주석은 p3가 Person에 대한 포인터이므로 메모리 반납시 프로그램이 비 정상적으로 
         // 종료될 수 있어서 주석 처리한 것임; 9장에서 해결
+        cout << "input alba: ";
+        sw2.input(cin);
+// a1 5 66.6 false :Nam-gu Busan: Computer 2.0 2 Hyundai Labor :CU,Emart,GS: true
+        if (UI::echo_input) sw2.println(); // 자동체크에서 사용됨
+        cout << "sw2: "; sw2.println();
+        cout << "sw1: "; sw1.println();
+        cout << "sw2 == sw1 : " << (sw2 == sw1) << endl; // Person의 == 연산자 호출
     }
 
 public:

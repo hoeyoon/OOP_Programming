@@ -399,3 +399,47 @@ Person::~Person():a1 5 55.5 true :Dong-gu Incheon: // Person의 소멸자만 실
                                                    // 9장에서는 모두 정상 수행될 것임
 ...
 ```
+
+### 문제 7 설명
+```
+1) Inheritance::studentWorker() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        cout << "input alba: ";
+        sw2.input(cin);
+// a1 5 66.6 false :Nam-gu Busan: Computer 2.0 2 Hyundai Labor :CU,Emart,GS: true
+        if (UI::echo_input) sw2.println(); // 자동체크에서 사용됨
+        cout << "sw2: "; sw2.println();
+        cout << "sw1: "; sw1.println();
+        cout << "sw2 == sw1 : " << (sw2 == sw1) << endl; // Person의 == 연산자 호출
+```
+```
+2) 위 코드가 정상적으로 실행될 수 있도록 StudentWorker::input(istream& in) 함수를 구현하라.
+   이 함수 구현 시 (StudentWorker::print() 구현을 참고할 것)
+     먼저 상위 클래스인 Person, Student, Worker의 ::inputMembers()를 호출하여 상위  
+     클래스의 모든 멤버들을 입력 받는다. 이때 각 클래스의 inputMembers() 함수가 리턴할 때마다
+     if (!in) return; 를 호출하여 에러가 발생한 경우 바로 리턴할 수 있도록 해야 한다. 
+     마지막으로 StudentWorker의 inputMembers()를 호출하여 
+     StudentWorker에서 추가된 멤버들을 입력 받는다.
+---------------------------------------------------------------------------
+3) 또한 아래 실행 결과를 참고하고 또한 StudentWorker::inputMembers(istream& in)에  
+   기술된 설명을 참고하여 이 함수를 완성하라. 이 함수 구현 시, 
+     입력 스트림 in에서 ":경력리스트: true" 순서로 멤버들을 입력 받으면 된다.
+     즉, ":CU KangNam,Seven Eleven,GSStore Suwon: false" 처럼 입력되는 값을 읽는다.
+     경력과 경력은 ','로 구분하고 각 경력은 여러 단어("CU KangNam")로 구성될 수 있다. 
+     : ... : 사이의 경력 리스트 "CU KangNam,Seven Eleven,GSStore Suwon"  
+     문자열을 멤버 career에 저장하고, false를 male에 저장해야 함
+```
+
+### 문제 7 실행 결과
+```
+// Main Menu item 6: Inheritance Menu item: 3 실행
+
+... // 아래 인적 정보를 복사해서 입력하면 편할 것이다.
+input alba: a1 5 66.6 false :Nam-gu Busan: Computer 2.0 2 Hyundai Labor :CU,Emart,GS: false
+sw2: a1 5 66.6 false :Nam-gu Busan: Computer 2 2 Hyundai Labor :CU,Emart,GS: false
+sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+sw2 == sw1 : true   // sw1과 sw2의 모든 멤버가 같은 것은 아님; 
+                    // 이름,id,학과,학년,부서,직급,남녀들 중 하나라도 다르면 false가 나와야 함
+...
+```

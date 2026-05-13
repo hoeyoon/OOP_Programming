@@ -1384,9 +1384,9 @@ void PersonManager::pushArray(){
 
 void PersonManager::deleteElemets() {
 	for(int i = 0; i < persons.size(); i++){
-		Person *temp = persons[i];
-
-		delete temp;
+//		Person *temp = persons[i];
+//
+//		delete temp;
 	}
 	persons.clear();
 	cpCount = 0;
@@ -1394,7 +1394,7 @@ void PersonManager::deleteElemets() {
 
 void PersonManager::printNotice(const string preMessage, const string postMessage) {
     cout << preMessage;
-    cout << " [delimiter(P, S, W, or A)] [person information] ";
+    cout << " [delimiter(P, S, W, or A)] [person information] :\n";
 }
 
 Person* PersonManager::findByName(const string name) {

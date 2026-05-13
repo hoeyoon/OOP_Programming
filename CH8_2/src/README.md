@@ -696,3 +696,62 @@ display(): count 15
 // 이 역시 9장에서 정상 출력될 것임
 ...
 ```
+
+### 문제 9 설명
+```
+PersonManager::persons[i]는 VectorPerson::pVector[i]와 동일하다.
+persons[i]는 Person* 변수이인데 
+이는 실제 서로 다른 파생 클래스(Student, Worker, StudentWorker)의 객체들을
+최상위 클래스인 Person의 포인터로 객체들의 주소를 관리하고 있다. 
+---------------------------------------------------------------------------
+그런데 Person Management Menu를 종료하면 MultiManager내의 
+PersonManager personMng 객체가 소멸되면서 순서적으로 PersonManager::~PersonManager()
+-> PersonManager::deleteElemets() -> delete persons[i];가 호출된다.
+---------------------------------------------------------------------------
+문제는 persons[i]가 포인터하는 객체들은 실제로 Student, Worker 등의 객체들이라 소멸시 
+각 객체별로 ~Student(), ~Worker()가 호출되어야 하는데 persons[i]가 Person*이므로 
+컴파러는 모든 객체를 ~Person()을 호출하여 소멸하므로 문제가 발생한다.
+---------------------------------------------------------------------------
+따라서 당분간 PersonManager::deleteElemets()내의 delete persons[i];를 
+for 문 내에서 아래처럼 주석 처리하라. 이 역시 9장에서 주석을 해제할 예정임.
+---------------------------------------------------------------------------
+   /* delete persons[i] */  ;
+```
+
+### 문제 9 실행 결과
+```
+******************************* Main Menu ...
+Menu item number? 1
+...
+====================== Person Management Menu ...
+Menu item number? 0
+PersonManager::run() returned
+//----------------------------------------------------------------------------
+// 원래는 여기에 delete persons[i]에 의한 소멸자 출력이 있어야 하지만 
+// 지금은 주석처리되어 출력되지 않았음
+//----------------------------------------------------------------------------
+// 아래는 MultiManager 클래스 내의 persons[], students[], workers[], albas[] 
+// 배열의 각 원소의 소멸자가 [역순]으로 실행된 것임.
+//----------------------------------------------------------------------------
+StudentWorker::~StudentWorker(): :Seven Eveven,eMart Jinju,CU Bongsun: true
+Worker::~Worker(): Kia CEO
+Student::~Student(): History 3.1 1
+Person::~Person():a2 6 66.6 false :Sasang-gu Sejong:
+StudentWorker::~StudentWorker(): :CU KangNam,Seven Eleven,GSStore Suwon: false
+Worker::~Worker(): Hyundai Labor
+Student::~Student(): Computer 3.5 2
+Person::~Person():a1 5 55.5 true :Dong-gu Incheon:
+Worker::~Worker(): Hyundai Manager
+Person::~Person():w2 4 44.4 true :Dobong-gu Kwangju:
+Worker::~Worker(): Samsung Director
+Person::~Person():w1 3 33.3 false :Kangnam-gu Seoul:
+Student::~Student(): Electronics 2.5 4
+Person::~Person():s2 2 54.3 false :Yeonje-gu Busan:
+Student::~Student(): Physics 3.8 1
+Person::~Person():s1 1 65.4 true :Jongno-gu Seoul:
+Person::~Person():p4 14 64.4 false :88 Gongpyeong-ro, Jung-gu, Daegu:
+Person::~Person():p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+Person::~Person():p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+Person::~Person():p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+Person::~Person():p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+```

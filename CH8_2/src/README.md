@@ -298,3 +298,39 @@ Inheritance::studentWorker() 함수 마지막에 아래 코드를 추가하라.
 sw1 == sw2 : true
 ...
 ```
+
+### 문제 4 설명
+```
+1) Inheritance::studentWorker() 함수 마지막에 아래 코드를 추가하라.
+```
+```c++
+        // Person 조부모 클래스의 멤버 함수 호출
+        sw2.set("a2", sw1.getId()+1, sw1.getWeight()*1.1, !sw1.getMarried(), sw1.getAddress());
+        // Student 부모 클래스의 멤버 함수 호출
+        sw2.setDepartment(sw1.getDepartment()+"-Electronics");
+        sw2.setGPA(sw1.getGPA()+1);
+        sw2.setYear(sw1.getYear()+1);
+        // Worker 부모 클래스의 멤버 함수 호출
+        sw2.setCompany(sw1.getCompany()+"-Hyundai");
+        sw2.setPosition(sw1.getPosition()+"-Manager");
+        // sw2 객체의 멤버 값 얻어오기 및 수정하기
+        sw2.setCareer(sw1.getCareer()+", Hi-Mart");
+        sw2.setMale(!sw1.getMale());
+        cout << "sw2: "; sw2.println();;
+        cout << "sw1: "; sw1.println();
+        cout << "sw1 == sw2 : " << (sw1 == sw2) << endl;
+```
+```
+2) 위 코드가 정상적으로 실행될 수 있도록 Student 클래스의 새로운 멤버함수들인
+   setCareer(), setMale()와 getCareer(), getMale() 등을 구현하라.
+```
+
+### 문제 4 실행 결과
+```
+// Main Menu item 6: Inheritance Menu item: 3 실행
+...
+sw2: a2 6 61.05 false :Dong-gu Incheon: Computer-Electronics 4.5 3 Hyundai-Hyundai Labor-Manager :CU KangNam,Seven Eleven,GSStore Suwon, Hi-Mart: true
+sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+sw1 == sw2 : false
+...
+```

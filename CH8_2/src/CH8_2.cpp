@@ -511,11 +511,11 @@ public:
     Person* clone();
 
     // Getter and Setter
-    const string& getCareer()  const;
-    bool          getMale()    const;
+    const string& getCareer()  const { return career; }
+    bool          getMale()    const { return male; }
 
-    void setCareer(const string& career);
-    void setMale(bool male);
+    void setCareer(const string& career) { this->career = career; }
+    void setMale(bool male) { this->male = male; }
 
     // Redefined member functions
     void input(istream& in);
@@ -2744,6 +2744,21 @@ class Inheritance
         cout << "sw1: " ; sw1.println();
         StudentWorker sw2 = sw1; // 묵시적으로 복사생성자 호출
         cout << "sw2: "; sw2.println();
+        cout << "sw1 == sw2 : " << (sw1 == sw2) << endl;
+        // Person 조부모 클래스의 멤버 함수 호출
+        sw2.set("a2", sw1.getId()+1, sw1.getWeight()*1.1, !sw1.getMarried(), sw1.getAddress());
+        // Student 부모 클래스의 멤버 함수 호출
+        sw2.setDepartment(sw1.getDepartment()+"-Electronics");
+        sw2.setGPA(sw1.getGPA()+1);
+        sw2.setYear(sw1.getYear()+1);
+        // Worker 부모 클래스의 멤버 함수 호출
+        sw2.setCompany(sw1.getCompany()+"-Hyundai");
+        sw2.setPosition(sw1.getPosition()+"-Manager");
+        // sw2 객체의 멤버 값 얻어오기 및 수정하기
+        sw2.setCareer(sw1.getCareer()+", Hi-Mart");
+        sw2.setMale(!sw1.getMale());
+        cout << "sw2: "; sw2.println();;
+        cout << "sw1: "; sw1.println();
         cout << "sw1 == sw2 : " << (sw1 == sw2) << endl;
     }
 

@@ -151,3 +151,42 @@ int main()
     cout << "\nGood bye!!" << endl;
 }
 ```
+
+### 문제 1 설명
+```
+0) 적절한 입출력 및 문자열 헤드 파일을 include하라.
+1) class Person, Employee와 Student 내의 접근 지정자를 지정하라.
+2) 프로그램이 정상 컴파일될 수 있도록 Employee와 Student 클래스의 생성자 함수를 구현하라. 
+3) 정상 컴파일 된다면 menu_switch() 함수 앞쪽에 있는 printPerson() 함수의 주석을 풀어라.
+4) menu_switch(menu) 함수의 switch 문장에 아래 case 문장을 추가하라.
+```
+```c++
+    case 1:
+        cout << "e->print(cout): "; e->print(cout); cout << endl;
+        cout << "e->println()  : "; e->println();
+        cout << "printPerson(e): "; printPerson(e);
+        cout << "s->print(cout): "; s->print(cout); cout << endl;
+        cout << "s->println()  : "; s->println();
+        cout << "printPerson(s): "; printPerson(s);
+        break;
+```
+```
+[문제 1] 실행 결과와 같이 출력되도록 해당 클래스에 print(), println() 멤버 함수를 구현하라.
+print(), println()가 필요하지 않은 경우 굳이 구현하지 않아도 된다.
+이 함수 구현 시 기존 Person::print(cout) 함수를 활용하라.
+```
+
+### 문제 1 실행 결과
+```
+------------------ Inheritance ----------------
+  0.exit 1.print 2.addHours 3.whatAreYouDoing  
+  4.whatIsYourPay 5.copyPerson 6.deletePerson  
+-----------------------------------------------
+menu item? 1
+e->print(cout): n:e i:10001 h:50 c:Samsung p:30000 o:10
+e->println()  : n:e i:10001 h:50
+printPerson(e): n:e i:10001 h:50
+s->print(cout): n:s i:10002 h:10 u:Chosun y:4 t:4000000
+s->println()  : n:s i:10002 h:10
+printPerson(s): n:s i:10002 h:10
+```

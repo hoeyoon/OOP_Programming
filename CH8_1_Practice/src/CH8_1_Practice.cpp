@@ -1,17 +1,17 @@
-#include < iostream>
-#include < string>
+#include <iostream>
+#include <string>
 using namespace std;
 
 /******************************************************************************
  * Person class
  ******************************************************************************/
 class Person {
-// TODO: 멤버 변수: 상속받은 자식 클래스에서 접근할 수 있도록 적절한 접근 지정자를 지정하라. 
+protected:
     string *name;  // 사람 이름
     int id;        // 고유한 ID 번호
     int hours;     // 일한 시간
 
-// TODO: 멤버 함수: 외부에서 접근할 수 있어야 한다.
+public:
     Person(const string& name="", int id=0, int hour=0); // 생성자
     ~Person();                                           // 소멸자
 
@@ -61,8 +61,8 @@ Person* Person::clone() const {
 /******************************************************************************
  * Class Employee
  ******************************************************************************/
-Person 클래스를 상속받은 Employee 클래스 선언
-
+class Employee : public Person {
+	
 // 멤버 변수
     string company;  // 근무회사
     int payPerHour;  // 시간당임금
@@ -72,12 +72,24 @@ public:
     Employee(const string& name, int id, int hours,
              const string& company, int payPerHour, int overtime);
     ~Employee() { cout << "~Employee(): n:" << *name << "   "; }
+    
+    void print(ostream& out) const;
+};
+
+Employee::Employee(const string& name, int id, int hours, const string& company, int payPerHour, int overtime) :
+	Person(name, id, hours), company(company), payPerHour(payPerHour), overtime(overtime)
+{}
+
+void Employee::print(ostream& out) const {
+	Person::print(out);
+	out << " c:" << company << " p:" << payPerHour << " o:" << overtime;
+}
 
 /******************************************************************************
  * Class Student
  ******************************************************************************/
-Person 클래스를 상속받은 Student 클래스 선언
-
+class Student : public Person {
+	
 // 멤버 변수
     string university; // 학생이 다니는 대학교 이름
     int year;          // 학년
@@ -87,6 +99,18 @@ public:
     Student(const string& name, int id, int hours,
             const string& university, int year, int tuition);
     ~Student() { cout << "~Student() : n:" << *name << "   "; }
+    
+    void print(ostream& out) const;
+};
+
+Student::Student(const string& name, int id, int hours, const string& university, int year, int tuition) : 
+	Person(name, id, hours), university(university), year(year), tuition(tuition)
+{}
+
+void Student::print(ostream& out) const {
+	Person::print(cout);
+	out << " u:" << university << " y:" << year << " t:" << tuition;
+}
 
 /******************************************************************************
  * menu_switch() 함수: 선택된 메인 메뉴 항목을 실행함
@@ -98,7 +122,7 @@ string menuStr =
     "-----------------------------------------------\n"
     "menu item? ";
 
-//void printPerson(Person *p)     { p->println(); }
+void printPerson(Person *p)     { p->println(); }
 //void addHours(Person *p)        { *p += 10; }
 //void whatAreYouDoing(Person *p) { p->whatAreYouDoing(); }
 //int  whatIsYourPay(Person *p)   { return (*p)(); } // return p->operator()();와 동일
@@ -112,6 +136,15 @@ void menu_switch(int menu)
     Person   *p;
 
     switch (menu) {
+    case 1:
+        cout << "e->print(cout): "; e->print(cout); cout << endl;
+        cout << "e->println()  : "; e->println();
+        cout << "printPerson(e): "; printPerson(e);
+        cout << "s->print(cout): "; s->print(cout); cout << endl;
+        cout << "s->println()  : "; s->println();
+        cout << "printPerson(s): "; printPerson(s);
+        break;
+
     }
     cout << endl;
 }

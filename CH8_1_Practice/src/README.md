@@ -284,3 +284,50 @@ whatIsYourPay(e): 430000
 s->operator()() : 10000
 whatIsYourPay(s): 86000
 ```
+
+### 문제 5 설명
+```
+clone() 멤버함수 구현
+menu_switch() 함수 앞쪽에 있는 copyPerson() 함수의 주석을 풀어라.
+menu_switch(menu) 함수의 switch 문장에 아래 case 문장을 추가하라.
+```
+```c++
+    case 5:
+        cout << "e->print(cout) : "; e->print(cout); cout << endl;
+        cout << "printPerson(e) : "; printPerson(e);
+        p = copyPerson(e);
+        cout << "p=copyPerson(e): "; printPerson(p);
+        cout << "((Employee*)e->clone())->print(cout): " << endl;
+        cout << "               : "; ((Employee*)e->clone())->print(cout); cout << endl;
+        cout << "s->print(cout) : "; s->print(cout); cout << endl;
+        cout << "printPerson(s) : "; printPerson(s);
+        p = copyPerson(s);
+        cout << "p=copyPerson(s): "; printPerson(p);
+        cout << "((Student*)s->clone())->print(cout): " << endl;
+        cout << "               : "; ((Student*)s->clone())->print(cout); cout << endl;
+        break;
+```
+```
+[문제 5 실행 결과]와 같이 출력되도록 해당 클래스에 자신을 복제하는 clone() 멤버함수를 구현하라.
+동적으로 객체를 생성한 후 현재 객체(this)의 내용을 복사생성자를 이용하여 복사해 주면 된다.
+예를 들어 Person::clone()의 경우 return new Person(*this); 으로 하면 된다.
+그런 후 파생 클래스에서 동일한 함수를 재정의하여야 한다.
+이때 함수이름, 매개변수, 리턴 데이타 타입을 Person::clone()과 동일하게 유지해야 한다.
+그러나 복제하는 내용은 Person::clone()와는 다르게 파생 클래스마다 자신의 클래스 객체를 복제해야 한다.
+```
+
+### 문제 5 실행 결과
+```
+...
+menu item? 5
+e->print(cout) : n:e i:10001 h:50 c:Samsung p:30000 o:10
+printPerson(e) : n:e i:10001 h:50
+p=copyPerson(e): n:e i:10001 h:50
+((Employee*)e->clone())->print(cout): 
+               : n:e i:10001 h:50 c:Samsung p:30000 o:10
+s->print(cout) : n:s i:10002 h:10 u:Chosun y:4 t:4000000
+printPerson(s) : n:s i:10002 h:10
+p=copyPerson(s): n:s i:10002 h:10
+((Student*)s->clone())->print(cout): 
+               : n:s i:10002 h:10 u:Chosun y:4 t:4000000
+```

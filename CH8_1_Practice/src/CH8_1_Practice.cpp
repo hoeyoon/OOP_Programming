@@ -13,6 +13,7 @@ protected:
 
 public:
     Person(const string& name="", int id=0, int hour=0); // 생성자
+    Person(const Person& ref);							 // 복사생성자
     ~Person();                                           // 소멸자
 
     void print(ostream& out) const;
@@ -29,6 +30,10 @@ Person::Person(const string& name, int id, int hours) {
     this->id = id;
     this->name = new string(name);
     this->hours = hours;
+}
+
+Person::Person(const Person& ref) : id(ref.id), hours(ref.hours){
+	this->name = new string(*ref.name);
 }
 
 Person::~Person() {
@@ -156,7 +161,7 @@ void addHours(Person *p)        { *p += 10; }
 void whatAreYouDoing(Person *p) { p->whatAreYouDoing(); }
 int  whatIsYourPay(Person *p)   { return (*p)(); } // return p->operator()();와 동일
 Person* copyPerson(Person *p)   { return p->clone(); }
-//void deletePerson(Person *p)    { delete p; }
+void deletePerson(Person *p)    { delete p; }
 
 void menu_switch(int menu)
 {
@@ -212,6 +217,17 @@ void menu_switch(int menu)
         cout << "p=copyPerson(s): "; printPerson(p);
         cout << "((Student*)s->clone())->print(cout): " << endl;
         cout << "               : "; ((Student*)s->clone())->print(cout); cout << endl;
+        break;
+        
+    case 6:
+        p = copyPerson(e);
+        cout << "p=copyPerson(e): "; printPerson(p); p->setName("p");
+        cout << "delete p       : "; delete p;
+        cout << "deletePerson(e): "; deletePerson(e);
+        p = copyPerson(s);
+        cout << "p=copyPerson(s): "; printPerson(p); p->setName("p");
+        cout << "deletePerson(p): "; deletePerson(p);
+        cout << "delete s       : "; delete s;
         break;
     }
     cout << endl;

@@ -331,3 +331,38 @@ p=copyPerson(s): n:s i:10002 h:10
 ((Student*)s->clone())->print(cout): 
                : n:s i:10002 h:10 u:Chosun y:4 t:4000000
 ```
+
+### 문제 6 설명
+```
+상속관계에서의 소멸자
+menu_switch() 함수 앞쪽에 있는 deletePerson() 함수의 주석을 풀어라.
+menu_switch(menu) 함수의 switch 문장에 아래 case 문장을 추가하라.
+```
+```c++
+    case 6:
+        p = copyPerson(e);
+        cout << "p=copyPerson(e): "; printPerson(p); p->setName("p");
+        cout << "delete p       : "; delete p;
+        cout << "deletePerson(e): "; deletePerson(e);
+        p = copyPerson(s);
+        cout << "p=copyPerson(s): "; printPerson(p); p->setName("p");
+        cout << "deletePerson(p): "; deletePerson(p);
+        cout << "delete s       : "; delete s;
+        break;
+```
+```
+프로그램이 정상적으로 구현되었다면 [문제 6 실행 결과]와 같이 출력되어야 한다.
+```
+
+### 문제 6 실행 결과
+```
+프로그램이 정상 실행되는가?
+그렇지 않은 경우 ~Person()의 delete name; 문장에서 프로그램이 죽을 것이다.
+이유가 무엇일까?
+copyPerson(s)은 p->clone()을 호출하고, p->clone()은 new Person(*this); 을 호출한다.
+이때 Person(*this) 복사생성자가 호출된다. 복사생성자를 구현했는가?
+Person의 멤버 중 포인터 변수가 있으므로 복사생성자가 있어야 한다. (그래서 소멸자도 있다.)
+(참고로 파생 클래스에서는 포인터 변수가 없기 때문에 복사 생성자가 없어도 된다.) 
+
+Person 클래스의 복사생성자를 구현하라.
+```

@@ -37,19 +37,30 @@ protected:
 
 // 새로운 노드(value 값을 저장하고 있음)를 생성한 후 리스트의 맨 마지막에 추가
 void BaseList::add_rear(int value) {
-    Node의 포인터 변수 n을 선언하고 
+    /* Node의 포인터 변수 n을 선언하고 
     새로운 Node를 동적으로 생성(value 값 전달)하여 n에 저장;
     만약 tail이 nullptr이 아니면 // NULL 대신에 nullptr 사용
         tail의 멤버함수 add(n)호출하여 리스트의 맨 끝에 n을 추가 
         리스트 끝에 새로 추가 되었으므로 tail을 n으로 설정
     아닌 경우 // 리스트에 노드가 없을 경우 n이 첫 노드가 됨
         tail과 head 값을 n으로 설정
-    BaseList의 데이터 개수를 1 증가
+    BaseList의 데이터 개수를 1 증가 */
+	
+	Node *n = new Node(value);
+	if(tail != nullptr){
+		tail->add(n);
+		tail = n;
+	}
+	else{
+		tail = n;
+		head = n;
+	}
+	size++;
 }
 
 // 리스트의 마지막 노드를 제거한 후 그 노드에 저장된 value를 리턴
 int BaseList::remove_rear() {
-    리스트의 노드 개수가 0이면 -1 리턴 // list empty error
+    /* 리스트의 노드 개수가 0이면 -1 리턴 // list empty error
     정수형 변수 val을 선언하고, 
     tail 노드에 저장된 value 값을 얻어와 val에 저장
     // 삭제할 노드의 앞 노드를 저장할 변수 prev 선언 및 초기화
@@ -61,12 +72,32 @@ int BaseList::remove_rear() {
         tail에 변수 prev을 설정 // 이제 마지막 노드는 삭제된 노드의 앞 노드가 됨
     아닌경우 즉, 변수 prev가 nullptr이면 // 더 이상 남은 노드가 없는 경우
          tail과 head 값을 nullptr로 설정
-    val 값을 리턴
+    val 값을 리턴 */
+	
+	if(size == 0) return -1;
+	
+	int val;
+	val = tail->getValue();
+	
+	Node *prev = tail->prev;
+	delete tail;
+	size--;
+	
+	if(prev != nullptr){
+		prev->next = nullptr;
+		tail = prev;
+	}
+	else{
+		tail = nullptr;
+		head = nullptr;
+	}
+	
+	return val;
 }
 
 // 리스트의 맨 처음 노드를 제거한 후 그 노드에 저장된 value를 리턴
 int BaseList::remove_front() {
-    리스트의 노드 개수가 0이면 -1 리턴 // list empty error
+    /* 리스트의 노드 개수가 0이면 -1 리턴 // list empty error
     정수형 변수 val을 선언하고, 
     head 노드에 저장된 value 값을 얻어와 val에 저장
     // 삭제할 노드의 뒤 노드를 저장할 변수 next 선언 및 초기화
@@ -78,18 +109,39 @@ int BaseList::remove_front() {
         head에 변수 next를 설정 // 이제 맨 첫 노드는 삭제된 노드의 뒤 노드가 됨
     아닌경우 즉, 변수 next가 nullptr이면 // 더 이상 남은 노드가 없는 경우
          tail과 head 값을 nullptr로 설정
-    val 값을 리턴
+    val 값을 리턴 */
+	if(size == 0) return -1;
+
+	int val;
+	val = head->getValue();
+	
+	Node *next = head->next;
+	delete head;
+	size--;
+	
+	if(next != nullptr){
+		next->prev = nullptr;
+		head = next;
+	}
+	else{
+		tail = nullptr;
+		head = nullptr;
+	}
+	
+	return val;
 }
 
-class MyQueue ... {  	// BaseList를 상속받게 선언해야 함
+class MyQueue : public BaseList {  	// BaseList를 상속받게 선언해야 함
 public:
     void enqueue(int value) {  // 큐의 맨 끝에 노드 추가 후 value 저장
-        Base List의 적절한 멤버함수를 호출함 
+        // Base List의 적절한 멤버함수를 호출함 
+    	add_rear(value);
     }
     int dequeue() { // 큐의 맨 앞의 노드 삭제하고 노드의 value 값 리턴
-        return Base List의 적절한 멤버함수를 호출함; 
+        // return Base List의 적절한 멤버함수를 호출함; 
+    	return remove_front();
     }
-    int length() { Base List에 저장된 데이터의 갯수를 리턴 }
+    int length() { /* Base List에 저장된 데이터의 갯수를 리턴 */ return size; }
     static void test(); // static 함수임
 };
 
@@ -113,12 +165,14 @@ void MyQueue::test() {
 class MyStack : public BaseList {
 public:
     void push(int value) { // 스택의 맨 끝에 노드 추가 후 value 저장
-        Base List의 적절한 멤버함수를 호출함; 
+        //Base List의 적절한 멤버함수를 호출함; 
+    	add_rear(value);
     }
     int pop() { // 스택의 맨 끝의 노드 삭제하고 노드의 value 값 리턴
-        return Base List의 적절한 멤버함수를 호출함; 
+        //return Base List의 적절한 멤버함수를 호출함;
+    	return remove_rear();
     }
-    int length() { Base List에 저장된 데이터의 갯수를 리턴 }
+    int length() { /* Base List에 저장된 데이터의 갯수를 리턴 */ return size; }
     static void test(); // static 함수임
 };
 

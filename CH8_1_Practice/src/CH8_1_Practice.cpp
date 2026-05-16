@@ -55,7 +55,7 @@ Person & Person::operator += (int hours) {
 }
 
 void Person::whatAreYouDoing() const {
-	cout << "I am taking a rest" << endl;
+	cout << "I am taking a rest." << endl;
 }
 
 Person* Person::clone() const {

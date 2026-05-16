@@ -221,3 +221,35 @@ addHours(e): n:e i:10001 h:70
 s += 10    : n:s i:10002 h:20
 addHours(s): n:s i:10002 h:30
 ```
+
+### 문제 3 설명
+```
+whatAreYouDoing() 멤버 함수: 재정의된 객체의 멤버함수 대신 부모 클래스의 멤버 함수 호출
+menu_switch() 함수 앞쪽에 있는 whatAreYouDoing() 함수의 주석을 풀어라.
+menu_switch(menu) 함수의 switch 문장에 아래 case 문장을 추가하라.
+```
+```c++
+    case 3:
+        cout << "e->whatAreYouDoing()          : "; e->whatAreYouDoing();
+        cout << "whatAreYouDoing(e)            : "; whatAreYouDoing(e);
+        cout << "e->Person::whatAreYouDoing()  : "; e->Person::whatAreYouDoing();
+        cout << "s->whatAreYouDoing()          : "; s->whatAreYouDoing();
+        cout << "whatAreYouDoing(s)            : "; whatAreYouDoing(s);
+        cout << "(*s).Person::whatAreYouDoing(): "; (*s).Person::whatAreYouDoing();
+        break;
+```
+```
+[문제 3] 실행 결과와 같이 출력되도록 해당 클래스에 whatAreYouDoing() 멤버함수를 구현하라.
+```
+
+### 문제 3 실행 결과
+```
+...
+menu item? 3
+e->whatAreYouDoing()          : I am working.
+whatAreYouDoing(e)            : I am taking a rest.
+e->Person::whatAreYouDoing()  : I am taking a rest.
+s->whatAreYouDoing()          : I am studying.
+whatAreYouDoing(s)            : I am taking a rest.
+(*s).Person::whatAreYouDoing(): I am taking a rest.
+```

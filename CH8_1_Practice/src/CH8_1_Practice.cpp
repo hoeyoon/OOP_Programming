@@ -51,6 +51,7 @@ Person & Person::operator += (int hours) {
 
 void Person::whatAreYouDoing() const {
 // TODO: 출력결과를 보고 적절한 문자열을 출력하라.
+	cout << "I am taking a rest" << endl;
 }
 
 Person* Person::clone() const {
@@ -74,6 +75,7 @@ public:
     ~Employee() { cout << "~Employee(): n:" << *name << "   "; }
     
     void print(ostream& out) const;
+    void whatAreYouDoing() const;
 };
 
 Employee::Employee(const string& name, int id, int hours, const string& company, int payPerHour, int overtime) :
@@ -83,6 +85,10 @@ Employee::Employee(const string& name, int id, int hours, const string& company,
 void Employee::print(ostream& out) const {
 	Person::print(out);
 	out << " c:" << company << " p:" << payPerHour << " o:" << overtime;
+}
+
+void Employee::whatAreYouDoing() const {
+	cout << "I am working." << endl;
 }
 
 /******************************************************************************
@@ -101,6 +107,7 @@ public:
     ~Student() { cout << "~Student() : n:" << *name << "   "; }
     
     void print(ostream& out) const;
+    void whatAreYouDoing() const;
 };
 
 Student::Student(const string& name, int id, int hours, const string& university, int year, int tuition) : 
@@ -110,6 +117,10 @@ Student::Student(const string& name, int id, int hours, const string& university
 void Student::print(ostream& out) const {
 	Person::print(cout);
 	out << " u:" << university << " y:" << year << " t:" << tuition;
+}
+
+void Student::whatAreYouDoing() const {
+	cout << "I am studying." << endl;
 }
 
 /******************************************************************************
@@ -124,7 +135,7 @@ string menuStr =
 
 void printPerson(Person *p)     { p->println(); }
 void addHours(Person *p)        { *p += 10; }
-//void whatAreYouDoing(Person *p) { p->whatAreYouDoing(); }
+void whatAreYouDoing(Person *p) { p->whatAreYouDoing(); }
 //int  whatIsYourPay(Person *p)   { return (*p)(); } // return p->operator()();와 동일
 //Person* copyPerson(Person *p)   { return p->clone(); }
 //void deletePerson(Person *p)    { delete p; }
@@ -152,6 +163,15 @@ void menu_switch(int menu)
         cout << "s += 10    : "; (*s += 10).println();
         addHours(s);
         cout << "addHours(s): "; printPerson(s);
+        break;
+        
+    case 3:
+        cout << "e->whatAreYouDoing()          : "; e->whatAreYouDoing();
+        cout << "whatAreYouDoing(e)            : "; whatAreYouDoing(e);
+        cout << "e->Person::whatAreYouDoing()  : "; e->Person::whatAreYouDoing();
+        cout << "s->whatAreYouDoing()          : "; s->whatAreYouDoing();
+        cout << "whatAreYouDoing(s)            : "; whatAreYouDoing(s);
+        cout << "(*s).Person::whatAreYouDoing(): "; (*s).Person::whatAreYouDoing();
         break;
     }
     cout << endl;

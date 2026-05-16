@@ -123,7 +123,7 @@ string menuStr =
     "menu item? ";
 
 void printPerson(Person *p)     { p->println(); }
-//void addHours(Person *p)        { *p += 10; }
+void addHours(Person *p)        { *p += 10; }
 //void whatAreYouDoing(Person *p) { p->whatAreYouDoing(); }
 //int  whatIsYourPay(Person *p)   { return (*p)(); } // return p->operator()();와 동일
 //Person* copyPerson(Person *p)   { return p->clone(); }
@@ -144,7 +144,15 @@ void menu_switch(int menu)
         cout << "s->println()  : "; s->println();
         cout << "printPerson(s): "; printPerson(s);
         break;
-
+        
+    case 2:
+        cout << "e += 10    : "; (*e += 10).println();
+        addHours(e);
+        cout << "addHours(e): "; printPerson(e);
+        cout << "s += 10    : "; (*s += 10).println();
+        addHours(s);
+        cout << "addHours(s): "; printPerson(s);
+        break;
     }
     cout << endl;
 }

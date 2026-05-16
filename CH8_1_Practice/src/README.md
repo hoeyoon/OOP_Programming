@@ -154,6 +154,7 @@ int main()
 
 ### 문제 1 설명
 ```
+print() 멤버함수
 0) 적절한 입출력 및 문자열 헤드 파일을 include하라.
 1) class Person, Employee와 Student 내의 접근 지정자를 지정하라.
 2) 프로그램이 정상 컴파일될 수 있도록 Employee와 Student 클래스의 생성자 함수를 구현하라. 
@@ -189,4 +190,34 @@ printPerson(e): n:e i:10001 h:50
 s->print(cout): n:s i:10002 h:10 u:Chosun y:4 t:4000000
 s->println()  : n:s i:10002 h:10
 printPerson(s): n:s i:10002 h:10
+```
+
+### 문제 2 설명
+```
++= 연산자 구현
+menu_switch() 함수 앞쪽에 있는 addHours() 함수의 주석을 풀어라.
+menu_switch(menu) 함수의 switch 문장에 아래 case 문장을 추가하라.
+```
+```c++
+    case 2:
+        cout << "e += 10    : "; (*e += 10).println();
+        addHours(e);
+        cout << "addHours(e): "; printPerson(e);
+        cout << "s += 10    : "; (*s += 10).println();
+        addHours(s);
+        cout << "addHours(s): "; printPerson(s);
+        break;
+```
+```
+[문제 2] 실행 결과와 같이 출력되도록 필요한 경우 해당 클래스에 연산자 += 를 구현하라.
+해당 연산자가 필요하지 않은 경우 굳이 구현하지 않아도 된다.
+```
+### 문제 2 실행 결과
+```
+...
+menu item? 2
+e += 10    : n:e i:10001 h:60
+addHours(e): n:e i:10001 h:70
+s += 10    : n:s i:10002 h:20
+addHours(s): n:s i:10002 h:30
 ```

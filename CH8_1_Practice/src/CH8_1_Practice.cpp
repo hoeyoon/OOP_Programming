@@ -50,7 +50,6 @@ Person & Person::operator += (int hours) {
 }
 
 void Person::whatAreYouDoing() const {
-// TODO: 출력결과를 보고 적절한 문자열을 출력하라.
 	cout << "I am taking a rest" << endl;
 }
 
@@ -76,6 +75,7 @@ public:
     
     void print(ostream& out) const;
     void whatAreYouDoing() const;
+    int  operator () () const;
 };
 
 Employee::Employee(const string& name, int id, int hours, const string& company, int payPerHour, int overtime) :
@@ -89,6 +89,10 @@ void Employee::print(ostream& out) const {
 
 void Employee::whatAreYouDoing() const {
 	cout << "I am working." << endl;
+}
+
+int Employee::operator () () const {
+	return hours * payPerHour + overtime * payPerHour * 1.5;
 }
 
 /******************************************************************************
@@ -108,6 +112,7 @@ public:
     
     void print(ostream& out) const;
     void whatAreYouDoing() const;
+    int  operator () () const;
 };
 
 Student::Student(const string& name, int id, int hours, const string& university, int year, int tuition) : 
@@ -123,6 +128,10 @@ void Student::whatAreYouDoing() const {
 	cout << "I am studying." << endl;
 }
 
+int Student::operator ()() const {
+	return hours * 1000;
+}
+
 /******************************************************************************
  * menu_switch() 함수: 선택된 메인 메뉴 항목을 실행함
  ******************************************************************************/
@@ -136,7 +145,7 @@ string menuStr =
 void printPerson(Person *p)     { p->println(); }
 void addHours(Person *p)        { *p += 10; }
 void whatAreYouDoing(Person *p) { p->whatAreYouDoing(); }
-//int  whatIsYourPay(Person *p)   { return (*p)(); } // return p->operator()();와 동일
+int  whatIsYourPay(Person *p)   { return (*p)(); } // return p->operator()();와 동일
 //Person* copyPerson(Person *p)   { return p->clone(); }
 //void deletePerson(Person *p)    { delete p; }
 
@@ -172,6 +181,13 @@ void menu_switch(int menu)
         cout << "s->whatAreYouDoing()          : "; s->whatAreYouDoing();
         cout << "whatAreYouDoing(s)            : "; whatAreYouDoing(s);
         cout << "(*s).Person::whatAreYouDoing(): "; (*s).Person::whatAreYouDoing();
+        break;
+        
+    case 4:
+        cout << "(*e)()          : " << (*e)() << endl;
+        cout << "whatIsYourPay(e): " << whatIsYourPay(e) << endl;
+        cout << "s->operator()() : " << s->operator()() << endl; // (*s)()와 동일
+        cout << "whatIsYourPay(s): " << whatIsYourPay(s) << endl;
         break;
     }
     cout << endl;

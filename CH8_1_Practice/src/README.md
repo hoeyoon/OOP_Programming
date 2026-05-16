@@ -253,3 +253,34 @@ s->whatAreYouDoing()          : I am studying.
 whatAreYouDoing(s)            : I am taking a rest.
 (*s).Person::whatAreYouDoing(): I am taking a rest.
 ```
+
+### 문제 4 설명
+```
+operator () 구현
+menu_switch() 함수 앞쪽에 있는 whatIsYourPay() 함수의 주석을 풀어라.
+menu_switch(menu) 함수의 switch 문장에 아래 case 문장을 추가하라.
+```
+```c++
+    case 4:
+        cout << "(*e)()          : " << (*e)() << endl;
+        cout << "whatIsYourPay(e): " << whatIsYourPay(e) << endl;
+        cout << "s->operator()() : " << s->operator()() << endl; // (*s)()와 동일
+        cout << "whatIsYourPay(s): " << whatIsYourPay(s) << endl;
+        break;
+```
+```
+[문제 4 실행 결과]와 같이 출력되도록 해당 클래스에 연산자 () 를 구현하라.
+이 연산자는 일한 시간에 대한 임금(pay)을 계산하여 반환한다. 
+직원의 경우 임금은 (일한시간*시간당임금+초과근무시간*시간당임금*1.5)이다. 
+학생의 경우 단위 시간당 임금을 1000원으로 하고 임금을 계산하라.
+```
+
+### 문제 4 실행 결과
+```
+...
+menu item? 4
+(*e)()          : 1950000
+whatIsYourPay(e): 430000
+s->operator()() : 10000
+whatIsYourPay(s): 86000
+```

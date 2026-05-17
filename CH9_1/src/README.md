@@ -287,3 +287,95 @@ p1 is taking a rest.
     오버라이딩된 함수가 실행되기 때문에 출력되는 내용은 모두 다르다는 것이다. (다형성)
 ---------------------------------------------------------------------------
 ```
+
+### 문제 3 설명
+```
+1) 최상위 클래스인 Person 클래스 선언부에서 input() 함수를 가상함수로 선언하라.
+2) Student, Worker, StudentWorker 클래스 선언부에서 위 함수의 원형에 override를 추가하라.
+3) Factory 클래스를 아래 코드로 대체하라. 기존 코드와의 차이점은 무엇인가?
+   아래 newPerson()에서는 Person*인 변수 p 하나만 사용한다. 그리고 클래스별로 객체를 생성한 후
+   각 클래스별 input()을 호출하지 않고 바로 리턴한다. 
+   그런 후 inputPerson()에서 대표로 한번만 p->input(in)을 호출하는데
+   이 역시 생성된 객체의 파생 클래스에서 override된 input()이 호출된다.
+```
+```c++
+class Factory
+{
+public:
+    // 동적으로 Person 객체를 할당 받은 후 키보드로부터 새로 추가하고자 하는 사람의
+    // 인적정보를 읽어 들여 해당 객체에 저장한 후 그 객체의 포인터를 반환한다.
+	
+    static Person* inputPerson(istream& in) {
+        Person* p;
+        string delimiter;
+
+        in >> delimiter;              // 입력장치에서 사람구분자를 입력 받음
+
+        if (in.eof())                 // 파일(입력장치가 파일인 경우)의 끝일 경우
+        	return nullptr;
+        else if (delimiter == "P") p = new Person(); 
+        else if (delimiter == "S") p = new Student();
+        else if (delimiter == "W") p = new Worker();
+        else if (delimiter == "A") p = new StudentWorker();
+        else {
+            cout << delimiter << ": WRONG delimiter" << endl;
+            getline(in, delimiter); // 엉뚱한 구분자일 경우 행 전체를 읽어서 버림
+            return nullptr;
+        }
+        //---------------------------------------------------------------------
+        // 주목: 아래 p->input(in)은 Person의 포인터 변수 p를 이용해 
+        //      Person::input(istream&)을 호출했을 뿐이데 p가 포인트하는 실제 객체의  
+        //      종류에 따라 오버라이딩된 파생 클래스의 input()이 호출된다. (다형성)
+        //---------------------------------------------------------------------
+        p->input(in);  // 각 클래스별 멤버들을 모두 입력 받음
+
+        if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
+            delete p;         // 할당된 메모리 반납
+            return nullptr;   // nullptr 반환은 에러가 발생했다는 의미임
+        }
+        if (UI::echo_input) {  // 자동체크에서 사용됨
+            cout << delimiter << " ";
+            p->println();
+        }
+        return p;
+    }
+};
+```
+
+### 문제 3 실행 결과
+```
+ch8-2의 [문제 8] 실행 결과와 동일하게 아래처럼 입력해 보라. 7개의 인적정보가 정상적으로 입력되어야 한다.
+그리고 display()가 실행될 때 아래처럼 객체 종류마다 다르게, 그리고 모든 멤버가 출력되어야 한다.
+
+******************************* Main Menu ...
+Menu item number? 1
+...
+====================== Person Management Menu ...
+Menu item number? 2
+The number of persons to append? 7
+Input 7 [delimiter(P, S, W, or A)] [person information] : 
+// 아래 7개의 인적 정보를 한번에 복사해서 입력할 것
+P p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+S s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21: Computer 3.3 2
+W w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul: Kia CEO
+A a3 14 54 false :Dong-gu, Incheon: Physics 3.8 1 Kakao Manager :SK, LG, KAI: true
+S s4 15 80 true :1001, Jungang-daero, Yeonje-gu, Busan: Biology 3.8 3
+W w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul: Naver Department-Head
+A a4 17 88 true :Kangdong-gu, Daejeon: Electronics 3.4 2 NC Developer :CU, GS: false
+Person::Person(...): 0 0 false :: // new에 의해 각 객체가 생성될 때 기본 생성자에 의해 출력됨
+...
+StudentWorker::StudentWorker(...): :: false
+// PersonManager::append() -> display()
+display(): count 15
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+...
+[7] a2 6 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+// 아래는 새로 입력된 객체들의 정보임
+[8] p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[9] s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21: Computer 3.3 2
+[10] w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul: Kia CEO
+[11] a3 14 54 false :Dong-gu, Incheon: Physics 3.8 1 Kakao Manager :SK, LG, KAI: true
+[12] s4 15 80 true :1001, Jungang-daero, Yeonje-gu, Busan: Biology 3.8 3
+[13] w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul: Naver Department-Head
+[14] a4 17 88 true :Kangdong-gu, Daejeon: Electronics 3.4 2 NC Developer :CU, GS: false
+```

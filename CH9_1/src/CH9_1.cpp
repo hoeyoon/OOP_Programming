@@ -69,7 +69,7 @@ public:
     const char* getAddress() const { return address; } // 수정하시오.
     const char* getMemo()    const { return memo_c_str; }
 
-    void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
+    virtual void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
     virtual void print(ostream& out) { printMembers(out); }
     void println()            { print(cout); cout << endl; }
     virtual void whatAreYouDoing();                          // ch3_2에서 추가
@@ -326,7 +326,7 @@ public:
     void setGPA(double GPA)						{ this->GPA = GPA; }
 
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
-    void input(istream& in){ Person::inputMembers(cin); inputMembers(cin); }
+    void input(istream& in) override { Person::inputMembers(cin); inputMembers(cin); }
     void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
 
     bool operator==(const Student& s);
@@ -415,7 +415,7 @@ public:
     void setPosition(const string& position) { this->position = position; }
 
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
-    void input(istream& in){ Person::inputMembers(cin); inputMembers(cin); }
+    void input(istream& in) override { Person::inputMembers(cin); inputMembers(cin); }
     void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
 
     bool operator==(const Worker& w);
@@ -517,7 +517,7 @@ public:
     void setMale(bool male) { this->male = male; }
 
     // Redefined member functions
-    void input(istream& in){
+    void input(istream& in) override {
     	Person::inputMembers(in); Student::inputMembers(in);
     	Worker::inputMembers(in); inputMembers(in);
     }
@@ -1286,6 +1286,7 @@ class Factory
 public:
     // 동적으로 Person 객체를 할당 받은 후 키보드로부터 새로 추가하고자 하는 사람의
     // 인적정보를 읽어 들여 해당 객체에 저장한 후 그 객체의 포인터를 반환한다.
+	
     static Person* inputPerson(istream& in) {
         Person* p;
         string delimiter;
@@ -1294,31 +1295,21 @@ public:
 
         if (in.eof())                 // 파일(입력장치가 파일인 경우)의 끝일 경우
         	return nullptr;
-        else if (delimiter == "P") {
-            p = new Person();  p->input(in);
-        }
-        else if (delimiter == "S") {
-            Student* s = new Student();
-            s->input(in);
-            p = s;
-        }
-        else if (delimiter == "W") {
-            Worker* w = new Worker();
-            w->input(in);
-            p = w;
-        }
-        else if (delimiter == "A") {
-            StudentWorker* sw = new StudentWorker();
-            sw->input(in);
-            p = sw;
-        }
+        else if (delimiter == "P") p = new Person(); 
+        else if (delimiter == "S") p = new Student();
+        else if (delimiter == "W") p = new Worker();
+        else if (delimiter == "A") p = new StudentWorker();
         else {
             cout << delimiter << ": WRONG delimiter" << endl;
             getline(in, delimiter); // 엉뚱한 구분자일 경우 행 전체를 읽어서 버림
             return nullptr;
         }
-
-        // p->input(in);  // 멤버들을 입력 받음: 9장에서 이 주석을 다시 해제할 예정이다.
+        //---------------------------------------------------------------------
+        // 주목: 아래 p->input(in)은 Person의 포인터 변수 p를 이용해 
+        //      Person::input(istream&)을 호출했을 뿐이데 p가 포인트하는 실제 객체의  
+        //      종류에 따라 오버라이딩된 파생 클래스의 input()이 호출된다. (다형성)
+        //---------------------------------------------------------------------
+        p->input(in);  // 각 클래스별 멤버들을 모두 입력 받음
 
         if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
             delete p;         // 할당된 메모리 반납

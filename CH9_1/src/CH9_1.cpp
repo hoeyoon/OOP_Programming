@@ -46,8 +46,8 @@ public:
     //Person(const string name);
     Person(const string& name = "", int id = 0, double weight = 0.0, bool married = false, const char *address = nullptr);
     Person(const Person& p);
-    ~Person();
-    Person* clone() { return new Person(*this); } // ch7_3에서 추가
+    virtual ~Person();
+    virtual Person* clone() { return new Person(*this); } // ch7_3에서 추가
 
     void set(const string& name, int pid, double weight, bool married, const char *address);
     void set(int id)					 { this->id = id; }
@@ -70,7 +70,7 @@ public:
     const char* getMemo()    const { return memo_c_str; }
 
     void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
-    void print(ostream& out) { printMembers(out); }
+    virtual void print(ostream& out) { printMembers(out); }
     void println()            { print(cout); cout << endl; }
     void whatAreYouDoing();                          // ch3_2에서 추가
     Person& operator = (const Person& p);				// ch7_1에서 추가
@@ -313,8 +313,8 @@ public:
             bool married={}, const char* address={},
             const string& department={}, double GPA={}, int year={});
     Student(const Student& s); // copy constructor
-    ~Student();
-    Person* clone(){ return new Student(*this); }  // 자동 업캐스팅
+    ~Student() override;
+    Person* clone() override { return new Student(*this); }  // 자동 업캐스팅
 
     // Getter and Setter
     int           getYear()       const { return year; }
@@ -327,8 +327,7 @@ public:
 
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
     void input(istream& in){ Person::inputMembers(cin); inputMembers(cin); }
-    void print(ostream& out){ Person::printMembers(cout); printMembers(cout); }
-    void println() { print(cout); cout << endl; }
+    void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
 
     bool operator==(const Student& s);
     void whatAreYouDoing();
@@ -405,8 +404,8 @@ public:
             bool married={}, const char* address={},
             const string& company={}, const string& position={});
     Worker(const Worker& w); // copy constructor
-    ~Worker();
-    Person* clone() { return new Worker(*this); }
+    ~Worker() override;
+    Person* clone() override { return new Worker(*this); }
 
     // Getter and Setter
     const string& getCompany()  const { return company; }
@@ -417,8 +416,7 @@ public:
 
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
     void input(istream& in){ Person::inputMembers(cin); inputMembers(cin); }
-    void print(ostream& out){ Person::printMembers(cout); printMembers(cout); }
-    void println() { print(cout); cout << endl; }
+    void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
 
     bool operator==(const Worker& w);
     void whatAreYouDoing();
@@ -508,8 +506,8 @@ public:
     );
 
     StudentWorker(const StudentWorker& a); // copy constructor
-    ~StudentWorker();
-    Person* clone() { return new StudentWorker(*this); }
+    ~StudentWorker() override;
+    Person* clone() override { return new StudentWorker(*this); }
 
     // Getter and Setter
     const string& getCareer()  const { return career; }
@@ -523,11 +521,10 @@ public:
     	Person::inputMembers(in); Student::inputMembers(in);
     	Worker::inputMembers(in); inputMembers(in);
     }
-    void print(ostream& out){ 
+    void print(ostream& out) override { 
     	Person::printMembers(out); Student::printMembers(out); 
     	Worker::printMembers(out); printMembers(out); 
     }
-    void println() { print(cout); cout << endl; }
 
     bool operator==(const StudentWorker& a);
     void whatAreYouDoing();
@@ -1385,9 +1382,9 @@ void PersonManager::pushArray(){
 
 void PersonManager::deleteElemets() {
 	for(int i = 0; i < persons.size(); i++){
-//		Person *temp = persons[i];
-//
-//		delete temp;
+		Person *temp = persons[i];
+
+		delete temp;
 	}
 	persons.clear();
 	cpCount = 0;
@@ -2765,7 +2762,7 @@ class Inheritance
         cout << "s2: "; s2.println();
         cout << "s1: "; s1.println();;
         cout << "s2 == s1 : " << (s2 == s1) << endl;
-        //delete s3;
+        delete s3;
     }
 
     void worker() {
@@ -2798,7 +2795,7 @@ class Inheritance
         cout << "w2: "; w2.println();
         cout << "w1: "; w1.println();;
         cout << "w2 == w1 : " << (w2 == w1) << endl;
-        //delete w3;
+        delete w3;
     }
 
     void studentWorker() {
@@ -2828,7 +2825,7 @@ class Inheritance
         cout << "sw1: "; sw1.println();
         cout << "p3 == sw1 : " << (*p3 == sw1) << endl; // Person 정보만 비교함
         // 위의 경우 p3가 Person* 이므로 Person 클래스의 ==연산자가 호출된다.
-        //delete p3; 
+        delete p3; 
         // 위 문장의 주석은 p3가 Person에 대한 포인터이므로 메모리 반납시 프로그램이 비 정상적으로 
         // 종료될 수 있어서 주석 처리한 것임; 9장에서 해결
         cout << "input alba: ";

@@ -1,5 +1,5 @@
 /*
- * CH8: ch9_1.cpp
+ * CH9: ch9_1.cpp
  *
  *  Created on: 2026. 05. 17.
  *      Author: 정회윤

@@ -1016,8 +1016,18 @@ void CurrentUser::whatAreYouDoing() {  // Menu item 5
 }
 
 void CurrentUser::isSame() { // Menu item 6
-    rUser.println();
-    cout << "isSame(\"user\", 1): " << rUser.isSame("user", 1) << endl;
+    Person* p = rUser.clone(); // 현재 로그인한 객체를 동일하게 복사함
+    cout << "rUser: "; rUser.println();
+    cout << "p    : "; p->println();
+    cout << "(rUser == p): " << (rUser == *p) << endl; // 같아야 함
+    // 아래 입력 시 현재 로그인한 객체와 동일한 양식으로 인적정보를 입력해야 함
+    UI::inputPerson(*p);
+    // 즉, 현재 Student(or Worker)으로 로그인했다면 [구분자] 없이 학생(or 노동자)정보를 입력해야 함
+    // 현 객체의 오버라이딩된 input(istream& in) 함수가 바로 호출되므로 구분자가 필요없다.
+    cout << "rUser: "; rUser.println();
+    cout << "p    : "; p->println();
+    cout << "(rUser == p): " << (rUser == *p) << endl;
+    delete p;
 }
 
 void CurrentUser::inputPerson() { // Menu item 7

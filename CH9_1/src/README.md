@@ -466,3 +466,75 @@ a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Kia     Labor :CU KangNam,Seven 
 // input alba: 값으로 아래를 입력했을 때 sw1과 동일하므로 == 값이 true가 출력되어야 함
 a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
 ```
+
+### 문제 5 설명
+```
+1) 기존의 CurrentUser::isSame()의 코드를 아래 코드로 대체하라.
+```
+```c++
+void CurrentUser::isSame() { // Menu item 6
+    Person* p = rUser.clone(); // 현재 로그인한 객체를 동일하게 복사함
+    cout << "rUser: "; rUser.println();
+    cout << "p    : "; p->println();
+    cout << "(rUser == p): " << (rUser == *p) << endl; // 같아야 함
+    // 아래 입력 시 현재 로그인한 객체와 동일한 양식으로 인적정보를 입력해야 함
+    UI::inputPerson(*p);
+    // 즉, 현재 Student(or Worker)으로 로그인했다면 [구분자] 없이 학생(or 노동자)정보를 입력해야 함
+    // 현 객체의 오버라이딩된 input(istream& in) 함수가 바로 호출되므로 구분자가 필요없다.
+    cout << "rUser: "; rUser.println();
+    cout << "p    : "; p->println();
+    cout << "(rUser == p): " << (rUser == *p) << endl;
+    delete p;
+}
+```
+```
+실행 시 아래 인적 정보 중 현재 로그인한 객체와 동일한 종류의 인적정보을 골라 입력 해 보라.
+p0 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:  // 현 객체가 Person인 경우: 이름 다름
+s1 1 65.4 true :Jongno-gu Seoul: Physics 3.8 2     // Student: 학년 다름
+w1 3 33.3 false :Kangnam-gu Seoul: Kia Director    // Worker: 회사 다름
+a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: true // male 다름
+```
+
+### 문제 5 실행 결과
+```
+******************************* Main Menu ...
+Menu item number? 1
+
+// 아래 항목을 순서적으로 입력하면 위 isSame()이 여러번 실행되는데 
+// 매번 실행 시 복제된 객체의 비교(==)는 true, 인적 정보 입력 후의 비교는 false가 출력되어야 함  
+
+4   // Login
+p1
+    // 이 줄은 빈 줄로 입력: 비번 없음: 즉, 그냥 엔터
+Menu item number? 6
+Person::Person(const Person&):p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+rUser: p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+p    : p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+(rUser == p): true                                // 항상 true
+input person information:
+p0 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul: // 사용자 입력: 이름이 rUser와 다름
+rUser: p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+p    : p0 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+(rUser == p): false                               // 항상 false 출력되어야 함
+Person::~Person():p0 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+...
+Menu item number? 0   // Logout
+4   // Login
+s1  // Student
+
+6   // IsSame: Student
+s1 1 65.4 true :Jongno-gu Seoul: Physics 3.8 2 // Student: 학년 다름
+0   // Logout
+4   // Login
+w1  // Worker
+
+6   // IsSame: Worker
+w1 3 33.3 false :Kangnam-gu Seoul: Kia Director // Worker: 회사 다름
+0   // Logout
+4   // Login
+a1  // StudentWorker
+
+6   // IsSame: StudentWorker
+a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: true // male 다름
+0   // Logout
+```

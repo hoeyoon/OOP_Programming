@@ -76,7 +76,7 @@ public:
     Person& operator = (const Person& p);				// ch7_1에서 추가
     bool isSame(const string& name, int id);         // ch3_2에서 추가
 
-    bool operator == (const Person &p);
+    virtual bool operator == (const Person &p);
     friend Person operator + (const Person &p, double weight);
     friend Person operator + (double weight, const Person &p);
     Person& operator++();
@@ -329,7 +329,7 @@ public:
     void input(istream& in) override { Person::inputMembers(cin); inputMembers(cin); }
     void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
 
-    bool operator==(const Student& s);
+    bool operator==(const Person& p) override;
     void whatAreYouDoing() override;
 
     // 새로 추가된 멤버 함수: Member functions added in Student
@@ -365,8 +365,9 @@ void Student::printMembers(ostream& out)   {             // 멤버 출력
     out << " " << department << " " << GPA << " " << year;
 }
 
-bool Student::operator == (const Student& s){
-	if(year == s.year && department == s.department){
+bool Student::operator == (const Person& p){
+    const Student& s = dynamic_cast< const Student& >(p); // 다운 캐스팅
+	if(Person::operator==(p) && year == s.year && department == s.department){
 		return true;
 	}
 	return false;
@@ -418,7 +419,7 @@ public:
     void input(istream& in) override { Person::inputMembers(cin); inputMembers(cin); }
     void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
 
-    bool operator==(const Worker& w);
+    bool operator==(const Person& p) override;
     void whatAreYouDoing() override;
 
     // 새로 추가된 멤버 함수: Member functions added in Worker
@@ -456,8 +457,9 @@ void Worker::printMembers(ostream& out)   {
     out << " " << company << " " << position;
 }
 
-bool Worker::operator == (const Worker& w){
-	if(company == w.company && position == w.position){
+bool Worker::operator == (const Person& p){
+    const Worker& w = dynamic_cast< const Worker& >(p); // 다운 캐스팅
+	if(Person::operator==(p) && company == w.company && position == w.position){
 		return true;
 	}
 	return false;
@@ -526,7 +528,7 @@ public:
     	Worker::printMembers(out); printMembers(out); 
     }
 
-    bool operator==(const StudentWorker& a);
+    bool operator==(const Person& p) override;
     void whatAreYouDoing() override;
 };
 
@@ -573,11 +575,9 @@ void StudentWorker::printMembers(ostream& out)   {
     out << " :" << career << ": " << male;
 }
 
-bool StudentWorker::operator == (const StudentWorker& a){
-	if(*(Student*)this == a && *(Worker*)this == a && male == a.male){
-		return true;
-	}
-	return false;
+bool StudentWorker::operator == (const Person& p){
+    const StudentWorker& a = dynamic_cast< const StudentWorker& >(p);
+    return Student::operator==(a) && Worker::operator==(a) && male == a.male;
 }
 
 void StudentWorker::whatAreYouDoing() {

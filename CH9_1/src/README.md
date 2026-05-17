@@ -379,3 +379,90 @@ display(): count 15
 [13] w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul: Naver Department-Head
 [14] a4 17 88 true :Kangdong-gu, Daejeon: Electronics 3.4 2 NC Developer :CU, GS: false
 ```
+
+### 문제 4 설명
+```
+1) 최상위 클래스인 Person 클래스 선언부에서 operator==() 함수를 가상함수로 선언하라.
+---------------------------------------------------------------------------
+2) Student, Worker, StudentWorker 클래스 선언부에서 위 함수의 원형에 override를 추가하라.
+   그런데 override를 추가하려면 Student, Worker, StudentWorker 클래스의 == 연산자 함수의
+   매개변수 타입이 Person::operator==(const Person& p)의 매개변수 타입과 동일해야 한다.
+   따라서 기존 Student, Worker, StudentWorker 클래스의 == 연산자 함수의 매개변수 타입을 모두
+   const Person& p로 통일하라. 그런 후 함수의 [원형]에 override를 추가하라.
+   매개변수 수정으로 인한 변수 에러는 다음 단계에서 수정될 것이다.
+---------------------------------------------------------------------------
+3) Student::operator==(const Person& p) 구현 시 함수 [처음]에 아래 변수를 선언하라.
+    const Student& s = dynamic_cast< const Student& >(p); // 다운 캐스팅
+---------------------------------------------------------------------------
+   위 변수 s는 if(s1 == s2)와 같이 == 함수 호출 시 함수 인자인 Student 객체 s2가 
+   업캐스딩되어 자동으로 매개변수인 Person& p로 타입으로 변경된 것을 이 함수에서 원래 타입인 
+   Student 타입으로 복구시키는 것이다.
+---------------------------------------------------------------------------
+   참고로 위 타입 변경 문장인 dynamic_cast< const Student& >(p)는
+   const Student& s = (const Student&)p;와 같은 의미인데, 문제는
+   Student 클래스가 Person을 virtual로 상속 받았고 또한 virtual 함수를 오버라이딩하고 있기
+   때문에 바로 (const Student&)로 타입을 변경할 수 없다. 이 경우 dynamic_cast< >를 
+   사용해야 하는데 이 때 p로 업캐스팅된 원래 객체가 Student 또는 StudentWorker 객체이어야 한다.
+   만약에 p가 원래 Person의 객체였다면 위처럼 dynamic_cast< const Student& >(p)
+   하면 프로그램 실행 도중 에러로 인해 중단하게 된다. 
+   이러한 것을 실행 중 자동 체크해 주는 것이 dynamic_cast< >이다.
+---------------------------------------------------------------------------
+4) Student::operator==(const Person& p) 함수 내의 
+    기존 *(Person*)this == s 를 아래처럼 수정하라.
+        Person::operator==(p)
+---------------------------------------------------------------------------
+    기존 *(Person*)this == s 방식은 Person의 operator==(...)를 호출하는데 이 연산자가 
+    이제는 가상 함수이므로 결국 파생클래스 Student의 오버라이딩된 operator==(...)를
+    다시 호출하게 되어 무한반복 호출될 수 있기 때문이다.
+    이를 방지하기 위해서는 오버라이딩된 함수가 아닌 Person의 operator==(...)를 직접 호출해야 
+    해야 한다. 수정된 문장 Person::operator==(p)는 오버라이딩된 함수가 아닌 
+    Person에서 구현된 연산자 함수를 직접 호출하는 방식이다. 
+---------------------------------------------------------------------------
+5) Worker::operator==(const Person& p) 도 위 3), 4) 방식으로 변경하라.
+    단 Student을 Worker로 교체하라.
+---------------------------------------------------------------------------
+6) StudentWorker::operator==(const Person& p) 역시 위 3), 4) 방식으로 변경하라. 
+    즉, 아래와 같이 구현하면 된다. 
+---------------------------------------------------------------------------
+    const StudentWorker& a = dynamic_cast< const StudentWorker& >(p);
+    return Student::operator==(a) && Worker::operator==(a) && male == a.male;
+```
+
+### 문제 4 실행 결과
+```
+******************************* Main Menu ...
+Menu item number? 6   // Inheritance
+
++++++++++++++ Inheritance Menu ...
+Menu item number? 3   // StudentWorker
+//
+// 아래 == 연산자 실행 결과와 일치하는지 확인하기 바란다.
+...
+sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+...
+sw2: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+sw1 == sw2 : true
+sw2: a2 6 61.05 false :Dong-gu Incheon: Computer-Electronics 4.5 3 Hyundai-Hyundai Labor-Manager :CU KangNam,Seven Eleven,GSStore Suwon, Hi-Mart: true
+sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+sw1 == sw2 : false
+########### StudentWorker::whatAreYouDoing() ...
+p3 : a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+p3 == sw1 : true
+...
+//
+// 아래 input alba: 값으로 아래 내용을 복사해서 입력하라.
+input alba: a1 5 66.6 false :Nam-gu Busan: Computer 2.0 2 Hyundai Labor :CU,Emart,GS: false
+sw2: a1 5 66.6 false :Nam-gu Busan: Computer 2 2 Hyundai Labor :CU,Emart,GS: false
+sw1: a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+sw2 == sw1 : true
+...
+// Inheritance Menu의 3번 메뉴를 반복 수행하되 위 input alba: 값으로 아래 값들을 
+// 입력했을 때도 sw1의 내용과 다르므로 == 값이 false가 나와야 함; 
+// 3번 메뉴를 반복 수행하여 각각을 따로 따로 입력해 보라.
+a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 3 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false // 학년 다름
+a1 6 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false // id 다름
+a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Kia     Labor :CU KangNam,Seven Eleven,GSStore Suwon: false // 회사명 다름
+// input alba: 값으로 아래를 입력했을 때 sw1과 동일하므로 == 값이 true가 출력되어야 함
+a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+```

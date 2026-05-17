@@ -72,7 +72,7 @@ public:
     void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
     virtual void print(ostream& out) { printMembers(out); }
     void println()            { print(cout); cout << endl; }
-    void whatAreYouDoing();                          // ch3_2에서 추가
+    virtual void whatAreYouDoing();                          // ch3_2에서 추가
     Person& operator = (const Person& p);				// ch7_1에서 추가
     bool isSame(const string& name, int id);         // ch3_2에서 추가
 
@@ -330,7 +330,7 @@ public:
     void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
 
     bool operator==(const Student& s);
-    void whatAreYouDoing();
+    void whatAreYouDoing() override;
 
     // 새로 추가된 멤버 함수: Member functions added in Student
     void study();
@@ -419,7 +419,7 @@ public:
     void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
 
     bool operator==(const Worker& w);
-    void whatAreYouDoing();
+    void whatAreYouDoing() override;
 
     // 새로 추가된 멤버 함수: Member functions added in Worker
     void work();
@@ -527,7 +527,7 @@ public:
     }
 
     bool operator==(const StudentWorker& a);
-    void whatAreYouDoing();
+    void whatAreYouDoing() override;
 };
 
 StudentWorker::StudentWorker(

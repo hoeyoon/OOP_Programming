@@ -229,3 +229,61 @@ display(): count 16
     아래 문제들도 다형성 원리을 기반으로 하고 있다.
 ---------------------------------------------------------------------------
 ```
+
+### 문제 2 설명
+```
+1) 최상위 클래스인 Person 클래스 선언부에서 whatAreYouDoing() 함수를 가상함수로 선언하라.
+2) Student, Worker, StudentWorker 클래스 선언부에서 위 함수의 원형에 override를 추가하라.
+```
+
+### 문제 2 실행 결과
+```
+******************************* Main Menu ...
+Menu item number? 1   // PersonManager
+...
+PersonManager Menu에서 아래 메뉴 항목을 순서적으로 입력하라.
+
+====================== Person Management Menu ...
+Menu item number? 4   // Login
+s1            // Student 객체로 로그인
+              // 그냥 엔터 입력; 즉, 빈줄 입력해야 함
++++++++++++++++++++++ Current User Menu ...
+Menu item number? 5   // WhatAreYouDoing
+~~~~~~~~~~~~~~~~ Student::whatAreYouDoing() ~~~~~~~~~~~~~~~~
+s1 is studying as a 1-year student in Physics
+s1 took several courses and got GPA 3.8
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Menu item number? 0   // Logout
+4             // Login
+w1            // Worker 객체로 로그인
+              // 그냥 엔터 입력; 즉, 빈줄 입력해야 함
+5
+!!!!!!!!!!!!!!!! Worker::whatAreYouDoing()!!!!!!!!!!!!!!!!!
+w1 works in Samsung as Director
+w1 is now enjoying his(her) vacation
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+0             // Logout
+4             // Login
+a1            // StudentWorker 객체로 로그인
+              // 그냥 엔터 입력; 즉, 빈줄 입력해야 함
+5             // WhatAreYouDoing
+########### StudentWorker::whatAreYouDoing() ##############
+a1 is studying as a 2-year student in Computer
+a1 works in Hyundai as Labor
+a1 took several courses and got GPA 3.5
+a1 is now enjoying his(her) vacation
+###########################################################
+0             // Logout
+4             // Login
+p1            // Person 객체로 로그인
+              // 그냥 엔터 입력; 즉, 빈줄 입력해야 함
+5             // WhatAreYouDoing
+p1 is taking a rest.
+
+---------------------------------------------------------------------------
+주목: 위 실행결과는 모두 CurrentUser::whatAreYouDoing() 내의 
+    rUser.whatAreYouDoing();에 의해 출력된 결과이다. 즉, Person의 참조변수인 rUser의
+    Person::whatAreYouDoing()를 호출했을 뿐이데, rUser가 참조하는 실제 객체의 종류에 따라
+    오버라이딩된 함수가 실행되기 때문에 출력되는 내용은 모두 다르다는 것이다. (다형성)
+---------------------------------------------------------------------------
+```

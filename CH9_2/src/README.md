@@ -126,3 +126,61 @@ Input [delimiter(P, S, W, or A)] [person information] to find by operator ==
 S s1 1 0 false :: Physics 0 2
 NOT found by operator ==
 ```
+
+### 문제 2 설명
+```
+[문제 1]에서 사용한 typeid()를 이용해 PersonManager::persons 벡터에서 관리되는 객체들 중
+StudentWorker 클래스 객체들만 찾아서 객체의 정보를 출력하라. 아래 프로그램 실행 결과 참고할 것.
+이를 위해 PersonManager에 아래 함수를 추가하고 run() 함수 내의 func_arr[]에 아래 함수를 
+등록하라. 그리고 함수 코드를 완성하라.
+```
+```c++
+void PersonManager::dispStudentWorkers() { // Menu item 10
+    cout << "dispStudentWorkers(): " << endl;
+    for문을 이용하여 persons 벡터의 각 객체 포인터 persons[i]에 대해 
+        persons[i]가 StudentWorker 클래스 객체이면 아래처럼 출력. 
+        (참고로 typeid(...)의 인자(...)는 [객체] 또는 [클래스이름]이어야 함. 
+         인자가 포인터면 인자 앞에 *를 붙여야만 함) 
+            cout << "[" << i << "] "; persons[i]->println();
+}
+```
+
+### 문제 2 실행 결과
+```
+====================== Person Management Menu ...
+Menu item number? 2   // Append
+The number of persons to append? 2 // 알바생 2명의 인적 정보를 추가함
+Input 2 [delimiter(P, S, W, or A)] [person information] :     
+// 아래 2명의 인적 정보를 복사해서 입력하라.
+A a3 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+A a4 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+display(): count 10
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+...
+[5] w2 4 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[6] a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[7] a2 6 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[8] a3 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[9] a4 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+
+====================== Person Management Menu ...
+Menu item number? 10   // DispAlbaStud
+dispStudentWorkers(): 
+[6] a1 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[7] a2 6 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[8] a3 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[9] a4 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+
+// 위 Person Management Menu에서 연속하여 아래 메뉴 항목을 계속 입력하라. 
+// 인덱스 번호 6을 가진 원소를 연속적으로 3번 삭제함
+6   // Delete
+6   // Index to delete?
+6   // Delete
+6   // Index to delete?
+6   // Delete
+6   // Index to delete?
+...
+Menu item number? 10   // DispAlbaStud
+dispStudentWorkers(): 
+[6] a4 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+```

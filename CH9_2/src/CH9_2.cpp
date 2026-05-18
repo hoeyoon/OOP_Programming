@@ -1218,7 +1218,7 @@ void VectorPerson::erase(int index) {
 		return;
 	}
 
-	for(int i = 0; i < size() - 1; i++){
+	for(int i = index; i < size(); i++){
 		pVector[i] = pVector[i + 1];
 	}
 	count--;
@@ -1367,6 +1367,7 @@ public:
     void copyPersons();
     void reset();
     void find();         // ch9_2 추가
+    void dispStudentWorkers(); // ch9_2 추가
     void run();
 };
 
@@ -1562,12 +1563,28 @@ void PersonManager::find() { // Menu item 9
 	}
 }
 
+void PersonManager::dispStudentWorkers() { // Menu item 10
+    cout << "dispStudentWorkers(): " << endl;
+    /*
+    for문을 이용하여 persons 벡터의 각 객체 포인터 persons[i]에 대해 
+        persons[i]가 StudentWorker 클래스 객체이면 아래처럼 출력. 
+        (참고로 typeid(...)의 인자(...)는 [객체] 또는 [클래스이름]이어야 함. 
+         인자가 포인터면 인자 앞에 *를 붙여야만 함) 
+            cout << "[" << i << "] "; persons[i]->println();
+	*/
+    for(int i = 0; i < persons.size(); i++){
+    	if(typeid(*persons[i]) == typeid(StudentWorker)){
+            cout << "[" << i << "] "; persons[i]->println();    		
+    	}
+    }
+}
+
 void PersonManager::run() {
     using func_t = void (PersonManager::*)();
     using PM = PersonManager; // 코딩 길이를 줄이기 위해
     func_t func_arr[] = {
         nullptr, &PM::display, &PM::append, &PM::clear, &PM::login, &PM::insert, &PM::remove,
-		&PM::copyPersons, &PM::reset, &PM::find,
+		&PM::copyPersons, &PM::reset, &PM::find, &PM::dispStudentWorkers,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

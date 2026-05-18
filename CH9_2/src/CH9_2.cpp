@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <typeinfo>
 
 using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include해야 한다.
 
@@ -547,14 +548,14 @@ StudentWorker::StudentWorker(
 			career(career), male(male)
 {
     //cout << "StudentWorker::StudentWorker(...):";
-    printMembers(cout); cout << endl;
+    //printMembers(cout); cout << endl;
 }
 
 StudentWorker::StudentWorker(const StudentWorker& a) :
 		Person(a), Student(a), Worker(a), career(a.career), male(a.male)
 { // 기존의 복사 생성자 참고할 것
     //cout << "StudentWorker::StudentWorker(const StudentWorker& a):";
-    printMembers(cout); cout << endl;
+    //printMembers(cout); cout << endl;
 }
 
 StudentWorker::~StudentWorker() {
@@ -1365,6 +1366,7 @@ public:
     void remove();
     void copyPersons();
     void reset();
+    void find();         // ch9_2 추가
     void run();
 };
 
@@ -1396,7 +1398,8 @@ void PersonManager::deleteElemets() {
 
 void PersonManager::printNotice(const string preMessage, const string postMessage) {
     cout << preMessage;
-    cout << " [delimiter(P, S, W, or A)] [person information] :\n";
+    cout << " [delimiter(P, S, W, or A)] [person information] ";
+    cout << postMessage << endl;
 }
 
 Person* PersonManager::findByName(const string name) {
@@ -1526,18 +1529,52 @@ void PersonManager::reset() { // Menu item 8
     display();
 }
 
+void PersonManager::find() { // Menu item 9
+    printNotice("Input", "to find by operator ==");
+    /*
+    Person* p = 새 객체를 동적으로 생성한 후 인적정보를 입력받고 p에 대입 [insert() 참고]
+    인적정보가 잘못 입력되었으면 여기서 리턴 [insert() 함수 참고]
+
+    bool found = false;
+    
+    for 문을 이용하여 persons 벡터의 모든 객체 포인터 persons[i]에 대해
+        if (persons[i]가 p가 포인터하는 객체와 동일한 종류의 객체이고, (아래 설명 참고)
+            == 연산자를 이용하여 p 객체와 비교하여 같으면)  
+            cout << "[" << i << "] "; persons[i]->println();
+            found를 true로 설정
+
+    위 for에서 동일한 객체를 하나도 찾지 못했으면 아래와 같이 출력
+        cout << "NOT found by operator ==";
+    */
+	Person* p = Factory::inputPerson(cin);
+	if (p == nullptr) return;
+	
+	bool found = false;
+	
+	for(int i = 0; i < persons.size(); i++){
+		if((typeid(*persons[i]) == typeid(*p)) && (*persons[i] == *p)){
+            cout << "[" << i << "] "; persons[i]->println();
+            found = true;
+		}
+	}
+	if(found == false){
+        cout << "NOT found by operator ==";
+	}
+}
+
 void PersonManager::run() {
     using func_t = void (PersonManager::*)();
     using PM = PersonManager; // 코딩 길이를 줄이기 위해
     func_t func_arr[] = {
         nullptr, &PM::display, &PM::append, &PM::clear, &PM::login, &PM::insert, &PM::remove,
-		&PM::copyPersons, &PM::reset,
+		&PM::copyPersons, &PM::reset, &PM::find,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =
         "====================== Person Management Menu ===================\n"
         "= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =\n"
 		"= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =\n"
+    	"= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =\n"
         "=================================================================\n";
 
     while (true) {

@@ -184,3 +184,284 @@ Menu item number? 10   // DispAlbaStud
 dispStudentWorkers(): 
 [6] a4 5 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
 ```
+
+### 코드 추가 및 변경 3
+```
+// 이제 순수 가상 함수를 활용하는 추상 클래스를 만들고 이를 상속하는 새로운 클래스를 만들어 보자.
+// 먼저 아래 헤드 파일을 추가한 후 공백은 삭제하라.
+```
+```c++
+#include < sstream >    // ch9_2 추가: for istringstream iss(expr);
+```
+```
+새로 추가될 추상 및 일반 클래스들의 계층 구조
+---------------------------------------------------------------------------
+
+    (추상클래스)Calculator Phone(추상클래스) -----> BaseStation(추상클래스)
+                  \      /                       |
+                 SmartPhone(추상클래스)<--     PersonManager ------ persons[...]
+                  /      \            |                                :
+           GalaxyPhone  IPhone        ---------------------------------:
+
+---------------------------------------------------------------------------
+아래 클래스들을 소스 파일 내의 class Person 보다 위쪽에 추가하라.
+---------------------------------------------------------------------------
+Phone과 Calculator는 전화기와 계산기의 표준 함수 스펙만을 정의하고 있다.
+SmartPhone은 두 개의 추상 클래스 Phone과 Calculator를 다중 상속하는 추상 클래스이다.
+SmartPhone 추상 클래스를 실제 구현하는 것이 GalaxyPhone과 IPhone이며, 
+이들 두 클래스들은 Phone, Calculator, SmartPhone 등에서 표준 스펙으로 
+정의된 함수들을 삼성과 애플에서 override 해서 구현한 것이라고 생각하면 됨
+```
+```c++
+//----------------------------------------------------------------------------
+// Phone class
+//----------------------------------------------------------------------------
+class Phone
+{
+public:
+    virtual ~Phone() {} // 가상 소멸자
+    
+    virtual void sendCall(const string& callee) = 0;
+    //------------------------------------------------------------------------
+    // 위 메소드는 "made a call to 수신자_이름(callee)"라고 출력해야 하며 
+    // 이 출력의 앞 또는 뒤에 발신자 이름도 함께 출력하되 메이커가 알아서 적절히 
+    // 회사명, 모델명 등과 함께 표시하면 된다.
+    // 그런 후 baseStation.connectTo(caller, callee)를 호출해야 한다.
+    //------------------------------------------------------------------------
+    
+    virtual void receiveCall(const string& caller) = 0;
+    //------------------------------------------------------------------------
+    // 이 메소드는 "received a call from 송신자_이름(caller)"라고 출력해야 하며 
+    // 이 출력의 앞 또는 뒤에 수신자 이름도 함께 출력하되 메이커가 알아서 적절히 
+    // 회사명, 모델명 등과 함께 표시하면 된다.
+    //------------------------------------------------------------------------
+};
+
+//----------------------------------------------------------------------------
+// Calculator class
+//----------------------------------------------------------------------------
+class Calculator
+{
+public:
+    virtual ~Calculator() {} // 가상 소멸자
+    
+    // +, -, *, / 사칙연산만 지원하고 그 외의 연산자일 경우 
+    // "NOT supported operator" 에러 메시지를 출력한다.
+    // 수식과 계산 결과 또는 에러 메시지를 출력해야 하며 이 출력의 앞 또는 뒤에
+    // 계산기 소유주 이름도 함께 출력하되 메이커가 알아서 적절히 회사명, 모델명 등과 함께 표시하면 된다.
+    
+    virtual void calculate(double oprd1, char op, double oprd2) = 0; // 예: (3, '+', 2.0)
+    virtual void calculate(const string& expr) = 0;                  // 예: ("3 + 2")
+    virtual void calculate(istream& in) = 0; // 키보드로부터 수식을 읽어 위 두 메소드 중 하나를 호출함
+};
+
+//----------------------------------------------------------------------------
+// SmartPhone class
+//----------------------------------------------------------------------------
+class SmartPhone: public Phone, public Calculator
+{
+protected:
+    string owner;  // 스마트폰 소유주 이름
+public:
+    SmartPhone(const string& owner): owner(owner) {}
+    virtual ~SmartPhone() {} // 가상 소멸자
+    virtual SmartPhone* clone() = 0;
+    virtual string getMaker() = 0;
+    void print(ostream& out) { out << owner << "'s Phone: " << getMaker(); }
+    void println() { print(cout); cout << endl; }
+};
+
+//----------------------------------------------------------------------------
+// GalaxyPhone class
+//----------------------------------------------------------------------------
+class GalaxyPhone: public SmartPhone
+{
+    void printTradeMark(const string& appName) {
+        cout << " @ " << owner << "'s Galaxy " << appName << endl;
+    }
+
+public:
+    GalaxyPhone(const string& owner): SmartPhone(owner) {}
+
+    // 동적으로 메모리를 할당 받는 멤버가 없기 때문에 소멸자, 복사 생성자를 구현하지 않아도 됨
+    // 컴파일러에 의해 제공되는 기본 소멸자와 복사 생성자를 활용하면 됨
+
+    void sendCall(const string& callee)    override {
+        /* TODO */
+    }
+
+    void receiveCall(const string& caller) override {
+        /* TODO */
+    }
+
+    void calculate(double oprd1, char op, double oprd2) override {
+        /* TODO */
+    }
+
+    void calculate(istream& in) override {
+        /* TODO */
+    }
+
+    void calculate(const string& expr) override {
+        // 키보드가 아닌 string expr에서 데이타를 읽어 들일 수 있는 istringstream을 만든다. 
+        istringstream iss(expr);  
+        // istringstream는 istream을 상속 받았기 때문에 iss는 자동으로 istream으로 업캐스팅 됨
+        calculate(iss); // calculate(istream& in)을 호출함
+        // calculate(cin)는 키보드에서 수식을 읽어 계산하지만
+        //   calculate(iss)는 키보드가 아닌 문자열 스트림 iss에서 수식을 읽어 계산함.
+        // GalaxyPhone은 여기서 calculate(istream& in)를 호출하지만
+        //   아래 IPhone의 경우 반대로 calculate(istream& in)에서 
+        //   calculate(const string& expr)을 호출함 (회사마다 구현 방법이 다름)
+    }
+
+    SmartPhone* clone() override { return nullptr /* TODO */ ; }
+
+    string getMaker() override { return "SAMSUNG Galaxy"; }
+};
+
+//----------------------------------------------------------------------------
+// IPhone class
+//----------------------------------------------------------------------------
+class IPhone: public SmartPhone
+{
+    string model;
+
+    double add(double oprd1, double oprd2) { return oprd1 + oprd2; }
+    double sub(double oprd1, double oprd2) { return oprd1 - oprd2; }
+    double mul(double oprd1, double oprd2) { return oprd1 * oprd2; }
+    double div(double oprd1, double oprd2) { return oprd1 / oprd2; }
+
+    void printTradeMark(const string& appName) {
+        cout << owner << "'s IPhone " << model << " " << appName;
+    }
+
+public:
+    IPhone(const string& owner, const string& model): SmartPhone(owner), model(model) {}
+
+    // 동적으로 메모리를 할당 받는 멤버가 없기 때문에 소멸자, 복사 생성자를 구현하지 않아도 됨
+    // 컴파일러에 의해 제공되는 기본 소멸자와 복사 생성자를 활용하면 됨
+    
+    void sendCall(const string& callee) override {
+        /* TODO */
+    }
+
+    void receiveCall(const string& caller) override {
+        /* TODO */
+    }
+
+    void calculate(double oprd1, char op, double oprd2) override {
+        /* TODO */
+    }
+
+    void calculate(const string& expr) override {
+        /* TODO */
+    }
+
+    void calculate(istream& in) override {
+        string line;
+        getline(in, line);
+        calculate(line);   
+        // IPhone의 경우 여기서 위 calculate(const string& expr)를 호출하지만
+        // GalaxyPhone은 반대로 calculate(const string& expr)에서 
+        //                    calculate(istream& in)를 호출함
+    }
+
+    SmartPhone* clone() override { return nullptr /* TODO */ ; }
+
+    string getMaker() override { return "Apple IPhone " + model; }
+};
+```
+
+### 문제 3 설명
+```
+Person 클래스에 아래 멤버들을 추가하라.
+1) 아래 멤버를 private 영역의 마지막에 추가하라.
+```
+```c++
+    SmartPhone* smartPhone; // 스마트폰: 9_1에서 추가
+```
+```
+2) 아래 멤버를 protected 영역의 마지막에 추가하라.
+```
+```c++
+    SmartPhone* newSmartPhone();           // 9_1에서 추가
+```
+```
+    위 함수는 아래처럼 구현하라.
+    사람 id가 홀수(id % 2)면 GalaxyPhone 객체를, 짝수면 IPhone 객체를 동적으로 생성하여 
+    리턴한다. 이때 각 스마트폰의 owner를 Person의 name으로 설정하고 
+    IPhone의 경우 모델을 "13"으로 지정하라.
+```
+```
+3) Person::Person(...) 생성자의 copyAddress(address); 다음에 아래 문장을 추가하라.
+    smartPhone이 포인터하는 실제 객체는 GalaxyPhone 또는 IPhone 객체이다.
+```
+```c++
+    smartPhone = newSmartPhone();
+```
+```
+4) Person::~Person()에 아래 내용을 추가하라.
+    smartPhone 멤버가 nullptr이 아니면 smartPhone이 포인터하는 객체 메모리를 반납하라.
+    그리고 마지막 문장으로 smartPhone을 nullptr로 설정하라.
+```
+```
+5) 아래 멤버 함수 선언을 public 영역의 setMemo(const char* c_str) 뒤에 추가하라.
+```
+```c++
+    void setSmartPhone(SmartPhone* smPhone={}); // 9_1에서 추가
+```
+```
+    위 함수를 아래처럼 구현하되 구현부의 맨 마지막에 배치하라.
+    기존의 smartPhone 멤버가 nullptr이 아니면 이 변수가 포인트하는 메모리를 먼저 반납한다.
+    매개변수 smPhone이 nullptr이면 newSmartPhone()을 호출한 후 리턴 값을, 
+    nullptr이 아니면 smPhone 값을, smartPhone에 저장한다. smartPhone = ? :
+```
+```
+6) 아래 멤버들을 public 영역의 getMemo() 선언 뒤에 추가하라.
+```
+```c++
+    SmartPhone*   getSmartPhone() const { return smartPhone; }
+    Phone*        getPhone()      const { return nullptr /* TODO */; }
+    Calculator*   getCalculator() const { return nullptr /* TODO */; }
+```
+```
+7) Person::Person(const Person& p) 복사 생성자의 맨 마지막에 아래 문장을 추가하라.
+```
+```c++
+    smartPhone = p.smartPhone->clone(); // 기존 p.smartPhone 객체를 복제해서 대입
+```
+```
+    위 코드가 정상적으로 작동할 수 있도록 GalaxyPhone과 IPhone 클래스의 clone()을 
+    구현하라. 이 함수는 새로운 객체를 동적으로 할당한 후 포인터를 반환한다. 단, 동적 생성 시 
+    복사 생성자를 호출하여 초기화하도록 해야 한다. 원본 객체를 복제하는 것임.
+    Student 또는 Worker의 clone() 함수를 참고하라.
+```
+```
+8) PersonManager에 아래 멤버함수와 함수 선언을 추가한 후 아래 코드를 완성하라.
+    또한 PersonManager::run()내의 func_arr[]에 아래 함수를 등록하라.
+```
+```c++
+void PersonManager::dispPhones() { // Menu item 11
+    cout << "dispPhones(): count " << count << endl;
+    for를 이용하여 persons 벡터의 각 객체 포인터 persons[i]에 대해 
+        cout << "[" << i << "] "; persons[i]->getSmartPhone()->println();
+        // 추상클래스 SmartPhone::println()->print()->가상함수 getMaker()-> 
+        // 파생클래스(Galaxy 또는 IPhone)의 override된 getMaker() 함수가 실제 호출됨  
+}
+```
+
+### 문제 3 실행 결과
+```
+====================== Person Management Menu ...
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2) ...
+Menu item number? 11
+dispPhones(): count 8
+[0] p0's Phone: Apple IPhone 13
+[1] p1's Phone: SAMSUNG Galaxy
+[2] s1's Phone: SAMSUNG Galaxy
+[3] s2's Phone: Apple IPhone 13
+[4] w1's Phone: SAMSUNG Galaxy
+[5] w2's Phone: Apple IPhone 13
+[6] a1's Phone: SAMSUNG Galaxy
+[7] a2's Phone: Apple IPhone 13
+```

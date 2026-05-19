@@ -17,6 +17,8 @@
 #include <iostream>
 #include <cstring>
 #include <typeinfo>
+#include <sstream>    // ch9_2 추가: for istringstream iss(expr);
+
 
 using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include해야 한다.
 
@@ -24,6 +26,164 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
 #define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+
+//----------------------------------------------------------------------------
+// Phone class
+//----------------------------------------------------------------------------
+class Phone
+{
+public:
+    virtual ~Phone() {} // 가상 소멸자
+    
+    virtual void sendCall(const string& callee) = 0;
+    //------------------------------------------------------------------------
+    // 위 메소드는 "made a call to 수신자_이름(callee)"라고 출력해야 하며 
+    // 이 출력의 앞 또는 뒤에 발신자 이름도 함께 출력하되 메이커가 알아서 적절히 
+    // 회사명, 모델명 등과 함께 표시하면 된다.
+    // 그런 후 baseStation.connectTo(caller, callee)를 호출해야 한다.
+    //------------------------------------------------------------------------
+    
+    virtual void receiveCall(const string& caller) = 0;
+    //------------------------------------------------------------------------
+    // 이 메소드는 "received a call from 송신자_이름(caller)"라고 출력해야 하며 
+    // 이 출력의 앞 또는 뒤에 수신자 이름도 함께 출력하되 메이커가 알아서 적절히 
+    // 회사명, 모델명 등과 함께 표시하면 된다.
+    //------------------------------------------------------------------------
+};
+
+//----------------------------------------------------------------------------
+// Calculator class
+//----------------------------------------------------------------------------
+class Calculator
+{
+public:
+    virtual ~Calculator() {} // 가상 소멸자
+    
+    // +, -, *, / 사칙연산만 지원하고 그 외의 연산자일 경우 
+    // "NOT supported operator" 에러 메시지를 출력한다.
+    // 수식과 계산 결과 또는 에러 메시지를 출력해야 하며 이 출력의 앞 또는 뒤에
+    // 계산기 소유주 이름도 함께 출력하되 메이커가 알아서 적절히 회사명, 모델명 등과 함께 표시하면 된다.
+    
+    virtual void calculate(double oprd1, char op, double oprd2) = 0; // 예: (3, '+', 2.0)
+    virtual void calculate(const string& expr) = 0;                  // 예: ("3 + 2")
+    virtual void calculate(istream& in) = 0; // 키보드로부터 수식을 읽어 위 두 메소드 중 하나를 호출함
+};
+
+//----------------------------------------------------------------------------
+// SmartPhone class
+//----------------------------------------------------------------------------
+class SmartPhone: public Phone, public Calculator
+{
+protected:
+    string owner;  // 스마트폰 소유주 이름
+public:
+    SmartPhone(const string& owner): owner(owner) {}
+    virtual ~SmartPhone() {} // 가상 소멸자
+    virtual SmartPhone* clone() = 0;
+    virtual string getMaker() = 0;
+    void print(ostream& out) { out << owner << "'s Phone: " << getMaker(); }
+    void println() { print(cout); cout << endl; }
+};
+
+//----------------------------------------------------------------------------
+// GalaxyPhone class
+//----------------------------------------------------------------------------
+class GalaxyPhone: public SmartPhone
+{
+    void printTradeMark(const string& appName) {
+        cout << " @ " << owner << "'s Galaxy " << appName << endl;
+    }
+
+public:
+    GalaxyPhone(const string& owner): SmartPhone(owner) {}
+
+    // 동적으로 메모리를 할당 받는 멤버가 없기 때문에 소멸자, 복사 생성자를 구현하지 않아도 됨
+    // 컴파일러에 의해 제공되는 기본 소멸자와 복사 생성자를 활용하면 됨
+
+    void sendCall(const string& callee)    override {
+        /* TODO */
+    }
+
+    void receiveCall(const string& caller) override {
+        /* TODO */
+    }
+
+    void calculate(double oprd1, char op, double oprd2) override {
+        /* TODO */
+    }
+
+    void calculate(istream& in) override {
+        /* TODO */
+    }
+
+    void calculate(const string& expr) override {
+        // 키보드가 아닌 string expr에서 데이타를 읽어 들일 수 있는 istringstream을 만든다. 
+        istringstream iss(expr);  
+        // istringstream는 istream을 상속 받았기 때문에 iss는 자동으로 istream으로 업캐스팅 됨
+        calculate(iss); // calculate(istream& in)을 호출함
+        // calculate(cin)는 키보드에서 수식을 읽어 계산하지만
+        //   calculate(iss)는 키보드가 아닌 문자열 스트림 iss에서 수식을 읽어 계산함.
+        // GalaxyPhone은 여기서 calculate(istream& in)를 호출하지만
+        //   아래 IPhone의 경우 반대로 calculate(istream& in)에서 
+        //   calculate(const string& expr)을 호출함 (회사마다 구현 방법이 다름)
+    }
+
+    SmartPhone* clone() override { return new GalaxyPhone(*this); }
+
+    string getMaker() override { return "SAMSUNG Galaxy"; }
+};
+
+//----------------------------------------------------------------------------
+// IPhone class
+//----------------------------------------------------------------------------
+class IPhone: public SmartPhone
+{
+    string model;
+
+    double add(double oprd1, double oprd2) { return oprd1 + oprd2; }
+    double sub(double oprd1, double oprd2) { return oprd1 - oprd2; }
+    double mul(double oprd1, double oprd2) { return oprd1 * oprd2; }
+    double div(double oprd1, double oprd2) { return oprd1 / oprd2; }
+
+    void printTradeMark(const string& appName) {
+        cout << owner << "'s IPhone " << model << " " << appName;
+    }
+
+public:
+    IPhone(const string& owner, const string& model): SmartPhone(owner), model(model) {}
+
+    // 동적으로 메모리를 할당 받는 멤버가 없기 때문에 소멸자, 복사 생성자를 구현하지 않아도 됨
+    // 컴파일러에 의해 제공되는 기본 소멸자와 복사 생성자를 활용하면 됨
+    
+    void sendCall(const string& callee) override {
+        /* TODO */
+    }
+
+    void receiveCall(const string& caller) override {
+        /* TODO */
+    }
+
+    void calculate(double oprd1, char op, double oprd2) override {
+        /* TODO */
+    }
+
+    void calculate(const string& expr) override {
+        /* TODO */
+    }
+
+    void calculate(istream& in) override {
+        string line;
+        getline(in, line);
+        calculate(line);   
+        // IPhone의 경우 여기서 위 calculate(const string& expr)를 호출하지만
+        // GalaxyPhone은 반대로 calculate(const string& expr)에서 
+        //                    calculate(istream& in)를 호출함
+    }
+
+    SmartPhone* clone() override { return new IPhone(*this); }
+
+    string getMaker() override { return "Apple IPhone " + model; }
+};
 
 /******************************************************************************
  * Person class
@@ -38,12 +198,14 @@ class Person
     bool   married;         // 결혼여부
     char*  address;	        // 주소: 5_2에서 []에서 *로 변경
     char*  memo_c_str; 		// 메모장: 5_2에서 []에서 *로 변경
+    SmartPhone* smartPhone; // 스마트폰: 9_1에서 추가
 
 protected:
     void inputMembers(istream& in);
     void printMembers(ostream& out);
     void copyAddress(const char* address); // 5_2에서 추가
     void copyMemo(const char* c_str);      // 5_2에서 추가
+    SmartPhone* newSmartPhone();           // 9_1에서 추가
 
 public:
     //Person();
@@ -64,6 +226,7 @@ public:
     void setMarried(bool married)        { this->married = married; }
     void setAddress(const char* address); // 5_2에서 수정
     void setMemo(const char* c_str);      // 5_2에서 수정
+    void setSmartPhone(SmartPhone* smPhone={}); // 9_1에서 추가
 
     const string& 		getName()    const { return name; }
     const string&		getPasswd()	 const { return passwd; }
@@ -72,6 +235,9 @@ public:
     bool        getMarried() const { return married; }  // 리턴 값들을
     const char* getAddress() const { return address; } // 수정하시오.
     const char* getMemo()    const { return memo_c_str; }
+    SmartPhone*   getSmartPhone() const { return smartPhone; }
+    Phone*        getPhone()      const { return nullptr /* TODO */; }
+    Calculator*   getCalculator() const { return nullptr /* TODO */; }
 
     virtual void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
     virtual void print(ostream& out) { printMembers(out); }
@@ -107,6 +273,7 @@ Person::Person(const string& name, int id, double weight, bool married, const ch
         name(name), id{id}, weight{weight}, married{married}, memo_c_str{} {
     // 생성자 서두에서 memo_c_str{}은 초기 값으로 디폴트 값인 nullptr(실제로는 주소 값 0)로 설정됨
     copyAddress(address);
+    smartPhone = newSmartPhone();
     //cout << "Person::Person(...):"; println();
 }
 
@@ -114,6 +281,7 @@ Person::Person(const Person& p):
     name(p.name), id(p.id), weight(p.weight), married(p.married) {
 	copyAddress(p.address);
 	copyMemo(p.memo_c_str);
+    smartPhone = p.smartPhone->clone(); // 기존 p.smartPhone 객체를 복제해서 대입
     //cout << "Person::Person(const Person&):"; println();
 }
 
@@ -130,6 +298,11 @@ Person::~Person() {
 
     // delete []address;
     // delete []memo_c_str;
+	if(smartPhone != nullptr){
+		delete smartPhone;
+		smartPhone = nullptr;
+	}
+	
 }
 
 // 처음 객체가 초기화될 때(생성자 또는 복사생성자) address 멤버를 초기화하고자 할 때 호출된다.
@@ -162,6 +335,18 @@ void Person::copyMemo(const char* c_str)      {
 	strcpy(s, c_str);
 }
 
+SmartPhone* Person::newSmartPhone(){
+	if(id % 2 == 1){
+		GalaxyPhone *g = new GalaxyPhone(name);
+		return g;
+	}
+	else{
+		IPhone *i = new IPhone(name, "13");
+		return i;
+	}
+}
+
+
 // 생성자 또는 복사생성자에 의해 이미 한번 초기화된 주소 문자열(기존의 주소)을 다른 주소로 변경할 때 호출됨
 // 이미 멤버 address용 메모리가 할당되었기 때문에 기존 메모리를 먼저 반납해야 하고 새로 할당해야 함
 void Person::setAddress(const char* address) {
@@ -180,6 +365,18 @@ void Person::setMemo(const char* c_str)      {
 		// delete []memo_c_str;
 	}
     copyMemo(c_str); // 새로 메모리 할당받아 복사한다.
+}
+
+void Person::setSmartPhone(SmartPhone* smPhone){
+	if(smartPhone != nullptr){
+		delete smartPhone;
+	}
+	if(smPhone == nullptr){
+		smartPhone = newSmartPhone();
+	}
+	else{
+		smartPhone = smPhone;
+	}
 }
 
 void Person::set(const string& name, int id, double weight,
@@ -1368,6 +1565,7 @@ public:
     void reset();
     void find();         // ch9_2 추가
     void dispStudentWorkers(); // ch9_2 추가
+    void dispPhones();	// ch9_2 추가
     void run();
 };
 
@@ -1579,12 +1777,24 @@ void PersonManager::dispStudentWorkers() { // Menu item 10
     }
 }
 
+void PersonManager::dispPhones() { // Menu item 11
+    cout << "dispPhones(): count " << persons.size() << endl;
+    /*
+    for를 이용하여 persons 벡터의 각 객체 포인터 persons[i]에 대해 
+        cout << "[" << i << "] "; persons[i]->getSmartPhone()->println();*/
+        // 추상클래스 SmartPhone::println()->print()->가상함수 getMaker()-> 
+        // 파생클래스(Galaxy 또는 IPhone)의 override된 getMaker() 함수가 실제 호출됨  
+    for(int i = 0; i < persons.size(); i++){
+        cout << "[" << i << "] "; persons[i]->getSmartPhone()->println();
+    }
+}
+
 void PersonManager::run() {
     using func_t = void (PersonManager::*)();
     using PM = PersonManager; // 코딩 길이를 줄이기 위해
     func_t func_arr[] = {
         nullptr, &PM::display, &PM::append, &PM::clear, &PM::login, &PM::insert, &PM::remove,
-		&PM::copyPersons, &PM::reset, &PM::find, &PM::dispStudentWorkers,
+		&PM::copyPersons, &PM::reset, &PM::find, &PM::dispStudentWorkers, &PM::dispPhones, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

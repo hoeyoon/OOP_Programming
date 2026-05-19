@@ -213,11 +213,21 @@ public:
     // 컴파일러에 의해 제공되는 기본 소멸자와 복사 생성자를 활용하면 됨
     
     void sendCall(const string& callee) override {
-        /* TODO */
+    	/*
+        TradeMark를 출력한 후 ": made a call to " 와 callee를 출력하라.
+        (아래 실행 결과를 참고)
+        baseStation의 connectTo(...)를 호출하라. (GalaxyPhone::sendCall() 참고)
+        */
+    	printTradeMark("Phone"); cout << ": made a call to " << callee << endl;
+    	baseStation->connectTo(owner, callee);
     }
 
     void receiveCall(const string& caller) override {
-        /* TODO */
+    	/*
+        TradeMark를 출력한 후 ": received a call from " 와 caller를 출력하라.
+        (아래 실행 결과를 참고)
+        */
+    	printTradeMark("Phone"); cout << ": received a call from " << caller << endl;
     }
 
     void calculate(double oprd1, char op, double oprd2) override {

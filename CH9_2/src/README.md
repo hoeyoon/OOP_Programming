@@ -957,3 +957,45 @@ Name to call? w4
 Made a call to w4 @ s1's Galaxy Phone
 w4: NOT found
 ```
+
+### 문제 8 설명
+```
+1) 아래 코드를 IPhone 클래스에 추가하고 코드를 완성하라.
+```
+```c++
+    void sendCall(const string& callee) override {
+        TradeMark를 출력한 후 ": made a call to " 와 callee를 출력하라.
+        (아래 실행 결과를 참고)
+        baseStation의 connectTo(...)를 호출하라. (GalaxyPhone::sendCall() 참고)
+    }
+
+    void receiveCall(const string& caller) override {
+        TradeMark를 출력한 후 ": received a call from " 와 caller를 출력하라.
+        (아래 실행 결과를 참고)
+    }
+```
+
+### 문제 8 실행 결과
+```
+// Person Management Menu에서 [ s2 ]으로 로그인한 후 아래를 실행하라.
+
+Menu item number? 14    // PhoneCall: IPhone -> IPhone
+Name to call? w2                                 // 송신자 s2, 수신자 w2
+s2's IPhone 13 Phone: made a call to w2          // sendCall()의 출력
+Base station: sends a call signal of s2 to w2    // connectToo()의 출력
+w2's IPhone 13 Phone: received a call from s2    // receiveCall()의 출력
+
+...
+Menu item number? 14    // PhoneCall: IPhone -> Galaxy
+Name to call? w1
+s2's IPhone 13 Phone: made a call to w1
+Base station: sends a call signal of s2 to w1
+Recieved a call from s2 @ w1's Galaxy Phone
+
+// 0 4 이 메뉴에서 빠져 나갔다 다시 [ s1 ]로 로그인 한 후 아래를 실행하라.
+Menu item number? 14    // PhoneCall: Galaxy -> IPhone
+Name to call? w2
+Made a call to w2 @ s1's Galaxy Phone
+Base station: sends a call signal of s1 to w2
+w2's IPhone 13 Phone: received a call from s1
+```

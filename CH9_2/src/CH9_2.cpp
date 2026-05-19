@@ -109,11 +109,30 @@ public:
     }
 
     void calculate(double oprd1, char op, double oprd2) override {
-        /* TODO */
+        cout << oprd1 << " " << op << " " << oprd2 << " = ";
+        switch (op) { // switch 문장 내에서 직접 계산함
+        case '+': cout << oprd1 + oprd2; break;
+        case '-': cout << oprd1 - oprd2; break;
+        case '*': cout << oprd1 * oprd2; break;
+        case '/': cout << oprd1 / oprd2; break;
+        default:  cout << "NOT supported operator"; break;
+        }
+        printTradeMark("Calculator");
     }
 
+    // istream& in에서 각 토큰을 분리한다. 여기서 in은 키보드인 cin일 수도 있고, 
+    // 또는 문자열 스트림(키보드가 아닌 문자열에서 읽음)일 수도 있다.
     void calculate(istream& in) override {
-        /* TODO */
+        double oprd1, oprd2;
+        string op, soprd2;
+        in >> oprd1 >> op;   // 2* 또는 2 * 로 입력해도 oprd1와 op가 구분되어 입력 됨
+        if (op.size() > 1) { // *3 처럼 연산자와 피연산자가 붙어 있는 경우
+            soprd2 = op.substr(1); // substring 발췌(피연산자): "*3"의 경우 "3"
+            oprd2 = stod(soprd2);  // 문자열 숫자 "3" -> double 3.0으로 변환
+        }
+        else                 // * 3 처럼 연산자와 피연산자가 떨어져 있는 경우
+            in >> oprd2;
+        calculate(oprd1, op[0], oprd2);
     }
 
     void calculate(const string& expr) override {
@@ -236,8 +255,8 @@ public:
     const char* getAddress() const { return address; } // 수정하시오.
     const char* getMemo()    const { return memo_c_str; }
     SmartPhone*   getSmartPhone() const { return smartPhone; }
-    Phone*        getPhone()      const { return nullptr /* TODO */; }
-    Calculator*   getCalculator() const { return nullptr /* TODO */; }
+    Phone*        getPhone()      const { return smartPhone; }
+    Calculator*   getCalculator() const { return smartPhone; }
 
     virtual void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
     virtual void print(ostream& out) { printMembers(out); }
@@ -1194,6 +1213,7 @@ public:
     void defaultParameter();
     void staticMember();
     void changeSmartPhone();
+    void calculate();
     void run();
 };
 
@@ -1324,6 +1344,14 @@ void CurrentUser::changeSmartPhone() {
     display();
 }
 
+void CurrentUser::calculate() {
+    cout << "Expression: ";
+    Calculator* cal = rUser.getCalculator();
+    cal->calculate(cin); 
+    // 추상클래스 포인트 변수 cal을 이용해 가상함수 calculate(cin) 호출 -> 
+    // 파생클래스(GalaxyPhone or IPhone)의 override된 함수가 실제 호출됨
+}
+
 void CurrentUser::run() {
     using func_t = void (CurrentUser::*)();
     using CU = CurrentUser;
@@ -1331,7 +1359,7 @@ void CurrentUser::run() {
         nullptr, &CU::display, &CU::getter, &CU::setter,
         &CU::set, &CU::whatAreYouDoing,
         &CU::isSame, &CU::inputPerson, &CU::changePasswd, &CU::manageMemo, &CU::defaultParameter,
-		&CU::staticMember, &CU::changeSmartPhone,
+		&CU::staticMember, &CU::changeSmartPhone, &CU::calculate,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 배열의 길이
     string menuStr =

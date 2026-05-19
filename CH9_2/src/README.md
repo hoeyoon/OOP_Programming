@@ -650,3 +650,89 @@ dispPhones(): count 8
 [6] a1's Phone: Apple IPhone 14    // SAMSUNG -> Apple
 [7] a2's Phone: SAMSUNG Galaxy     // Apple   -> SAMSUNG
 ```
+
+### 문제 5 설명
+```
+이제 스마트폰에 계산기 기능을 추가 해 보자.
+---------------------------------------------------------------------------
+먼저 CurrentUser 클래스에 아래 멤버 함수를 추가한 후 
+CurrentUser::run()내의 func_arr[]에 아래 함수를 등록하라.
+```
+```c++
+void CurrentUser::calculate() {
+    cout << "Expression: ";
+    Calculator* cal = rUser.getCalculator();
+    cal->calculate(cin); 
+    // 추상클래스 포인트 변수 cal을 이용해 가상함수 calculate(cin) 호출 -> 
+    // 파생클래스(GalaxyPhone or IPhone)의 override된 함수가 실제 호출됨
+}
+```
+```
+// 1) 위 코드가 정상적으로 작동할 수 있도록 Person::getCalculator()를 구현하라.
+//    Calculator가 SmartPhone의 부모 클래스이기 때문에 Person::getSmartPhone()처럼 
+//    값을 리턴하라. (SmartPhone*에서 Calculator*로 자동으로 업캐스팅 되어 리턴됨)
+//----------------------------------------------------------------------------
+2) 동일한 방법을 사용하여 Person::getPhone() 함수도 구현하라.
+---------------------------------------------------------------------------
+위 CurrentUser::calculate() 내의 cal->calculate(cin)는 현재 Person의 
+smartPhone에 등록된 실제 스마트 폰이 GalaxyPhone 또는 IPhone 객체냐에 따라 
+해당 객체의 오버라딩된 calculate(istream& in) 함수가 호출된다.
+---------------------------------------------------------------------------
+3) GalaxyPhone의 calculate(double oprd1, ...)와 calculate(istream& in)을
+    아래 코드로 교체하라. 
+    GalaxyPhone은 switch 문장 내에서 직접 계산한다. IPhone의 경우 다른 방식으로 구현.
+```
+```c++
+    void calculate(double oprd1, char op, double oprd2) override {
+        cout << oprd1 << " " << op << " " << oprd2 << " = ";
+        switch (op) { // switch 문장 내에서 직접 계산함
+        case '+': cout << oprd1 + oprd2; break;
+        case '-': cout << oprd1 - oprd2; break;
+        case '*': cout << oprd1 * oprd2; break;
+        case '/': cout << oprd1 / oprd2; break;
+        default:  cout << "NOT supported operator"; break;
+        }
+        printTradeMark("Calculator");
+    }
+
+    // istream& in에서 각 토큰을 분리한다. 여기서 in은 키보드인 cin일 수도 있고, 
+    // 또는 문자열 스트림(키보드가 아닌 문자열에서 읽음)일 수도 있다.
+    void calculate(istream& in) override {
+        double oprd1, oprd2;
+        string op, soprd2;
+        in >> oprd1 >> op;   // 2* 또는 2 * 로 입력해도 oprd1와 op가 구분되어 입력 됨
+        if (op.size() > 1) { // *3 처럼 연산자와 피연산자가 붙어 있는 경우
+            soprd2 = op.substr(1); // substring 발췌(피연산자): "*3"의 경우 "3"
+            oprd2 = stod(soprd2);  // 문자열 숫자 "3" -> double 3.0으로 변환
+        }
+        else                 // * 3 처럼 연산자와 피연산자가 떨어져 있는 경우
+            in >> oprd2;
+        calculate(oprd1, op[0], oprd2);
+    }
+```
+
+### 문제 5 실행 결과
+```
+// Person Management Menu에서 [ w1 ]로 로그인한 후 아래를 실행하라.
++++++++++++++++++++++ Current User Menu ...
++ 12.ChangeSmartPhone(9_2) 13.Calculate(9_2) 14.PhoneCall(9_2) ...
+Menu item number? 13   // Calculate
+Expression: 2 + 3
+2 + 3 = 5 @ w1's Galaxy Calculator
+
+13    // Calculate
+2- 3
+2 - 3 = -1 @ w1's Galaxy Calculator
+
+13    // Calculate
+2 *3
+2 * 3 = 6 @ w1's Galaxy Calculator
+
+13    // Calculate
+3/2
+3 / 2 = 1.5 @ w1's Galaxy Calculator
+
+13    // Calculate
+1 % 2
+1 % 2 = NOT supported operator @ w1's Galaxy Calculator
+```

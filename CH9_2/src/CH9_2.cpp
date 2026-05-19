@@ -1193,6 +1193,7 @@ public:
     void manageMemo();
     void defaultParameter();
     void staticMember();
+    void changeSmartPhone();
     void run();
 };
 
@@ -1296,6 +1297,33 @@ void CurrentUser::staticMember() { // Menu item 11
     cout << "ui.getNext() : " << word2 << endl;
 }
 
+// 사용자로부터 생성할 스마트폰 종류를 입력받고 해당 스마트폰 객체를 생성한 후 
+// 기존 rUser의 smartPhone 멤버를 새로 생성된 스마트폰 객체로 변경한다.
+void CurrentUser::changeSmartPhone() {
+    string& maker = UI::getNext("Maker of phone to change(ex: Samsung or Apple)? ");
+    /*
+    maker가 "Samsung"이면 GalaxyPhone 객체를
+            "Apple" 이면 IPhone 객체를 동적으로 할당하여 생성한 후, 
+            (위 각 스마트폰 객체 생성 시 owner는 rUser의 이름으로 지정하고 
+             IPhone인 경우 모델명은 "14"로 하라.)
+           생성된 스마트폰 객체를 rUser.setSmartPhone(...)을 호출하여 등록한다.
+    */
+    SmartPhone *p;
+    if(maker == "Samsung"){
+    	p = new GalaxyPhone(rUser.getName());
+    	rUser.setSmartPhone(p);
+    }
+    else if(maker == "Apple"){
+    	p = new IPhone(rUser.getName(), "14");
+    	rUser.setSmartPhone(p);
+    }
+    else { // maker가 "Samsung" 또는 "Apple"이 아닌 경우
+        cout << maker << ": WRONG phone's maker" << endl;
+        return;
+    }
+    display();
+}
+
 void CurrentUser::run() {
     using func_t = void (CurrentUser::*)();
     using CU = CurrentUser;
@@ -1303,14 +1331,15 @@ void CurrentUser::run() {
         nullptr, &CU::display, &CU::getter, &CU::setter,
         &CU::set, &CU::whatAreYouDoing,
         &CU::isSame, &CU::inputPerson, &CU::changePasswd, &CU::manageMemo, &CU::defaultParameter,
-		&CU::staticMember,
+		&CU::staticMember, &CU::changeSmartPhone,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 배열의 길이
     string menuStr =
         "+++++++++++++++++++++ Current User Menu ++++++++++++++++++++++++\n"
         "+ 0.Logout 1.Display 2.Getter 3.Setter 4.Set 5.WhatAreYouDoing +\n"
     	"+ 6.IsSame 7.InputPerson 8.ChangePasswd(4_2) 9.ManageMemo(4_3) +\n"
-    	"+ 10.DefaultParameter(6_1) 11.StaticMember(6_1)                +\n"
+		"+ 10.DefaultParameter(6_1) 11.StaticMember(6_1) 15.CalExp(9_2) +\n"
+		"+ 12.ChangeSmartPhone(9_2) 13.Calculate(9_2) 14.PhoneCall(9_2) +\n"
         "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
     while (true) {

@@ -575,3 +575,78 @@ dispPhones(): count 15
 [13] w4's Phone: Apple IPhone 13
 [14] a4's Phone: SAMSUNG Galaxy
 ```
+
+### 문제 4 설명
+```
+위 문제에서 각 사람들에게 주어진 스마트폰은 Person의 id 값에 의해 스마트폰 종류가 결정되어진다.
+이제 내가 원하는 메이커의 스마트폰을 지정할 수 있도록 해 보자.
+---------------------------------------------------------------------------
+먼저 CurrentUser::run() 내의 menuStr에 아래 문자열을 추가하라. 
+공간을 줄이기 위해 메뉴 [메뉴 항목 15]가 [메뉴 항목 11] 뒤에 있음을 유의하라.
+---------------------------------------------------------------------------
+        "+ 10.DefaultParameter(6_1) 11.StaticMember(6_1) 15.CalExp(9_2) +\n"
+        "+ 12.ChangeSmartPhone(9_2) 13.Calculate(9_2) 14.PhoneCall(9_2) +\n"
+---------------------------------------------------------------------------
+그리고 CurrentUser 클래스에 아래 멤버 함수를 추가한 후 구현하고 
+CurrentUser::run()내의 func_arr[]에 아래 함수를 등록하라.
+```
+```c++
+// 사용자로부터 생성할 스마트폰 종류를 입력받고 해당 스마트폰 객체를 생성한 후 
+// 기존 rUser의 smartPhone 멤버를 새로 생성된 스마트폰 객체로 변경한다.
+void CurrentUser::changeSmartPhone() {
+    string& maker = UI::getNext("Maker of phone to change(ex: Samsung or Apple)? ");
+    maker가 "Samsung"이면 GalaxyPhone 객체를
+            "Apple" 이면 IPhone 객체를 동적으로 할당하여 생성한 후, 
+            (위 각 스마트폰 객체 생성 시 owner는 rUser의 이름으로 지정하고 
+             IPhone인 경우 모델명은 "14"로 하라.)
+           생성된 스마트폰 객체를 rUser.setSmartPhone(...)을 호출하여 등록한다.
+    else { // maker가 "Samsung" 또는 "Apple"이 아닌 경우
+        cout << maker << ": WRONG phone's maker" << endl;
+        return;
+    }
+    display();
+}
+```
+
+### 문제 4 실행 결과
+```
+====================== Person Management Menu ...
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2) ...
+Menu item number? 11
+dispPhones(): count 8
+...
+[5] w2's Phone: Apple IPhone 13
+[6] a1's Phone: SAMSUNG Galaxy
+[7] a2's Phone: Apple IPhone 13
+
+// 아래 메뉴 항목을 순서적으로 입력하라.
+4     // Login 
+a1
+      // 입력 없이 그냥 엔터: 빈줄 입력
++++++++++++++++++++++ Current User Menu ...
++ 10.DefaultParameter(6_1) 11.StaticMember(6_1)                +
++ 12.ChangeSmartPhone(9_2) 13.Calculate(9_2) 14.PhoneCall(9_2) +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 12
+Maker of phone to change(ex: Samsung or Apple)? ssanm
+ssanm: WRONG phone's maker
+
+// 아래 메뉴 항목을 순서적으로 입력하라.
+12    // ChangeSmartPhone
+Apple
+0     // Logout
+4     // Login
+a2
+
+12    // ChangeSmartPhone
+Samsung
+0     // Logout
+
+====================== Person Management Menu ...
+Menu item number? 11   // DispPhones
+dispPhones(): count 8
+...
+[5] w2's Phone: Apple IPhone 13
+[6] a1's Phone: Apple IPhone 14    // SAMSUNG -> Apple
+[7] a2's Phone: SAMSUNG Galaxy     // Apple   -> SAMSUNG
+```

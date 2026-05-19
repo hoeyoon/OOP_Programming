@@ -1290,6 +1290,7 @@ public:
     void changeSmartPhone();
     void calculate();
     void phoneCall();
+    void calExpr();
     void run();
 };
 
@@ -1434,6 +1435,18 @@ void CurrentUser::phoneCall() {
     // 궁극적으로 파생 클래스인 Galaxy 또는 IPhone의 오버라이딩된 sendCall()이 호출된다.
 }
 
+void CurrentUser::calExpr() {
+    cout << "Expression: ";
+    string line;
+    getline(cin, line);   // 키보드에서 한 줄 입력 받아 line에 저장
+    Calculator* cal = rUser.getCalculator();
+    cal->calculate(line); 
+    // Calculator::calculate(string& expr) 호출 => 문자열 expr에서 수식을 읽어 계산함
+    // cal->calculate("2+3") 형식으로 문자열을 주고 계산할 수 있음; 예) "2 / 3", "3 *2"
+    // 추상클래스 포인트 변수 cal을 통해 가상함수 Calculator::calculate("2+3") 호출 =>
+    // 파생클래스(Galaxy 또는 IPone)의 override된 상응하는 함수가 실제 호출됨
+}
+
 void CurrentUser::run() {
     using func_t = void (CurrentUser::*)();
     using CU = CurrentUser;
@@ -1441,7 +1454,7 @@ void CurrentUser::run() {
         nullptr, &CU::display, &CU::getter, &CU::setter,
         &CU::set, &CU::whatAreYouDoing,
         &CU::isSame, &CU::inputPerson, &CU::changePasswd, &CU::manageMemo, &CU::defaultParameter,
-		&CU::staticMember, &CU::changeSmartPhone, &CU::calculate, &CU::phoneCall,
+		&CU::staticMember, &CU::changeSmartPhone, &CU::calculate, &CU::phoneCall, &CU::calExpr,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 배열의 길이
     string menuStr =

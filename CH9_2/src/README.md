@@ -999,3 +999,33 @@ Made a call to w2 @ s1's Galaxy Phone
 Base station: sends a call signal of s1 to w2
 w2's IPhone 13 Phone: received a call from s1
 ```
+
+### 문제 9 설명
+```
+CurrentUser 클래스에 아래 멤버 함수를 추가한 후 
+CurrentUser::run()내의 func_arr[]에 아래 함수를 등록하라.
+---------------------------------------------------------------------------
+아래 함수와 [문제 5]의 CurrentUser::calculate() 함수와의 차이점은 무엇인가?
+[문제 5]에선 Calculator::calculate(istream& in) 호출
+    즉, cal->calculate(cin) 호출 => 키보드에서 직접 수식을 읽어 계산함
+[문제 9]에선 Calculator::calculate(const string& expr) 호출
+    즉, 키보드에서 한 line을 읽은 후 
+        cal->calculate(line) 호출 => 문자열(line)에서 수식을 읽어 계산함
+```
+```c++
+void CurrentUser::calExpr() {
+    cout << "Expression: ";
+    string line;
+    getline(cin, line);   // 키보드에서 한 줄 입력 받아 line에 저장
+    Calculator* cal = rUser.getCalculator();
+    cal->calculate(line); 
+    // Calculator::calculate(string& expr) 호출 => 문자열 expr에서 수식을 읽어 계산함
+    // cal->calculate("2+3") 형식으로 문자열을 주고 계산할 수 있음; 예) "2 / 3", "3 *2"
+    // 추상클래스 포인트 변수 cal을 통해 가상함수 Calculator::calculate("2+3") 호출 =>
+    // 파생클래스(Galaxy 또는 IPone)의 override된 상응하는 함수가 실제 호출됨
+}
+```
+### 문제 9 실행 결과
+```
+[문제 5]와 [문제 6]의 입력 데이타와 동일하게 입력한 후 결과가 동일하게 나오는지 확인하라.
+```

@@ -527,3 +527,51 @@ p3: p 1 115.9 true :Jong-ro 1-gil, Jongno-gu, Seoul:
 p3 smartPhone: p's Phone: SAMSUNG Galaxy     // p2의 스마트폰 복제
 p == p3 : true
 ```
+
+### 문제 3-2 설명
+```
+Person::set(const string& name, ..., const char* address) 함수와 
+Person::inputMembers(istream& in) 함수의 맨 마지막에 아래 문장을 추가하라.
+
+    아래 함수호출시 인자가 없기 때문에 이 함수의 매개변수 smPhone는 디폴트인 nullptr로 설정됨.
+    따라서 이 함수 내에서 newSmartPhone()를 호출하여 smartPhone 객체를 새로 생성함 
+    즉, set(...) 또는 키보드에서 Person을 입력 받을 경우, smartPhone은 새로 생성됨
+    setSmartPhone();
+```
+
+### 문제 3-2 실행 결과
+```
+====================== Person Management Menu ...
+
+Menu item number? 2   // Append
+The number of persons to append? 7
+Input 7 [delimiter(P, S, W, or A)] [person information] :    
+// 아래 7명의 정보를 복사해서 한번에 입력
+P p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+S s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21: Computer 3.3 2
+W w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul: Kia CEO
+A a3 14 54 false :Dong-gu, Incheon: Physics 3.8 1 Kakao Manager :SK, LG, KAI: true
+S s4 15 80 true :1001, Jungang-daero, Yeonje-gu, Busan: Biology 3.8 3
+W w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul: Naver Department-Head
+A a4 17 88 true :Kangdong-gu, Daejeon: Electronics 3.4 2 NC Developer :CU, GS: false
+display(): count 15
+... // 생략
+[8] p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[9] s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21: Computer 3.3 2
+[10] w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul: Kia CEO
+[11] a3 14 54 false :Dong-gu, Incheon: Physics 3.8 1 Kakao Manager :SK, LG, KAI: true
+[12] s4 15 80 true :1001, Jungang-daero, Yeonje-gu, Busan: Biology 3.8 3
+[13] w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul: Naver Department-Head
+[14] a4 17 88 true :Kangdong-gu, Daejeon: Electronics 3.4 2 NC Developer :CU, GS: false
+
+Menu item number? 11   // DispPhones
+dispPhones(): count 15
+... // 위 [문제 3]의 결과와 동일
+[8] p3's Phone: SAMSUNG Galaxy
+[9] s3's Phone: Apple IPhone 13
+[10] w3's Phone: SAMSUNG Galaxy
+[11] a3's Phone: Apple IPhone 13
+[12] s4's Phone: SAMSUNG Galaxy
+[13] w4's Phone: Apple IPhone 13
+[14] a4's Phone: SAMSUNG Galaxy
+```

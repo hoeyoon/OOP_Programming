@@ -386,6 +386,7 @@ void Person::set(const string& name, int id, double weight,
 	this->weight = weight;
 	this->married = married;
 	setAddress(address);
+	setSmartPhone();
 }
 
 void Person::inputMembers(istream& in)   {
@@ -402,6 +403,11 @@ void Person::inputMembers(istream& in)   {
     // 아래 함수에서 address[]의 문자열 길이만큼 메모리를 할당(멤버 address용) 받은 후 복사한다.
     // 멤버 address는 이전에 이미 초기화되었기 때문에 copyAddress()가 아닌 아래 함수를 사용함
     setAddress(address); // ch5_2에서 추가됨
+    
+    // 아래 함수호출시 인자가 없기 때문에 이 함수의 매개변수 smPhone는 디폴트인 nullptr로 설정됨.
+    // 따라서 이 함수 내에서 newSmartPhone()를 호출하여 smartPhone 객체를 새로 생성함 
+    // 즉, set(...) 또는 키보드에서 Person을 입력 받을 경우, smartPhone은 새로 생성됨
+    setSmartPhone();
 }
 
 void Person::whatAreYouDoing() {
@@ -419,6 +425,11 @@ Person& Person::operator = (const Person& p) {
           // 복사생성자에서는 copyAddress()와 copyMemo()를 호출했는데 (처음 초기화할 때)
           // 여기서는 setAddress(), setMemo()를 호출하였다. (기존 값을 변경하고자 할 때)
           // 왜 그렇게 했는지 이해했는가?
+    // Person(const Person& p) 복사생성자에서는 멤버를 처음 초기화하는 것이기 때문에 
+    // smartPhone = p.smartPhone->clone()처럼 복제해서 바로 smartPhone에 대입함.
+    // 그러나 = 연산자의 경우 기존 smartPhone 멤버가 포인터하고 있는 메모리가 이미 있으므로
+    // 이를 먼저 반납하고 복제된 객체로 smartPhone을 설정해야 한다. 그래서 아래 함수를 호출함.
+    setSmartPhone(p.smartPhone->clone()); 
 
     return *this; // this 객체 자신의 참조자를 반환한다.
     // 자신 객체의 참조자를 리턴했기 때문에 c.assign(p.assign(backup)).println() 등의
@@ -433,11 +444,6 @@ bool Person::isSame(const string& name, int id) {
 }
 
 bool Person::operator == (const Person &p){
-    // Person(const Person& p) 복사생성자에서는 멤버를 처음 초기화하는 것이기 때문에 
-    // smartPhone = p.smartPhone->clone()처럼 복제해서 바로 smartPhone에 대입함.
-    // 그러나 = 연산자의 경우 기존 smartPhone 멤버가 포인터하고 있는 메모리가 이미 있으므로
-    // 이를 먼저 반납하고 복제된 객체로 smartPhone을 설정해야 한다. 그래서 아래 함수를 호출함.
-    setSmartPhone(p.smartPhone->clone()); 
 	if(this->isSame(p.name, p.id)){
 		return true;
 	}

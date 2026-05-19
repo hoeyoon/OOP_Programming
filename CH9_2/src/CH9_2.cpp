@@ -28,12 +28,38 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 #define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 //----------------------------------------------------------------------------
+// 휴대폰 기지국
+//----------------------------------------------------------------------------
+class BaseStation
+{
+public:
+    virtual ~BaseStation() {}
+
+    virtual bool connectTo(const string& caller, const string& callee) = 0;
+    //------------------------------------------------------------------------
+    // 이 메소드는 Phone::sendCall(const string& callee)에서 호출되어야 한다.
+    // 수신자 callee라는 사람이 존재할 경우
+    //    cout << "Base station: sends a call signal of " << caller <<
+    //              " to " << callee << endl;를 출력하고
+    //    이 사람의 등록된 Phone의 receiveCall(caller, callee)을 호출하고 true 리턴
+    // 존재하지 않을 경우 
+    //    "callee_name: NOT found"라는 에러 메시지 출력하고 false 리턴
+    //------------------------------------------------------------------------
+};
+
+//----------------------------------------------------------------------------
 // Phone class
 //----------------------------------------------------------------------------
 class Phone
 {
+	// 아래 static 멤버는 모든 Phone 객체에서 사용(공유)할 수 있다
+protected:
+	// static 변수 선언이며 실제 메모리 확보을 위해선 클래스 바깥에서 별도로 선언해야 함
+    static BaseStation* baseStation;
+    
 public:
     virtual ~Phone() {} // 가상 소멸자
+    static void initBaseStation(BaseStation* bs) { baseStation = bs; }
     
     virtual void sendCall(const string& callee) = 0;
     //------------------------------------------------------------------------
@@ -50,6 +76,9 @@ public:
     // 회사명, 모델명 등과 함께 표시하면 된다.
     //------------------------------------------------------------------------
 };
+
+// 아래 전역변수는 PersonManager 생성자에서 initBaseStation(...)을 호출하여 초기화해야 함
+BaseStation* Phone::baseStation; // 실제 static 멤버 변수 메모리 확보
 
 //----------------------------------------------------------------------------
 // Calculator class
@@ -70,7 +99,7 @@ public:
 };
 
 //----------------------------------------------------------------------------
-// SmartPhone class
+// Smart class
 //----------------------------------------------------------------------------
 class SmartPhone: public Phone, public Calculator
 {
@@ -101,11 +130,20 @@ public:
     // 컴파일러에 의해 제공되는 기본 소멸자와 복사 생성자를 활용하면 됨
 
     void sendCall(const string& callee)    override {
-        /* TODO */
+    	/*
+        아래 실행 결과를 참고해서 "Made a call to "와 callee를 출력한 후 TradeMark를 출력하라.
+        Phone 클래스로부터 상속 받은 static 포인트 멤버 변수의 baseStation->connectTo()
+        멤버 함수를 호출하여 수신자에게 신호를 전송하라. 이 함수의 인자로 
+        SmartPhone에 저장되어 있는 송신자 owner와 매개변수인 수신자 callee를 지정하라.
+        */
+    	cout << "Made a call to " << callee; printTradeMark("Phone");
+    	baseStation->connectTo(owner, callee);
     }
 
     void receiveCall(const string& caller) override {
-        /* TODO */
+        //실행 결과를 참고해서 "Recieved a call from "와 caller를 출력한 후 TradeMark를 출력하라.
+        // 위 "Recieved" 단어가 오타인데 그래도 일단 이렇게 입력하세요.^^
+    	cout << "Recieved a call from " << caller; printTradeMark("Phone");
     }
 
     void calculate(double oprd1, char op, double oprd2) override {
@@ -1241,6 +1279,7 @@ public:
     void staticMember();
     void changeSmartPhone();
     void calculate();
+    void phoneCall();
     void run();
 };
 
@@ -1379,6 +1418,12 @@ void CurrentUser::calculate() {
     // 파생클래스(GalaxyPhone or IPhone)의 override된 함수가 실제 호출됨
 }
 
+void CurrentUser::phoneCall() {
+    string& callee = UI::getNext("Name to call? "); // 수신자 이름
+    rUser.getPhone()->sendCall(callee);             // rUer가 송신자임
+    // 궁극적으로 파생 클래스인 Galaxy 또는 IPhone의 오버라이딩된 sendCall()이 호출된다.
+}
+
 void CurrentUser::run() {
     using func_t = void (CurrentUser::*)();
     using CU = CurrentUser;
@@ -1386,7 +1431,7 @@ void CurrentUser::run() {
         nullptr, &CU::display, &CU::getter, &CU::setter,
         &CU::set, &CU::whatAreYouDoing,
         &CU::isSame, &CU::inputPerson, &CU::changePasswd, &CU::manageMemo, &CU::defaultParameter,
-		&CU::staticMember, &CU::changeSmartPhone, &CU::calculate,
+		&CU::staticMember, &CU::changeSmartPhone, &CU::calculate, &CU::phoneCall,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 배열의 길이
     string menuStr =
@@ -1633,7 +1678,7 @@ public:
  * ch4_2: PersonManager class
  ******************************************************************************/
 
-class PersonManager
+class PersonManager: public BaseStation  //ch9_2 상속
 {
     VectorPerson persons;
     // Factory factory;
@@ -1661,12 +1706,16 @@ public:
     void find();         // ch9_2 추가
     void dispStudentWorkers(); // ch9_2 추가
     void dispPhones();	// ch9_2 추가
+    bool connectTo(const string& caller, const string& callee) override; //ch9_2 추가
     void run();
 };
 
 PersonManager::PersonManager(Person* array[], int len) : array(array), arrLen(len), cpCount(0) {
     //cout << "PersonManager::PersonManager(array[], len)" << endl;
 	pushArray();
+    Phone::initBaseStation(this);
+    // 추상클래스 BaseStation이 PersonManager의 부모 클래스이므로
+    // this 포인터가 자동으로 업캐스팅되어 BaseStation*로 변경됨
     //display();
 }
 
@@ -1882,6 +1931,26 @@ void PersonManager::dispPhones() { // Menu item 11
     for(int i = 0; i < persons.size(); i++){
         cout << "[" << i << "] "; persons[i]->getSmartPhone()->println();
     }
+}
+
+// PersonManager::persons 벡터에 관리 중인 여러 사람들 중에서 
+// 수신자를 찾아서 그 수신자의 스마트 폰의 receiveCall()을 호출한다.
+bool PersonManager::connectTo(const string& caller, const string& callee) {
+	/*
+    Person* p = callee라는 이름을 가진 사람을 찾아 p에 저장; 
+    (사람 찾기는 기존 멤버 함수 이용할 것: login() 참조)
+    if (p == nullptr) return false; // 수신자를 찾지 못한 경우
+    실행 결과를 참고하여 "Base station: sends a call signal of "와 caller, 그리고
+        " to "와 callee를 출력하라.
+    p의 Phone을 구한 후 그 폰의 receiveCall() 호출 (p와 폰이 모두 포인터임)
+    (Phone 구하는 것은 위 CurrentUser::phoneCall() 참고)
+    return true;
+    */
+    Person* p = findByName(callee); 
+    if (p == nullptr) return false;
+    cout << "Base station: sends a call signal of " << caller << " to " << callee << endl;
+    p->getPhone()->receiveCall(caller);
+    return true;
 }
 
 void PersonManager::run() {

@@ -810,3 +810,150 @@ w2's IPhone 13 Calculator: 3 / 2 = 1.5
 1 % 2
 w2's IPhone 13 Calculator: NOT supported operator
 ```
+
+### 코드 추가 및 변경 4
+```
+이제 스마트폰에 전화 기능을 추가 해 보자. 이를 위해 먼저 
+1) 휴대폰 기지국 역할을 하는 추상 BaseStation 클래스를 class Phone 앞쪽에 배치하라.
+```
+```c++
+//----------------------------------------------------------------------------
+// 휴대폰 기지국
+//----------------------------------------------------------------------------
+class BaseStation
+{
+public:
+    virtual ~BaseStation() {}
+
+    virtual bool connectTo(const string& caller, const string& callee) = 0;
+    //------------------------------------------------------------------------
+    // 이 메소드는 Phone::sendCall(const string& callee)에서 호출되어야 한다.
+    // 수신자 callee라는 사람이 존재할 경우
+    //    cout << "Base station: sends a call signal of " << caller <<
+    //              " to " << callee << endl;를 출력하고
+    //    이 사람의 등록된 Phone의 receiveCall(caller, callee)을 호출하고 true 리턴
+    // 존재하지 않을 경우 
+    //    "callee_name: NOT found"라는 에러 메시지 출력하고 false 리턴
+    //------------------------------------------------------------------------
+};
+```
+```
+2) PersonManager 클래스가 BaseStation을 상속하도록 아래처럼 코드를 수정하라.
+    이는 특정 사용자가 전화를 걸때 수신자를 찾아 상호 연결해 주는 무선 기지국 기능을 
+    PersonManager가 제공하기 위함이다. 
+    그리고 추상 클래스인 BaseStation의 순수 가상 함수인 connectTo(...)를 오버라이딩하는 
+    아래 connectTo() 함수 선언을 기존 run() 함수 앞에 추가하라. 
+```
+```c++
+class PersonManager: public BaseStation  //ch9_2 상속
+{
+    ....
+    bool connectTo(const string& caller, const string& callee) override; //ch9_2 추가
+    void run();
+};
+```
+```
+3) 아래의 baseStation, initBaseStation() 등의 static 멤버를 기존 Phone 클래스에 추가하고,
+    baseStation의 실제 static 변수 정의를 클래스 바깥에 선언하라.
+```
+```c++
+class Phone
+{
+    // 아래 static 멤버는 모든 Phone 객체에서 사용(공유)할 수 있다.
+protected:
+    // static 변수 선언이며 실제 메모리 확보을 위해선 클래스 바깥에서 별도로 선언해야 함
+    static BaseStation* baseStation;
+public:
+    static void initBaseStation(BaseStation* bs) { baseStation = bs; }
+    
+    ... // 기존 멤버들
+};
+
+// 아래 전역변수는 PersonManager 생성자에서 initBaseStation(...)을 호출하여 초기화해야 함
+BaseStation* Phone::baseStation; // 실제 static 멤버 변수 메모리 확보
+```
+```
+4) 아래 코드를 PersonManager::PersonManager(...) 생성자의 마지막에 추가하라.
+    이 코드에서 PersonManager의 this를 initBaseStation()의 함수 인자로 넘겨 주었는데, 
+    이는 PersonManager가 BaseStation을 상속 받았기 때문에 this는 BaseStation* 으로  
+    컴파일러에 의해 자동으로 업캐스팅 된다. 
+    따라서 Phone::baseStation static 멤버는 곧 PersonManager를 포인터 한다.
+```
+```c++
+    Phone::initBaseStation(this);
+    // 추상클래스 BaseStation이 PersonManager의 부모 클래스이므로
+    // this 포인터가 자동으로 업캐스팅되어 BaseStation*로 변경됨
+```
+```
+5) CurrentUser 클래스에 아래 멤버 함수를 추가한 후
+    CurrentUser::run()내의 func_arr[]에 아래 함수를 등록하라.
+```
+```c++
+void CurrentUser::phoneCall() {
+    string& callee = UI::getNext("Name to call? "); // 수신자 이름
+    rUser.getPhone()->sendCall(callee);             // rUer가 송신자임
+    // 궁극적으로 파생 클래스인 Galaxy 또는 IPhone의 오버라이딩된 sendCall()이 호출된다.
+}
+```
+```
+6) 위 코드가 정상적으로 작동할 수 있도록 Person::getPhone()를 구현하라.
+    [문제 5]의 2)에서 이미 구현하였지만 한번 더 코드를 자동 업캐스딩되는 것을 복습하라.
+    Phone 클래스가 SmartPhone의 부모 클래스이기 때문에 Person::getSmartPhone()처럼 
+    값을 리턴하라. (SmartPhone*에서 자동으로 Calculator*로 업캐스팅 되어 리턴된다.)
+```
+
+### 문제 7 설명
+```
+1) 아래 코드를 GalaxyPhone 클래스에 추가하고 코드를 완성하라. Phone 클래스에 기술한 
+    함수들의 표준 기능을 다시 한번 읽어 본 후 아래 함수를 구현하기 바란다.
+```
+```c++
+    void sendCall(const string& callee)    override {
+        아래 실행 결과를 참고해서 "Made a call to "와 callee를 출력한 후 TradeMark를 출력하라.
+        Phone 클래스로부터 상속 받은 static 포인트 멤버 변수의 baseStation->connectTo()
+        멤버 함수를 호출하여 수신자에게 신호를 전송하라. 이 함수의 인자로 
+        SmartPhone에 저장되어 있는 송신자 owner와 매개변수인 수신자 callee를 지정하라.
+    }
+
+    void receiveCall(const string& caller) override {
+        실행 결과를 참고해서 "Recieved a call from "와 caller를 출력한 후 TradeMark를 출력하라.
+        // 위 "Recieved" 단어가 오타인데 그래도 일단 이렇게 입력하세요.^^
+    }
+```
+```
+2) PersonManager 클래스에 아래 함수를 추가하고 코드를 완성하라.
+    이 함수는 PersonManager가 상속받은 BaseStation의 순수 가상 함수를 오버라이딩하는 것이다.
+    sendCall(const string& callee)에서 이 함수를 호출한다.
+```
+```c++
+// PersonManager::persons 벡터에 관리 중인 여러 사람들 중에서 
+// 수신자를 찾아서 그 수신자의 스마트 폰의 receiveCall()을 호출한다.
+bool PersonManager::connectTo(const string& caller, const string& callee) {
+    Person* p = callee라는 이름을 가진 사람을 찾아 p에 저장; 
+    (사람 찾기는 기존 멤버 함수 이용할 것: login() 참조)
+    if (p == nullptr) return false; // 수신자를 찾지 못한 경우
+    실행 결과를 참고하여 "Base station: sends a call signal of "와 caller, 그리고
+        " to "와 callee를 출력하라.
+    p의 Phone을 구한 후 그 폰의 receiveCall() 호출 (p와 폰이 모두 포인터임)
+    (Phone 구하는 것은 위 CurrentUser::phoneCall() 참고)
+    return true;
+}
+```
+
+### 문제 7 실행 결과
+```
+// Person Management Menu에서 [ s1 ]으로 로그인한 후 아래를 실행하라.
+
++++++++++++++++++++++ Current User Menu ...
++ 12.ChangeSmartPhone(9_2) 13.Calculate(9_2) 14.PhoneCall(9_2) ...
+Menu item number? 14    // PhoneCall
+Name to call? w1                                 // 송신자 s1, 수신자 w1
+Made a call to w1 @ s1's Galaxy Phone            // sendCall()의 출력
+Base station: sends a call signal of s1 to w1    // connectTo()의 출력
+Recieved a call from s1 @ w1's Galaxy Phone      // receiveCall()의 출력
+...
+Menu item number? 14    // PhoneCall
+Name to call? w4
+Made a call to w4 @ s1's Galaxy Phone
+w4: NOT found
+```

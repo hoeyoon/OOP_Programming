@@ -183,11 +183,38 @@ public:
     }
 
     void calculate(double oprd1, char op, double oprd2) override {
-        /* TODO */
+        string printMsg;
+        double ret = 0;
+        switch (op) { // switch 문장 내에서 직접 계산하지 않고 각 함수를 호출함
+        case '+': ret = add(oprd1, oprd2); break;
+        case '-': ret = sub(oprd1, oprd2); break;
+        case '*': ret = mul(oprd1, oprd2); break;
+        case '/': ret = div(oprd1, oprd2); break;
+        default : printMsg = "NOT supported operator"; break;
+        }
+        printTradeMark("Calculator"); cout << ": ";
+        if (printMsg == "") // 정상적으로 계산되었을 경우
+            cout << oprd1 <<" "<< op << " "<< oprd2 <<" = "<< ret << endl;
+        else                // 연산자가 잘못 되었을 경우
+            cout << printMsg << endl;
     }
 
+    // 문자열 expr에서 연산자를 찾은 다음 연산자의 좌우 피연산자를 별도의 문자열로 발췌한다.
     void calculate(const string& expr) override {
-        /* TODO */
+        string oprs[] = { "+", "-", "*", "/" }; // 연산자 종류
+        size_t pos, i, length = sizeof(oprs) / sizeof(oprs[0]); // 연산자 개수
+        for (i = 0; i < length; i++)
+            if ((pos=expr.find(oprs[i])) != string::npos) 
+                break;   // 수식에서 연산자를 찾은 경우
+        if (i >= length) // 수식에서 연산자를 찾지 못한 경우
+            calculate(0, '\0', 0); // op 값으로 '\0'를 설정하여 에러가 발생하게 함
+        else {
+            string soprd1 = expr.substr(0, pos); // 왼쪽 피연산자 발췌
+            string soprd2 = expr.substr(pos+1);  // 오른쪽 피연산자 발췌
+            double oprd1 = stod(soprd1); // 문자열로 된 피연산자를 실수 값으로 변경
+            double oprd2 = stod(soprd2); // 문자열로 된 피연산자를 실수 값으로 변경
+            calculate(oprd1, expr[pos], oprd2);
+        }
     }
 
     void calculate(istream& in) override {

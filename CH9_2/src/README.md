@@ -465,3 +465,65 @@ dispPhones(): count 8
 [6] a1's Phone: SAMSUNG Galaxy
 [7] a2's Phone: Apple IPhone 13
 ```
+
+### 문제 3-1 설명
+```
+1) Person::operator = (const Person& p) 함수의 맨 마지막에 아래 문장을 추가하라.
+
+    Person(const Person& p) 복사생성자에서는 멤버를 처음 초기화하는 것이기 때문에 
+    smartPhone = p.smartPhone->clone()처럼 복제해서 바로 smartPhone에 대입함.
+    그러나 = 연산자의 경우 기존 smartPhone 멤버가 포인터하고 있는 메모리가 이미 있으므로
+    이를 먼저 반납하고 복제된 객체로 smartPhone을 설정해야 한다. 그래서 아래 함수를 호출함.
+    setSmartPhone(p.smartPhone->clone()); 
+```
+```
+2) OperatorOverload::personAssign() 함수의 내용을 아래 내용으로 교체하라.
+    아래에서 기존 코드에서 Person의 = 연산자 앞뒤에 스마트 폰과 관련된 출력 문장이 추가되었다.  
+```
+```c++
+    void personAssign() { // Memu item 4
+        cout << "p:  "; p.println();
+        cout << "p  smartPhone: "; p .getSmartPhone()->println();
+        cout << "Person p2;" << endl;
+        Person p2;
+        cout << "p2: "; p2.println();
+        cout << "p2 smartPhone: "; p2.getSmartPhone()->println();
+        cout << "p2 = p" << endl;
+        p2 = p;
+        cout << "p2: "; p2.println();
+        cout << "p2 smartPhone: "; p2.getSmartPhone()->println();
+        cout << "Person p3(...);" << endl;
+        Person p3("Hong",  0, 72.1, false, "Gwangju Nam-gu Bongseon-dong 21");
+        cout << "p3: "; p3.println();
+        cout << "p3 smartPhone: "; p3.getSmartPhone()->println();
+        cout << "p3 = 20.0 + p2 + 30.5" << endl;
+        p3 = 20.0 + p2 + 30.5;
+        cout << "p3: "; p3.println();
+        cout << "p3 smartPhone: "; p3.getSmartPhone()->println();
+        cout << "p == p3 : " << (p == p3) << endl;
+    }
+```
+
+### 문제 3-1 실행 결과
+```
+******************************* Main Menu ...
+Menu item number? 5   // OperatorOverload
+
++++++++++++++++++++ Operator Overload ...
+Menu item number? 4   // Assign
+p:  p 1 65.4 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+p  smartPhone: p's Phone: SAMSUNG Galaxy
+Person p2;
+p2:  0 0 false ::
+p2 smartPhone: 's Phone: Apple IPhone 13     // id가 0이므로 IPhone
+p2 = p
+p2: p 1 65.4 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+p2 smartPhone: p's Phone: SAMSUNG Galaxy     // p의 스마트폰 복제
+Person p3(...);
+p3: Hong 0 72.1 false :Gwangju Nam-gu Bongseon-dong 21:
+p3 smartPhone: Hong's Phone: Apple IPhone 13 // id가 0이므로 IPhone
+p3 = 20.0 + p2 + 30.5
+p3: p 1 115.9 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+p3 smartPhone: p's Phone: SAMSUNG Galaxy     // p2의 스마트폰 복제
+p == p3 : true
+```

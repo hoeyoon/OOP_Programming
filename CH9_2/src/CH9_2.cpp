@@ -433,6 +433,11 @@ bool Person::isSame(const string& name, int id) {
 }
 
 bool Person::operator == (const Person &p){
+    // Person(const Person& p) 복사생성자에서는 멤버를 처음 초기화하는 것이기 때문에 
+    // smartPhone = p.smartPhone->clone()처럼 복제해서 바로 smartPhone에 대입함.
+    // 그러나 = 연산자의 경우 기존 smartPhone 멤버가 포인터하고 있는 메모리가 이미 있으므로
+    // 이를 먼저 반납하고 복제된 객체로 smartPhone을 설정해야 한다. 그래서 아래 함수를 호출함.
+    setSmartPhone(p.smartPhone->clone()); 
 	if(this->isSame(p.name, p.id)){
 		return true;
 	}
@@ -2848,15 +2853,23 @@ class OperatorOverload
 
     void personAssign() { // Memu item 4
         cout << "p:  "; p.println();
-        Person p2; // 기본 생성자에 의해 초기화
+        cout << "p  smartPhone: "; p .getSmartPhone()->println();
+        cout << "Person p2;" << endl;
+        Person p2;
+        cout << "p2: "; p2.println();
+        cout << "p2 smartPhone: "; p2.getSmartPhone()->println();
         cout << "p2 = p" << endl;
         p2 = p;
         cout << "p2: "; p2.println();
+        cout << "p2 smartPhone: "; p2.getSmartPhone()->println();
+        cout << "Person p3(...);" << endl;
         Person p3("Hong",  0, 72.1, false, "Gwangju Nam-gu Bongseon-dong 21");
         cout << "p3: "; p3.println();
+        cout << "p3 smartPhone: "; p3.getSmartPhone()->println();
         cout << "p3 = 20.0 + p2 + 30.5" << endl;
         p3 = 20.0 + p2 + 30.5;
         cout << "p3: "; p3.println();
+        cout << "p3 smartPhone: "; p3.getSmartPhone()->println();
         cout << "p == p3 : " << (p == p3) << endl;
     }
 

@@ -14,7 +14,7 @@ protected:
 public:
     Person(const string& name="", int id=0, int hour=0); // 생성자
     Person(const Person& ref);							 // 복사생성자
-    ~Person();                                           // 소멸자
+    virtual ~Person();                                           // 소멸자
 
     virtual void print(ostream& out) const;
     virtual void whatAreYouDoing() const;    // 현재하고 있는 일을 출력
@@ -75,7 +75,7 @@ class Employee : public Person {
 public:
     Employee(const string& name, int id, int hours,
              const string& company, int payPerHour, int overtime);
-    ~Employee() { cout << "~Employee(): n:" << *name << "   "; }
+    ~Employee() override { cout << "~Employee(): n:" << *name << "   "; }
     
     void print(ostream& out) const override;
     void whatAreYouDoing() const override;
@@ -117,7 +117,7 @@ class Student : public Person {
 public:
     Student(const string& name, int id, int hours,
             const string& university, int year, int tuition);
-    ~Student() { cout << "~Student() : n:" << *name << "   "; }
+    ~Student() override { cout << "~Student() : n:" << *name << "   "; }
     
     void print(ostream& out) const override;
     void whatAreYouDoing() const override;

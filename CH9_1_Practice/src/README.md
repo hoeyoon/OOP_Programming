@@ -125,3 +125,24 @@ p=copyPerson(s): n:s i:10002 h:10 u:Chosun y:4 t:4000000
 ((Student*)s->clone())->print(cout): 
                : n:s i:10002 h:10 u:Chosun y:4 t:4000000
 ```
+
+### 문제 6 설명
+```
+상속관계에서의 소멸자: virtual 소멸자
+
+아래 실행 결과와 같이 출력되도록 Person 클래스와 파생 클래스에 적절한 키워드를 추가하라.
+deletePerson(e)의 매개변수가 Person *p 이고 delete p; 가 호출되었는데도
+파생클래스의 소멸자가 실행되었음을 주지하라. 
+```
+
+### 문제 6 실행 결과
+```
+...
+menu item? 6
+p=copyPerson(e): n:e i:10001 h:50 c:Samsung p:30000 o:10
+delete p       : ~Employee(): n:p   ~Person(): delete p
+deletePerson(e): ~Employee(): n:e   ~Person(): delete e
+p=copyPerson(s): n:s i:10002 h:10 u:Chosun y:4 t:4000000
+deletePerson(p): ~Student() : n:p   ~Person(): delete p
+delete s       : ~Student() : n:s   ~Person(): delete s
+```

@@ -42,3 +42,19 @@ s->print(cout): n:s i:10002 h:10 u:Chosun y:4 t:4000000
 s->println()  : n:s i:10002 h:10 u:Chosun y:4 t:4000000
 printPerson(s): n:s i:10002 h:10 u:Chosun y:4 t:4000000
 ```
+
+### 문제 2 설명
+```
++= 연산자 구현
+아래 실행 결과와 같이 출력되도록 Person 클래스와 파생 클래스에 적절한 키워드를 추가하라.
+필요하지 않은 경우 굳이 추가하지 않아도 된다.
+```
+### 문제 2 실행 결과
+```
+...
+menu item? 2
+e += 10    : n:e i:10001 h:60 c:Samsung p:30000 o:10
+addHours(e): n:e i:10001 h:70 c:Samsung p:30000 o:10
+s += 10    : n:s i:10002 h:20 u:Chosun y:4 t:4000000
+addHours(s): n:s i:10002 h:30 u:Chosun y:4 t:4000000
+```

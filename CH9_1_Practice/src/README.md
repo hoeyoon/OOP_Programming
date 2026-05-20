@@ -79,3 +79,22 @@ s->whatAreYouDoing()          : I am studying.
 whatAreYouDoing(s)            : I am studying.
 (*s).Person::whatAreYouDoing(): I am taking a rest.
 ```
+
+### 문제 4 설명
+```
+operator () 구현
+
+아래 실행 결과와 같이 출력되도록 Person 클래스와 파생 클래스에 적절한 키워드를 추가하라.
+whatIsYourPay(e)의 매개변수가 Person *p 이고 (*p)()이 호출되었는데도 
+파생클래스의 operator()가 실행되었음을 주지하라. 
+```
+
+### 문제 4 실행 결과
+```
+...
+menu item? 4
+(*e)()          : 1950000
+whatIsYourPay(e): 1950000
+s->operator()() : 10000
+whatIsYourPay(s): 10000
+```

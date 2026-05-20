@@ -18,7 +18,7 @@ public:
 
     virtual void print(ostream& out) const;
     virtual void whatAreYouDoing() const;    // 현재하고 있는 일을 출력
-    int  operator () () const;       // 임금 계산
+    virtual int  operator () () const;       // 임금 계산
     Person* clone() const;           // 자기 자신을 복제
 
     void println() const { print(cout); cout << endl; }
@@ -79,7 +79,7 @@ public:
     
     void print(ostream& out) const override;
     void whatAreYouDoing() const override;
-    int  operator () () const;
+    int  operator () () const override;
     Person* clone() const; 
 };
 
@@ -121,7 +121,7 @@ public:
     
     void print(ostream& out) const override;
     void whatAreYouDoing() const override;
-    int  operator () () const;
+    int  operator () () const override;
     Person* clone() const; 
 };
 

@@ -17,7 +17,7 @@ public:
     ~Person();                                           // 소멸자
 
     virtual void print(ostream& out) const;
-    void whatAreYouDoing() const;    // 현재하고 있는 일을 출력
+    virtual void whatAreYouDoing() const;    // 현재하고 있는 일을 출력
     int  operator () () const;       // 임금 계산
     Person* clone() const;           // 자기 자신을 복제
 
@@ -78,7 +78,7 @@ public:
     ~Employee() { cout << "~Employee(): n:" << *name << "   "; }
     
     void print(ostream& out) const override;
-    void whatAreYouDoing() const;
+    void whatAreYouDoing() const override;
     int  operator () () const;
     Person* clone() const; 
 };
@@ -120,7 +120,7 @@ public:
     ~Student() { cout << "~Student() : n:" << *name << "   "; }
     
     void print(ostream& out) const override;
-    void whatAreYouDoing() const;
+    void whatAreYouDoing() const override;
     int  operator () () const;
     Person* clone() const; 
 };

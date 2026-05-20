@@ -58,3 +58,24 @@ addHours(e): n:e i:10001 h:70 c:Samsung p:30000 o:10
 s += 10    : n:s i:10002 h:20 u:Chosun y:4 t:4000000
 addHours(s): n:s i:10002 h:30 u:Chosun y:4 t:4000000
 ```
+
+### 문제 3 설명
+```
+whatAreYouDoing() 멤버 함수: 재정의된 객체의 멤버함수 대신 부모 클래스의 멤버 함수 호출
+
+아래 실행 결과와 같이 출력되도록 Person 클래스와 파생 클래스에 적절한 키워드를 추가하라.
+whatAreYouDoing(e)의 매개변수가 Person *p 이고 p->whatAreYouDoing()이 호출되었는데도
+파생클래스의 멤버함수 whatAreYouDoing()이 실행되었음을 주지하라. 
+```
+
+### 문제 3 실행 결과
+```
+...
+menu item? 3
+e->whatAreYouDoing()          : I am working.
+whatAreYouDoing(e)            : I am working.
+e->Person::whatAreYouDoing()  : I am taking a rest.
+s->whatAreYouDoing()          : I am studying.
+whatAreYouDoing(s)            : I am studying.
+(*s).Person::whatAreYouDoing(): I am taking a rest.
+```

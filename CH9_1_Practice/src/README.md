@@ -98,3 +98,30 @@ whatIsYourPay(e): 1950000
 s->operator()() : 10000
 whatIsYourPay(s): 10000
 ```
+
+### 문제 5 설명
+```
+clone() 멤버함수 구현
+
+아래 실행 결과와 같이 출력되도록 Person 클래스와 파생 클래스에 적절한 키워드를 추가하라.
+copyPerson(e)의 매개변수가 Person *p 이고 p->clone()이 호출되었는데도
+파생클래스의 clone()이 실행되었음을 주지하라.
+clone()이 정상작동하기 위해서는 각 클래스의 멤버 중 포인터 변수가 있을 경우
+복사생성자를 만들어 깊은 복사를 해 주어야만 정상적으로 clone이 만들어진다는 사실을 명심하라. 
+```
+
+### 문제 5 실행 결과
+```
+...
+menu item? 5
+e->print(cout) : n:e i:10001 h:50 c:Samsung p:30000 o:10
+printPerson(e) : n:e i:10001 h:50 c:Samsung p:30000 o:10
+p=copyPerson(e): n:e i:10001 h:50 c:Samsung p:30000 o:10
+((Employee*)e->clone())->print(cout): 
+               : n:e i:10001 h:50 c:Samsung p:30000 o:10
+s->print(cout) : n:s i:10002 h:10 u:Chosun y:4 t:4000000
+printPerson(s) : n:s i:10002 h:10 u:Chosun y:4 t:4000000
+p=copyPerson(s): n:s i:10002 h:10 u:Chosun y:4 t:4000000
+((Student*)s->clone())->print(cout): 
+               : n:s i:10002 h:10 u:Chosun y:4 t:4000000
+```

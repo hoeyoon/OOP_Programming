@@ -19,7 +19,7 @@ public:
     virtual void print(ostream& out) const;
     virtual void whatAreYouDoing() const;    // 현재하고 있는 일을 출력
     virtual int  operator () () const;       // 임금 계산
-    Person* clone() const;           // 자기 자신을 복제
+    virtual Person* clone() const;           // 자기 자신을 복제
 
     void println() const { print(cout); cout << endl; }
     Person& operator += (int hours); // 매개변수(일한 시간) hours을 멤버 hours에 더함
@@ -80,7 +80,7 @@ public:
     void print(ostream& out) const override;
     void whatAreYouDoing() const override;
     int  operator () () const override;
-    Person* clone() const; 
+    Person* clone() const override; 
 };
 
 Employee::Employee(const string& name, int id, int hours, const string& company, int payPerHour, int overtime) :
@@ -122,7 +122,7 @@ public:
     void print(ostream& out) const override;
     void whatAreYouDoing() const override;
     int  operator () () const override;
-    Person* clone() const; 
+    Person* clone() const override; 
 };
 
 Student::Student(const string& name, int id, int hours, const string& university, int year, int tuition) : 

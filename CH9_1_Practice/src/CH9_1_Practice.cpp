@@ -16,7 +16,7 @@ public:
     Person(const Person& ref);							 // 복사생성자
     ~Person();                                           // 소멸자
 
-    void print(ostream& out) const;
+    virtual void print(ostream& out) const;
     void whatAreYouDoing() const;    // 현재하고 있는 일을 출력
     int  operator () () const;       // 임금 계산
     Person* clone() const;           // 자기 자신을 복제
@@ -77,7 +77,7 @@ public:
              const string& company, int payPerHour, int overtime);
     ~Employee() { cout << "~Employee(): n:" << *name << "   "; }
     
-    void print(ostream& out) const;
+    void print(ostream& out) const override;
     void whatAreYouDoing() const;
     int  operator () () const;
     Person* clone() const; 
@@ -119,7 +119,7 @@ public:
             const string& university, int year, int tuition);
     ~Student() { cout << "~Student() : n:" << *name << "   "; }
     
-    void print(ostream& out) const;
+    void print(ostream& out) const override;
     void whatAreYouDoing() const;
     int  operator () () const;
     Person* clone() const; 
@@ -150,7 +150,7 @@ Person* Student::clone() const {
  * menu_switch() 함수: 선택된 메인 메뉴 항목을 실행함
  ******************************************************************************/
 string menuStr =
-    "------------------ Inheritance ----------------\n"
+	"--------------- Virtual Functions -------------\n"
     "  0.exit 1.print 2.addHours 3.whatAreYouDoing  \n"
     "  4.whatIsYourPay 5.copyPerson 6.deletePerson  \n"
     "-----------------------------------------------\n"

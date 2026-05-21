@@ -27,28 +27,40 @@ public:
 // UI의 모든 멤버 함수들은 static 함수임; 함수 정의 때는 static을 붙이지 않음
 
 int UI::printGetInt(string msg) { // msg 문자열 출력 후 정수 값 하나 읽어 리턴
+	/*
     문자열 msg 출력
     키보드에서 정수를 하나 읽어 리턴       // 예제 2-3 참조
+    */
+	cout << msg;
+	int n;
+	cin >> n;
+	return n;
 }
 
-UI의 println 함수 {
-    문자열 msg와 줄바꾸기를 출력
+void UI::println(string msg) {
+    // 문자열 msg와 줄바꾸기를 출력
+	cout << msg << endl;
 }
 
-UI의 print(string msg) 함수 {
-    문자열 msg 출력
+void UI::print(string msg) {
+    // 문자열 msg 출력
+	cout << msg;
 }
 
 // 메인 메뉴 종류 출력하고 메뉴 선택 값(정수) 입력 받아 리턴
-UI의 getMainMenu 함수 {
+int UI::getMainMenu() {
     // printGetInt() 함수를 사용하여 
     // 메인 메뉴를 출력하고 입력한 메뉴 번호 값을 읽어 리턴함. 즉,
-    return printGetInt(출력할 메인 메뉴 문자열);
+    return printGetInt("종료:0, 모두보기:1, 자동삽입:2, 모두이동:3, 모두삭제:4 >> ");
 }
 // 삽입할 도형 종류 출력하고 종류 값 입력 받아 리턴
-UI의 getWidthHeight 함수 {
+void UI::getWidthHeight(int& width, int& height) {
+	/*
     ＂X축과 Y축으로 이동할 양은(정수 두개 입력)? >> ＂를 출력 // 교재 p.66 참조, cout 사용
     정수 값 두개를 읽어 인자인 width와 height에 저장 // cin 사용
+    */
+	cout << "X축과 Y축으로 이동할 양은(정수 두개 입력)? >> ";
+	cin >> width >> height;
 }
 
 
@@ -68,13 +80,15 @@ public:
 };
 
 // 객체 초기화: x, y 좌표 초기화
-Point::Point(int x, int y) { 
-     함수 인자인 x, y를 이 객체의 x, y 멤버에 저장
+Point::Point(int x, int y) : x(x), y(y) { 
+     // 함수 인자인 x, y를 이 객체의 x, y 멤버에 저장
 }
 
 // x, y 좌표를 각각 width, height만큼 이동시킨다.
 void Point::move(int width, int height) {
-    이 객체의 x, y 멤버에 각각 width, height를 더하여 좌표를 이동함 
+    // 이 객체의 x, y 멤버에 각각 width, height를 더하여 좌표를 이동함 
+	x += width;
+	y += height;
 }
 
 // (x,y) 좌표를 문자열로 변환하여 리턴, 예) "(10,15)"
@@ -90,14 +104,28 @@ string Point::toString() {
 *******************************************************************************/
 
 class Shape {
-    . . .
+    Shape *next;
+protected:
+    virtual void draw() = 0;
 public:
-    . . .
-
+    Shape() { next = NULL; }
+    virtual ~Shape(){}
+    
+    void paint();
+    Shape* add(Shape *p);
+    Shape* getNext() { return next; }
     // 기존 객체를 x, y 축 방향으로 width, height 만큼 각각 이동함
     virtual void move(int width, int height) = 0;
 };
 
+void Shape::paint(){
+	draw();
+}
+
+Shape* Shape::add(Shape *p){
+	this->next = p;
+	return p;
+}
 
 /******************************************************************************
  Line 클래스 선언 및 구현
@@ -108,10 +136,12 @@ class Line : public Shape {
     Point p1;    // 라인의 시작 좌표
     Point p2;    // 라인의 끝 좌표
 protected:
-    . . .
+    //. . .
+    virtual void draw();
 public:
     Line(const Point &p1, const Point &p2);
-    Shape 클래스의 move()를 override 선언하라.
+    // Shape 클래스의 move()를 override 선언하라.
+    void move(int width, int height) override;
 };
 
 // 생성자: 객체 멤버 초기화
@@ -144,23 +174,30 @@ class Rect : public Shape {
     Point p1;    // 사각형의 왼쪽 위쪽 좌표
     Point p2;    // 사각형의 오른쪽 아래쪽 좌표
 protected:
-    . . .
+    //. . .
+    virtual void draw();
 public:
     Rect(const Point &p1, const Point &p2);
-    Shape 클래스의 move()를 override 선언하라.
+    // Shape 클래스의 move()를 override 선언하라.
+    void move(int width, int height) override;
 };
 
 // 위 Line 클래스 구현 부분을 참고하여 작성할 것
 
-Rect의 생성자 함수 {
-    함수 인자로 넘어 온 p1과 p2를 이 객체의 p1, p2에 저장
+Rect::Rect(const Point &p1, const Point &p2) : p1(p1), p2(p2) {
+    // 함수 인자로 넘어 온 p1과 p2를 이 객체의 p1, p2에 저장
 }
 
-Rect의 draw() {  // UI의 적절한 멤버 함수 사용할 것
-    화면에 사각형의 좌표 값을 출력, 예) "Rectangle (10,15) (20,30)"
+void Rect::draw() {  // UI의 적절한 멤버 함수 사용할 것
+    //화면에 사각형의 좌표 값을 출력, 예) "Rectangle (10,15) (20,30)"
+    UI::println("Rectangle " + p1.toString() + " " + p2.toString());
 }
 
-Rect의 move 함수 { 기존 p1과 p2의 위치를 width, height만큼 옮긴다. }
+void Rect::move(int width, int height){ 
+	//기존 p1과 p2의 위치를 width, height만큼 옮긴다.
+	p1.move(width, height);
+	p2.move(width, height);
+}
 
 
 /******************************************************************************
@@ -172,25 +209,33 @@ class Circle : public Shape {
     Point center;// 원의 중심 좌표
     int   radius;// 반지름의 길이
 protected:
-    . . .
+    //. . .
+    virtual void draw();
 public:
-    Circle(int radius, const Point ¢er);
-    Shape 클래스의 move()를 override 선언하라.
+    Circle(int radius, const Point &er);
+    // Shape 클래스의 move()를 override 선언하라.
+    void move(int width, int height) override;
 };
 
 // 위 Line 클래스 구현 부분을 참고하여 작성할 것
 
-Circle 의 생성자 함수 {
-    함수 인자로 넘어 온 radiu와 center를 이 객체의 해당 멤버에 저장
+Circle::Circle(int radius, const Point &er) {
+    //함수 인자로 넘어 온 radiu와 center를 이 객체의 해당 멤버에 저장
+	this->center = er;
+	this->radius = radius;
 }
 
-Circle 의 draw() { // 반지름은 to_string(radius)를 이용하여 문자열로 변화
+void Circle::draw() { // 반지름은 to_string(radius)를 이용하여 문자열로 변화
                    // 이 함수 사용법은 Point.cpp의 toString() 함수 참조할 것
     // UI의 적절한 멤버 함수 사용할 것
-    화면에 반지름과 중심 좌표 값을 출력, 예) "Circle 5 (20,30)"
+    // 화면에 반지름과 중심 좌표 값을 출력, 예) "Circle 5 (20,30)"
+    UI::println("Circle " + to_string(radius) + " " + center.toString());
 }
 
-Circle 의 move 함수 { 기존 중심 좌표의 위치를 width, height만큼 옮긴다. }
+void Circle::move(int width, int height){
+	// 기존 중심 좌표의 위치를 width, height만큼 옮긴다.
+	center.move(width, height);	
+}
 
 
 /******************************************************************************
@@ -310,27 +355,37 @@ public:
 };
 
 // GraphicEditor 클래스 멤버인 pStart와 pLast의 용도는 [그림 9-12 참조할 것]
-GraphicEditor의 생성자 함수 {
-    pStart와 pLast 멤버 데이터를 nullptr(NULL아닌 nullptr)로 초기화 
+GraphicEditor::GraphicEditor() {
+    // pStart와 pLast 멤버 데이터를 nullptr(NULL아닌 nullptr)로 초기화 
+	pStart = nullptr;
+	pLast = nullptr;
 }
 
-GraphicEditor의 removeAllShapes 함수 {
+void GraphicEditor::removeAllShapes() {
     // 현재 생성된 모든 객체를 삭제: [그림 9-11]의 마지막 부분 참조할 것
     // Shape 객체의 linked list인 pStart에서 pLast까지 모두 삭제
-    for (Shape *p = pStart, *q; p != nullptr; p = q) {
-        p의 다음 객체에 대한 포인터를 구해 q에 저장;
-        p가 포인터하는 객체 반납;
+	Shape *p = pStart;
+    while(p != nullptr) {
+        // p의 다음 객체에 대한 포인터를 구해 q에 저장;
+        // p가 포인터하는 객체 반납;
+    	Shape *q = p->getNext();
+    	delete p;
+    	p = q;
     }
-    pStart와 pLast 멤버 데이터를 nullptr로 초기화 
+    // pStart와 pLast 멤버 데이터를 nullptr로 초기화 
+    pStart = nullptr;
+    pLast = nullptr;
 }
 
-GraphicEditor의 소멸자 함수 {
-    removeAllShapes 함수 호출하여 리스트의 모든 객체 삭제
+GraphicEditor::~GraphicEditor(){
+    // removeAllShapes 함수 호출하여 리스트의 모든 객체 삭제
+	removeAllShapes();
 }
 
 // 새로운 그래픽 객체 p를 맨 마지막인 pLast 다음에 추가
 // GraphicEditor 클래스의 멤버인 pStart와 pLast의 용도는 [그림 9-12 참조할 것]
-GraphicEditor의 add(Shape *p) 함수 { 
+void GraphicEditor::add(Shape *p){
+	/*
     pStart가 nullptr이면 {
         // [그림 9-11] 12~13행 참조
         pStart, pLast를 p로 설정한 후 리턴
@@ -340,42 +395,73 @@ GraphicEditor의 add(Shape *p) 함수 {
         pLast 뒤에 p를 추가하고(pLast의 멤버 함수 add()를 호출하여 p를 추가할 것)
         add()의 리턴 값을 pLast에 저장(pLast가 삽입된 마지막 도형을 포인터하게 함)
     }
+    */
+	if(pStart == nullptr){
+		pStart = p;
+		pLast = p;
+		return;
+	}
+	else{
+		pLast = pLast->add(p);
+	}
 }
 
 // 객체가 하나도 없으면 에러 메시지 출력 후 true 리턴, 있을 경우 false 리턴
-GraphicEditor의 empty() 함수 {
+bool GraphicEditor::empty(){
+	/*
     pStart가 nullptr이면 {
         UI의 적절한 멤버 함수 이용하여 "그려진 도형이 없습니다." 출력
         적절한 값 리턴
     }
     적절한 값 리턴
+    */
+	if(pStart == nullptr){
+		UI::println("그려진 도형이 없습니다.");
+		return true;
+	}
+	return false;
 }
 
 // 삽입된 모든 그래픽 객체들을 화면에 출력
-GraphicEditor allPaint 함수 { 
+void GraphicEditor::allPaint(){ 
     // 처음부터 끝까지 linked list를 따라 가면서 도형을 그린다.
     // [그림 9-11] 중간부분 참조할 것
+	/*
     Shape의 포인터형 변수 p를 선언하고 pStart로 초기화
     for (int i = 0; p != nullptr; ++i, p = p->getNext()) {
        // 인덱스 출력: 예), [1] 또는 [4]
        UI 적절한 멤버 함수 이용하여 "[" + to_string(i) + "]: " 출력(인덱스 출력)
        도형을 그리는 p의 멤버 함수 호출 // 도형 그리기 public 함수 호출
     }
+    */
+	Shape *p = pStart;
+	for(int i = 0; p != nullptr; ++i, p = p->getNext()){
+		UI::print("[" + to_string(i) + "]: ");	
+		p->paint();
+	}
 }
 
 // 자동으로 객체를 생성하여 리스트에 추가한다.
-GraphicEditor autoInsert 함수 { 
+void GraphicEditor::autoInsert() { 
     // 자동 삽입할 그래픽 객체의 개수를 얻어 옴(난수 발생)
+	/*
     정수형 변수 size를 선언하고 Factory::getSize()를 호출하여 리턴 값으로 초기화 
     for 문을 이용하여 size만큼 반복 수행
         Factory::create()호출하여 새로운 그래픽 객체를 자동 생성하고
         생성된 객체를 GraphicEditor의 add() 함수 호출하여 리스트에 추가
         // Factory::create()의 리턴 값을 add()의 인자로 주면 됨
     모든 객체를 화면에 보여줌 (allPaint() 사용)
+    */
+	int size = Factory::getSize();
+	for(int i = 0; i < size; i++){
+		add(Factory::create());
+	}
+	allPaint();
 }
 
 // 현재 생성된 모든 객체를 이동한다.
-GraphicEditor allMove 함수 { 
+void GraphicEditor::allMove() { 
+	/*
     객체가 전혀 없을 경우 에러 출력 후 여기서 리턴 // empty() 사용
     정수형 변수 width, height 선언 // 각 도형의 이동할 양
     // 아래 함수는 "참조에 의한 호출"임; 그림[5-8] 참조
@@ -386,17 +472,35 @@ GraphicEditor allMove 함수 {
          // for문은 allPaint()의 for를 적절히 응용 (필요 없는 변수와 문장은 빼고)
          각 도형의 move 함수 호출     // 도형 옮기기
     모든 객체를 화면에 보여줌
+    */
+	if(empty()){
+		return;
+	}
+	int width, height;
+	UI::getWidthHeight(width, height);
+	Shape *p = pStart;
+	for(int i = 0; p != nullptr; ++i, p = p->getNext()){
+		p->move(width, height);
+	}
+	allPaint();
 }
 
 // 현재 생성된 모든 객체를 삭제한다.
-GraphicEditor allRemove 함수 { 
+void GraphicEditor::allRemove(){
+	/*
     객체가 전혀 없을 경우 에러 출력 후 여기서 리턴 // empty() 사용
-    removeAllShapes 함수 호출하여 리스트의 모든 객체 삭제 
+    removeAllShapes 함수 호출하여 리스트의 모든 객체 삭제
+    */
+	if(empty()){
+		return;
+	}
+	removeAllShapes();
 }
 
 // 메인 메뉴를 보여 주고 사용자가 선택한 작업을 실행함
-GraphicEditor run 함수 {
+void GraphicEditor::run(){
     // UI 클래스의 함수들은 모두 static 함수임; 함수 호출은 예제 6-10 참조
+	/*
     UI의 적절한 함수를 사용하여 "그래픽 에디터입니다." 출력
     while문을 이용하여 다음을 반복 수행 {
         정수형 변수 menu를 선언함과 동시에 
@@ -414,6 +518,30 @@ GraphicEditor run 함수 {
         그 외(default)는 "명령 선택 오류" 출력 (UI의 멤버 함수 사용)
         }
     }
+    */
+	UI::println("그래픽 에디터입니다.");
+	while(true){
+		int menu = UI::getMainMenu();
+		switch(menu){
+		case EXIT:
+			return;
+			
+		case ALL_PAINT:
+			allPaint(); break;
+		
+		case AUTO_INSERT:
+			autoInsert(); break;
+			
+		case ALL_MOVE:
+			allMove(); break;
+			
+		case ALL_REMOVE:
+			allRemove(); break;
+		
+		default:
+			UI::println("명령 선택 오류"); break;
+		}
+	}
 }
 
 
@@ -425,6 +553,8 @@ GraphicEditor run 함수 {
 
 int main()
 {
-    GraphicEditor 변수 g 선언
-    g의 멤버 함수 run() 호출  // g는 포인터 변수가 아닌 일반 객체임
+    // GraphicEditor 변수 g 선언
+    // g의 멤버 함수 run() 호출  // g는 포인터 변수가 아닌 일반 객체임
+	GraphicEditor g;
+	g.run();
 }

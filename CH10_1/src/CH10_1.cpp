@@ -2001,54 +2001,67 @@ void PersonManager::run() {
  ******************************************************************************/
 class MultiManager
 {
-    static const int personCount = 5;
-    Person persons[personCount] = {
-        Person("p0", 10, 70.0, false, "Gwangju Nam-gu Bongseon-dong 21"),
-        Person("p1", 11, 61.1, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
-        Person("p2", 12, 52.2, false, "1001, Jungang-daero, Yeonje-gu, Busan"),
-        Person("p3", 13, 83.3, true,  "100 Dunsan-ro Seo-gu Daejeon"),
-        Person("p4", 14, 64.4, false, "88 Gongpyeong-ro, Jung-gu, Daegu"),
-    };
-    // new를 이용해 동적으로 할당할 경우 소멸자 함수를 만들어 거기서 delete 해 주어야 함
-    
-    static const int studentCount = 2;
-    Student students[studentCount] = {
-        Student("s1", 1, 65.4, true,  "Jongno-gu Seoul", "Physics", 3.8, 1),
-        Student("s2", 2, 54.3, false, "Yeonje-gu Busan", "Electronics", 2.5, 4),
-    };
-
-    static const int workerCount = 2;
-    Worker workers[workerCount] = {
-        Worker("w1", 3, 33.3, false, "Kangnam-gu Seoul",  "Samsung", "Director"),
-        Worker("w2", 4, 44.4, true,  "Dobong-gu Kwangju", "Hyundai", "Manager"),
-    };
-
-    static const int albaCount = 2;
-    StudentWorker albas[albaCount] = {
-        StudentWorker("a1", 5, 55.5, true, "Dong-gu Incheon",
-                      "Computer", 3.5, 2, "Hyundai", "Labor",
-                      "CU KangNam,Seven Eleven,GSStore Suwon", false),
-        StudentWorker("a2", 6, 66.6, false, "Sasang-gu Sejong",
-                      "History", 3.1, 1, "Kia", "CEO",
-                      "Seven Eveven,eMart Jinju,CU Bongsun", true),
-    };
-
-    static const int allPersonCount = 8;
-    Person* allPersons[allPersonCount] = {
-            &persons[0], &persons[1], &students[0], &students[1],
-            &workers[0], &workers[1], &albas[0],    &albas[1],
-    };
-
-    PersonManager personMng { allPersons, allPersonCount };
-    // 위 문장은 PersonManager personMng(allPersons, allPersonCount);와 동일함
+    static Person persons[];
+    static Student students[];
+    static Worker workers[];
+    static StudentWorker albas[];
 
 public:
+    static const int allPersonCount;
+    static Person* allPersons[];
+    PersonManager personMng { allPersons, allPersonCount };
+
     void run() {
-        cout << "PersonManager::run() starts" << endl;
+        //cout << "PersonManager::run() starts" << endl;
         personMng.run();
-        cout << "PersonManager::run() returned" << endl;
+        //cout << "PersonManager::run() returned" << endl;
     }
-}; // ch3_2, 4_1, 4_2: MultiManager class
+}; // ch3_2, 4_1, 4_2, ch8_2: MultiManager class
+
+Person MultiManager::persons[5] = {
+    Person("p0", 10, 70.0, false, "Gwangju Nam-gu Bongseon-dong 21"),
+    Person("p1", 11, 61.1, true,  "Jong-ro 1-gil, Jongno-gu, Seoul"),
+    Person("p2", 12, 52.2, false, "1001, Jungang-daero, Yeonje-gu, Busan"),
+    Person("p3", 13, 83.3, true,  "100 Dunsan-ro Seo-gu Daejeon"),
+    Person("p4", 14, 64.4, false, "88 Gongpyeong-ro, Jung-gu, Daegu"),
+};
+
+Student MultiManager::students[4] = {
+    Student("s1", 21, 65.4, true,  "Jongno-gu Seoul", "Physics", 3.8, 1),
+    Student("s2", 22, 54.3, false, "Yeonje-gu Busan", "Electronics", 2.5, 4),
+    Student("s3", 23, 55.5, true,  "Dong-gu Incheon", "Computer", 3.5, 2),
+    Student("s4", 24, 66.6, false, "Sasang-gu Sejong","History", 3.1, 1),
+};
+
+Worker MultiManager::workers[4] = {
+    Worker("w1", 31, 33.3, false, "Kangnam-gu Seoul",  "Samsung", "Director"),
+    Worker("w2", 32, 44.4, true,  "Dobong-gu Kwangju", "Hyundai", "Manager"),
+    Worker("w3", 33, 55.5, true,  "Dong-gu Incheon",   "Hyundai", "Labor"),
+    Worker("w4", 34, 66.6, false, "Sasang-gu Sejong",  "Kia", "CEO"),
+};
+
+StudentWorker MultiManager::albas[4] = {
+    StudentWorker("a1", 41, 55.5, true, "Dong-gu Incheon",
+                  "Computer", 3.5, 2, "Hyundai", "Labor",
+                  "CU KangNam,Seven Eleven,GSStore Suwon", false),
+    StudentWorker("a2", 42, 66.6, false, "Sasang-gu Sejong",
+                  "History", 3.1, 1, "Kia", "CEO",
+                  "Seven Eveven,eMart Jinju,CU Bongsun", true),
+    StudentWorker("a3", 43, 51.9, false, "Buk-gu Daejeon",
+                  "Computer", 3.5, 2, "Samsung", "Manager",
+                  "Youngpung,Kyobo Gwanghwa,E-mart Suwon", true),
+    StudentWorker("a4", 44, 66.6, true, "Nam-gu Busan",
+                  "History", 3.1, 1, "LG", "DepartmentHead",
+                  "CU, FamilyMart, LotteMart, HomePlus", false),
+};
+
+const int MultiManager::allPersonCount = 16;
+Person* MultiManager::allPersons[allPersonCount] = {
+        &persons[0],  &persons[1],  &persons[2],  &persons[3],
+        &students[0], &students[1], &students[2], &students[3],
+        &workers[0],  &workers[1],  &workers[2],  &workers[3],
+        &albas[0],    &albas[1],    &albas[2],    &albas[3],
+};
 
 /******************************************************************************
  * ch3_1: Class And Object
@@ -3331,7 +3344,7 @@ public:
         int menuCount = 7; // 상수 정의
         string menuStr =
         		"******************************* Main Menu *********************************\n"
-        		"* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9)                          *\n"
+        		"* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9, 10)                      *\n"
         		"* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *\n"
         		"* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8)                            *\n"
         		"***************************************************************************\n";

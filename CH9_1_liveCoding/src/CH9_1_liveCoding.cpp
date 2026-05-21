@@ -8,11 +8,11 @@ public:
     // 추상 메서드로 compareTo 정의
     virtual int compareTo(AbstractItem* other) const = 0;
     // 추상 메서드로 getSize 정의
-    /*              */
+    virtual int getSize() const = 0;
     // 추상 메서드로 getName 정의
-    /*                */
+    virtual string getName() const = 0;
     // 가상 소멸자
-   /*                  */
+    virtual ~AbstractItem(){}
 };
 
 // ConcretePackage 클래스는 AbstractItem 클래스를 상속
@@ -26,13 +26,26 @@ public:
     ConcretePackage(string n, int l, int w, int h) : name(n), length(l), width(w), height(h) {}
 
     // 패키지의 부피를 계산하여 반환하는 메서드
-    /*                     */
+    int getSize() const override{
+    	return length * width * height;
+    }
 
     // 패키지의 이름을 반환하는 메서드
-    /*                       */
+    string getName() const override{
+    	return name;
+    }
 
     // 다른 패키지와의 크기를 비교하는 메서드
-     /*                         */
+    int compareTo(AbstractItem* other) const override{
+    	int chk;
+    	int curSize = this->getSize();
+    	int othSize = other->getSize();
+    	if(curSize > othSize) chk = 1;
+    	else if(curSize < othSize) chk = -1;
+    	else chk = 0;
+    	return chk;
+    }
+};
 
 int main() {
     // 패키지 포인터 배열 선언
@@ -48,19 +61,25 @@ int main() {
 
     cout << "패키지 크기 비교 =>" << endl;
 
-     string firstName = packages[0]->getName(); // 첫 번째 패키지의 이름
+    string firstName = packages[0]->getName(); // 첫 번째 패키지의 이름
     for (int i = 1; i < 3; ++i) {
-        /*                            */                      // 현재 패키지의 이름
-        /*                             */                       // 첫 번째 패키지와 비교
+    	string curName = packages[i]->getName();				// 현재 패키지의 이름
+        int chk = packages[0]->compareTo(packages[i]);          // 첫 번째 패키지와 비교
         // 비교 결과에 따라 출력
-       /*
-
-        */
-
+    	if(chk > 0){
+    		cout << firstName << " > " << curName << endl;
+    	}
+    	else if(chk < 0){
+    		cout << firstName << " < " << curName << endl;    		
+    	}
+    	else{
+    		cout << firstName << " = " << curName << endl;    		    		
+    	}
+    }
     // 메모리 해제(동적으로 할당된 패키지 객체 삭제)
-  /*
-
-   */
+    for(int i = 0; i < 3; i++){
+    	delete packages[i];
+    }
 
     return 0;
 }

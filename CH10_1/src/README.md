@@ -536,3 +536,62 @@ display(): count 13
 ...
 [12] a3 43 51.9 false :Buk-gu Daejeon:
 ```
+
+### 문제 9 설명
+```
+PMbyVector::copy()
+
+PMbyVector::copy()를 구현하고, run()의 func_arr[]에 등록하라.
+이 함수는 각 Vector의 기존 [i]번째 정보를 복사해서 Vector의 끝에 새로 추가한다.
+(물론 중복을 피하기 위해 복사후 값을 약간 변경해서 추가함)
+1) 구현 시 PersonManager::copyPersons()를 복사해와 삽입하라.
+2) persons.size()의 persons 대신 PMbyVector 내의 다른 Vector 이름으로 수정하라.
+3) PMbyVector::pushPerson(Person* p)에서 address 관련 문장을 복사해서
+    persons.push_back(p); 앞에 추가하라. 그런 후
+    Person *p = persons[i]->clone();과 persons.push_back(p);을 삭제하라.
+4) 지역변수 string name의 변수명 name을 모두 newName으로 변경하라.
+5) 모든 p->get...()들을 상응하는 Vector에서 인덱스 [i] 값을 가져 오도록 변경하라.
+    예를 들어, p->getName()의 경우 name[i]로 변경하라.
+6) 모든 p->set(...)들을 상응하는 Vector의 push_back(...)을 호출하도록 변경하라.
+    예를 들어, p->setName(newName)은 name.push_back(newName)으로 변경하라.
+7) married의 경우 cpCount가 홀수(cpCount % 2)면 !married[i] 값을 추가하고
+    짝수이면 married[i]를 추가하라. (기존 문장에 else문을 추가해야 한다.)
+    또는 if else 문을 아래처럼 3항 연산자를 사용하여 한 문장으로 해도 된다.
+    married.push_back( ? : );
+```
+
+### 문제 9 실행 결과
+```
+7    // PMbyVector
+1    // Display
+display(): count 16
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[1] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+...
+[14] a3 43 51.9 false :Buk-gu Daejeon:
+[15] a4 44 66.6 true :Nam-gu Busan:
+
+6    // Copy
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+...
+[15] a4 44 66.6 true :Nam-gu Busan:
+[16] pp0 30 71 true :Gwangju Nam-gu Bongseon-dong 21:
+[17] pp1 31 62.1 false :Jong-ro 1-gil, Jongno-gu, Seoul:
+...
+[30] aa3 63 52.9 true :Buk-gu Daejeon:
+[31] aa4 64 67.6 false :Nam-gu Busan:
+
+6    // Copy
+...
+[31] aa4 64 67.6 false :Nam-gu Busan:
+[32] ppp0 50 72 false :Gwangju Nam-gu Bongseon-dong 21:
+[33] ppp1 51 63.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+...
+[46] aaa3 83 53.9 false :Buk-gu Daejeon:
+[47] aaa4 84 68.6 true :Nam-gu Busan:
+[48] pppp0 70 73 true :Gwangju Nam-gu Bongseon-dong 21:
+[49] pppp1 71 64.1 false :Jong-ro 1-gil, Jongno-gu, Seoul:
+...
+[62] aaaa3 103 54.9 true :Buk-gu Daejeon:
+[63] aaaa4 104 69.6 false :Nam-gu Busan:
+```

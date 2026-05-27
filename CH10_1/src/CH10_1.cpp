@@ -3501,11 +3501,32 @@ void PMbyVector::remove(){
     display();
 }
 
+void PMbyVector::copy(){
+    cpCount++;
+    for (unsigned i = 0, size = name.size(); i < size; ++i) {
+    	string newName = name[i];
+        for (int j = 0; j < cpCount; ++j)
+            newName = newName[0] + newName;  // 이름 변경
+        
+        name.push_back(newName);
+        id.push_back(id[i] + cpCount * 20);
+        weight.push_back(weight[i] + cpCount);
+        if(cpCount % 2 == 1){
+        	married.push_back(!married[i]);
+        }
+        else{
+        	married.push_back(married[i]);        	
+        }
+        address.push_back(copyAddress(address[i]));
+    }
+    display();
+}
+
 void PMbyVector::run() {
     using func_t = void (PMbyVector::*)();
     func_t func_arr[] = {
         nullptr, &PMbyVector::display, &PMbyVector::append, &PMbyVector::clear, &PMbyVector::insert,
-		&PMbyVector::remove,
+		&PMbyVector::remove, &PMbyVector::copy,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

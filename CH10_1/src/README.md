@@ -481,3 +481,58 @@ P p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
 display(): count 1
 [0] p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
 ```
+
+### 문제 8 설명
+```
+PMbyVector::remove()
+
+PMbyVector::remove()를 구현하고, run()의 func_arr[]에 등록하라.
+1) 구현 시 PersonManager::remove()를 복사해와 삽입하라.
+2) persons.size()의 persons 대신 PMbyVector 내의 다른 Vector 이름으로 수정하라.
+3) delete persons[index]; persons.erase(index); 두 개의 문장 대신
+    erasePerson(index);를 호출하라.
+4) erasePerson(int index) 함수를 구현하라. 
+    이 함수는 각 Vector의 index 위치의 원소를 제거한다. 구현시 먼저 
+    i) address[index]는 동적으로 할당 받은 char[] 배열이므로 
+        이 메모리를 먼저 반납하라. 반납시 []를 유의하라.
+    i) insertPerson(int index, Person* p)의 내용을 복사해서 위 문장 뒤에 삽입하라.
+    ii) insert(...)를 erase(...)로 변경하고, 두번째 인자를 모두 제거하라.
+```
+
+### 문제 8 실행 결과
+```
+7    // PMbyVector
+1    // Display
+display(): count 16
+...  // [문제 3] 실행 결과와 동일
+
+5    // Delete
+Index to delete? 0
+display(): count 15
+[0] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[1] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[...
+[13] a3 43 51.9 false :Buk-gu Daejeon:
+[14] a4 44 66.6 true :Nam-gu Busan:
+
+5    // Delete
+Index to delete? 14
+display(): count 14
+[0] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[1] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+...
+[12] a2 42 66.6 false :Sasang-gu Sejong:
+[13] a3 43 51.9 false :Buk-gu Daejeon:
+
+5    // Delete
+Index to delete? 14
+14: OUT of selection range(0 ~ 13)
+Index to delete? 3
+display(): count 13
+...
+[2] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[3] s2 22 54.3 false :Yeonje-gu Busan:
+[4] s3 23 55.5 true :Dong-gu Incheon:
+...
+[12] a3 43 51.9 false :Buk-gu Daejeon:
+```

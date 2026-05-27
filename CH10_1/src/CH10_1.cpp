@@ -3434,6 +3434,15 @@ void PMbyVector::insertPerson(int index, Person* p){
     address.insert(index, copyAddress(p->getAddress()));
 }
 
+void PMbyVector::erasePerson(int index){
+	delete address[index];
+    name   .erase(index);
+    id     .erase(index);
+    weight .erase(index);
+    married.erase(index);
+    address.erase(index);
+}
+
 void PMbyVector::display() { // Menu item 1
     int count = name.size();
     cout << "display(): count " << count << endl;
@@ -3482,10 +3491,21 @@ void PMbyVector::insert(){
     display();
 }
 
+void PMbyVector::remove(){
+	if(name.empty() == 1){
+		cout << "No entry to remove" << endl;
+		return;
+	}
+	int index = UI::getIndex("Index to delete? ", name.size());
+	erasePerson(index);
+    display();
+}
+
 void PMbyVector::run() {
     using func_t = void (PMbyVector::*)();
     func_t func_arr[] = {
-        nullptr, &PMbyVector::display, &PMbyVector::append, &PMbyVector::clear, &PMbyVector::insert, 
+        nullptr, &PMbyVector::display, &PMbyVector::append, &PMbyVector::clear, &PMbyVector::insert,
+		&PMbyVector::remove,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

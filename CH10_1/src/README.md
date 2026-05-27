@@ -408,3 +408,22 @@ display(): count 0
 1    // Display
 display(): count 0
 ```
+
+### 문제 6 설명
+```
+PMbyVector::~PMbyVector()
+
+PMbyVector의 객체가 소멸될 때 [문제 5]에서처럼 address Vector에 저장된 
+모든 메모리를 반납해야 한다. (이들은 생성자에서 동적으로 할당 받은 char[] 배열이기 때문이다.)
+PMbyVector::~PMbyVector()를 구현하라.  
+구현 시 앞서 구현한 clearVectors()를 호출하기만 하면 된다.
+```
+
+### 문제 6 실행 결과
+```
+7    // PMbyVector: PMbyVector 객체 생성
+1    // Display
+display(): count 16
+...  // [문제 3] 실행 결과와 동일
+0    // Exit: PMbyVector 객체 소멸되면서 ~PMbyVector() 호출됨
+```

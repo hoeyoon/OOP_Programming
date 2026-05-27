@@ -3381,7 +3381,7 @@ public:
 // cpCount{}는 cpCount(0) 또는 cpCount=0와 같은 의미
 PMbyVector::PMbyVector(): cpCount{} { pushArray(); }
 
-PMbyVector::~PMbyVector() { /* 코드 추가 예정 */ }
+PMbyVector::~PMbyVector() { clearVectors(); }
 
 // Person, Student, Worker, StudentWorker 객체들의 정보를 Vector들에 추가
 void PMbyVector::pushArray() {

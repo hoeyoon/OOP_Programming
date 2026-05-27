@@ -3415,6 +3415,17 @@ void PMbyVector::printNotice(const string& preMessage, const string& postMessage
     cout << postMessage << endl;
 }
 
+void PMbyVector::clearVectors(){
+	for(int i = 0; i < address.size(); i++){
+		delete address[i];
+	}
+	name.clear();
+	id.clear();
+	weight.clear();
+	married.clear();
+	cpCount = 0;
+}
+
 void PMbyVector::display() { // Menu item 1
     int count = name.size();
     cout << "display(): count " << count << endl;
@@ -3443,10 +3454,15 @@ void PMbyVector::append(){
     display();
 }
 
+void PMbyVector::clear(){
+    clearVectors();
+    display();
+}
+
 void PMbyVector::run() {
     using func_t = void (PMbyVector::*)();
     func_t func_arr[] = {
-        nullptr, &PMbyVector::display, &PMbyVector::append, 
+        nullptr, &PMbyVector::display, &PMbyVector::append, &PMbyVector::clear, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

@@ -380,3 +380,31 @@ display(): count 23
 [21] w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul:
 [22] a4 17 88 true :Kangdong-gu, Daejeon:
 ```
+
+### 문제 5 설명
+```
+PMbyVector::clear()
+
+PMbyVector::clear()를 구현하고, run()의 func_arr[]에 등록하라.
+1) 구현 시 PersonManager의 clear()를 복사해와 삽입하라.
+2) deleteElemets()를 clearVectors()로 교체하라.
+3) clearVectors()를 구현하라. 
+    구현 시 PersonManager::deleteElemets()를 참고하여
+    i) for를 이용하여 address.size()개의 각 address[i]가 포인터하는 메모리를 
+        모두 반납하라. address[i]는 동적으로 할당 받은 char[] 배열이므로 
+        반납시 []를 유의하라.
+    ii) name, id, weight, married, address Vector 들의 모든 원소를 제거하라.
+    iii) cpCount = 0;
+```
+
+### 문제 5 실행 결과
+```
+7    // PMbyVector
+1    // Display
+display(): count 16
+...  // [문제 3] 실행 결과와 동일
+3    // Clear
+display(): count 0
+1    // Display
+display(): count 0
+```

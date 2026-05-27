@@ -595,3 +595,31 @@ display(): count 16
 [62] aaaa3 103 54.9 true :Buk-gu Daejeon:
 [63] aaaa4 104 69.6 false :Nam-gu Busan:
 ```
+
+### 문제 10 설명
+```
+PMbyVector::reset()
+
+PMbyVector::reset()를 구현하고, run()의 func_arr[]에 등록하라.
+1) 구현 시 PersonManager::reset()를 복사해와 삽입하라.
+2) deleteElemets() 대신 clearVectors()를 호출하도록 수정하라.
+```
+
+### 문제 10 실행 결과
+```
+7    // PMbyVector
+1    // Display
+display(): count 16
+3    // Clear
+display(): count 0
+7    // Reset
+display(): count 16
+// 위 1번 메뉴(Display)와 동일
+6    // Copy
+display(): count 32
+6    // Copy
+display(): count 64
+7    // Reset
+display(): count 16
+// 위 1번 메뉴(Display)와 동일
+```

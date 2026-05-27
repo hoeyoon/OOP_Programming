@@ -1,7 +1,7 @@
 /*
- * CH9: ch9_2.cpp
+ * CH10: ch10_1.cpp
  *
- *  Created on: 2026. 05. 18.
+ *  Created on: 2026. 05. 27.
  *      Author: 정회윤
  *
  *  + VectorPerson -> Vector로 이름 변경
@@ -3423,6 +3423,7 @@ void PMbyVector::clearVectors(){
 	id.clear();
 	weight.clear();
 	married.clear();
+	address.clear();
 	cpCount = 0;
 }
 
@@ -3522,11 +3523,17 @@ void PMbyVector::copy(){
     display();
 }
 
+void PMbyVector::reset(){
+    clearVectors();
+    pushArray();
+    display();
+}
+
 void PMbyVector::run() {
     using func_t = void (PMbyVector::*)();
     func_t func_arr[] = {
         nullptr, &PMbyVector::display, &PMbyVector::append, &PMbyVector::clear, &PMbyVector::insert,
-		&PMbyVector::remove, &PMbyVector::copy,
+		&PMbyVector::remove, &PMbyVector::copy, &PMbyVector::reset, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

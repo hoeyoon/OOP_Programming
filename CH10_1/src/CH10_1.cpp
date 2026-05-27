@@ -1477,11 +1477,12 @@ void CurrentUser::run() {
 // 필요에 따라 포인터를 삽입, 삭제, 추가 등을 할 수 있다.
 // 삽입하는 포인터 개수가 점점 많아지면 pVector[] 배열을 위한 메모리를 자동 확장하기도 한다.
 
-class VectorPerson
+template < typename T >
+class Vector
 {
     static const int DEFAULT_SIZE = 10; // pVector의 디폴트 배열 원소 개수
 
-    Person **pVector; // Person *pVector[]; Person에 대한 포인터들의 배열, 배열에 저장될 값이 Person *이다.
+    T *pVector; // Person *pVector[]; Person에 대한 포인터들의 배열, 배열에 저장될 값이 Person *이다.
     int count;        // pVector 배열에 현재 삽입된 객체 포인터의 개수
     int allocSize;    // 할당 받의 pVector의 총 배열 원소의 개수
 
@@ -1489,13 +1490,13 @@ class VectorPerson
 
 public:
     //VectorPerson() :VectorPerson{DEFAULT_SIZE} {}
-    VectorPerson(int capacity = DEFAULT_SIZE);
-    VectorPerson(const VectorPerson& vp);
-    ~VectorPerson();
+    Vector(int capacity = DEFAULT_SIZE);
+    Vector(const Vector& vp);
+    ~Vector();
 
     // 아래 긱 함수이름 뒤의 const는 그 함수가 클래스 멤버 변수들을 수정하지 않고 읽기만 한다는 의미임
     // pVector[index]의 포인터 값을 반환
-    Person* at(int index) const { return pVector[index]; }
+    T at(int index) const { return pVector[index]; }
 
     // 할당 받의 pVector의 총 배열 원소의 개수를 반환
     int     capacity()    const { return allocSize; }
@@ -1510,22 +1511,23 @@ public:
     int     size()        const { return count; }
 
     // pVector 배열에 마지막 삽입된 원소 뒤에 새로운 원소 p를 삽입하고 현재 삽입된 객체 개수를 증가
-    void push_back(Person* p);
+    void push_back(T p);
     void erase(int index);
-    void insert(int index, Person* p);
+    void insert(int index, T p);
 
-    Person* operator [] (int index) const;
+    T operator [] (int index) const;
     bool operator ! ();
     operator bool ();
-    VectorPerson& operator = (const VectorPerson& vp);
-    VectorPerson  operator + (const VectorPerson& vp);
-    VectorPerson& operator += (const VectorPerson& vp);
+    Vector& operator = (const Vector& vp);
+    Vector  operator + (const Vector& vp);
+    Vector& operator += (const Vector& vp);
 };
 
-void VectorPerson::extend_capacity(int capacity) {
-    Person **saved_persons = pVector; // 기존의 pVector를 백업함
+template < typename T >
+void Vector<T>::extend_capacity(int capacity) {
+    T *saved_persons = pVector; // 기존의 pVector를 백업함
     allocSize = capacity;
-    pVector = new Person*[allocSize];
+    pVector = new T[allocSize];
     for(int i = 0; i < count; i++){
     	pVector[i] = saved_persons[i];
     }
@@ -1534,26 +1536,30 @@ void VectorPerson::extend_capacity(int capacity) {
 }
 
 // capacity는 할당해야 할 배열 원소의 개수
-VectorPerson::VectorPerson(int capacity) : count{0}, allocSize{capacity} {
+template < typename T >
+Vector<T>::Vector(int capacity) : count{0}, allocSize{capacity} {
     //cout << "VectorPerson::VectorPerson(" << allocSize << ")" << endl;
-    pVector = new Person*[allocSize]; // Person* 들의 배열을 위한 동적 메모리 할당
+    pVector = new T[allocSize]; // Person* 들의 배열을 위한 동적 메모리 할당
 }
 
-VectorPerson::VectorPerson(const VectorPerson& vp){
+template < typename T >
+Vector<T>::Vector(const Vector<T>& vp){
     cout << "VectorPerson::VectorPerson(const VectorPerson& vp)" << endl;
     allocSize = vp.allocSize;
     count = vp.count;
-    pVector = new Person*[allocSize];
+    pVector = new T[allocSize];
     for(int i = 0; i < count; i++){
     	pVector[i] = vp.pVector[i];
     }
 }
 
-VectorPerson::~VectorPerson() {
+template < typename T >
+Vector<T>::~Vector() {
     //cout << "VectorPerson::~VectorPerson(): pVector deleted" << endl;
 }
 
-void VectorPerson::push_back(Person *p){
+template < typename T >
+void Vector<T>::push_back(T p){
 	if(count < allocSize){
 		pVector[count++] = p;
 	}
@@ -1563,7 +1569,8 @@ void VectorPerson::push_back(Person *p){
 	}
 }
 
-void VectorPerson::erase(int index) {
+template < typename T >
+void Vector<T>::erase(int index) {
 	/*
     index가 음수이거나 마지막 원소보다 큰 인덱인 경우 바로 리턴하라.
     pVector[index] 원소를 삭제하라.
@@ -1582,7 +1589,8 @@ void VectorPerson::erase(int index) {
 	count--;
 }
 
-void VectorPerson::insert(int index, Person* p) {
+template < typename T >
+void Vector<T>::insert(int index, T p) {
 	/*
 	현재 벡터 내에 삽입된 원소의 개수가 할당된 원소의 개수와 같거나 큰 경우
 		기존 함수를 호출하여 pVector의 용량을 먼저 확장한다. [push_back() 참조]
@@ -1600,23 +1608,27 @@ void VectorPerson::insert(int index, Person* p) {
 	count++;
 }
 
-Person* VectorPerson::operator [] (int index) const{
+template < typename T >
+T Vector<T>::operator [] (int index) const{
 	return pVector[index];
 }
 
-bool VectorPerson::operator ! (){
+template < typename T >
+bool Vector<T>::operator ! (){
 	return empty();
 }
 
-VectorPerson::operator bool (){
+template < typename T >
+Vector<T>::operator bool (){
 	return !empty();
 }
 
-VectorPerson& VectorPerson::operator = (const VectorPerson& vp){
+template < typename T >
+Vector<T>& Vector<T>::operator = (const Vector<T>& vp){
 	if(vp.count > allocSize){
 		delete []pVector;
 		allocSize = vp.allocSize;
-		pVector = new Person*[allocSize];
+		pVector = new T[allocSize];
         //cout << "VectorPerson::operator = : capacity extended to " << allocSize << endl;
 	}
 	count = vp.count;
@@ -1626,8 +1638,9 @@ VectorPerson& VectorPerson::operator = (const VectorPerson& vp){
 	return *this;
 }
 
-VectorPerson VectorPerson::operator + (const VectorPerson& vp){
-	VectorPerson tmp(this->count + vp.count);
+template < typename T >
+Vector<T> Vector<T>::operator + (const Vector<T>& vp){
+	Vector<T> tmp(this->count + vp.count);
 	for(int i = 0; i < count; i++){
 		tmp.pVector[i] = pVector[i];
 	}
@@ -1638,7 +1651,8 @@ VectorPerson VectorPerson::operator + (const VectorPerson& vp){
 	return tmp;
 }
 
-VectorPerson& VectorPerson::operator += (const VectorPerson& vp){
+template < typename T >
+Vector<T>& Vector<T>::operator += (const Vector<T>& vp){
 	if((vp.count + count) > allocSize){
 		extend_capacity(vp.allocSize + allocSize);
 	}
@@ -1701,7 +1715,7 @@ public:
 
 class PersonManager: public BaseStation  //ch9_2 상속
 {
-    VectorPerson persons;
+    Vector<Person*> persons;
     // Factory factory;
     Person** array;     // ch7_3 추가
     int arrLen;         // ch7_3 추가
@@ -2844,9 +2858,9 @@ class VectorOperator
     };
     int pa_len = sizeof(pa) / sizeof(pa[0]);
 
-    VectorPerson pv1, pv2;
+    Vector<Person*> pv1, pv2;
 
-    void disp_vector(const VectorPerson& pv) {
+    void disp_vector(const Vector<Person*>& pv) {
         int count = pv.size();
         cout << "count " << count << endl;
         for (int i = 0; i < count; ++i) {
@@ -2873,7 +2887,7 @@ public:
     }
 
     void operatorNot() { // Memu item 2
-        VectorPerson pv;
+        Vector<Person*> pv;
         disp_vector(pv);
 
         // operator bool() 호출
@@ -2899,15 +2913,15 @@ public:
         // pv[0]는 동적으로 할당받은 주소가 아니므로, 즉 배열 원소 pa[0]의 주소이므로 반납하지 않아도 됨
     }
 
-    VectorPerson call_return_value(VectorPerson pv) {
+    Vector<Person*> call_return_value(Vector<Person*> pv) {
         cout << "pv: "; disp_vector(pv);
         cout << "return pv1 " << endl;
         return pv1;
     }
 
     void copyConstructor() { // Memu item 3
-        cout << "VectorPerson pv3 = pv2" << endl;
-        VectorPerson pv3 = pv2;  // 묵시적 복사생성자 호출; VectorPerson pv3(pv2)와 동일
+        cout << "Vector<Person*> pv3 = pv2" << endl;
+        Vector<Person*> pv3 = pv2;  // 묵시적 복사생성자 호출; VectorPerson pv3(pv2)와 동일
         cout << "pv3: "; disp_vector(pv3);
         pv3.erase(0);
         cout << "pv3.erase(0)" << endl;
@@ -2922,8 +2936,8 @@ public:
     }
 
     void operatorAssign() { // Memu item 4
-        cout << "VectorPerson pv3 = pv2" << endl;
-        VectorPerson pv3 = pv2;
+        cout << "Vector<Person*> pv3 = pv2" << endl;
+        Vector<Person*> pv3 = pv2;
         cout << "pv3: "; disp_vector(pv3);
         cout << "pv3 = pv1" << endl;
         pv3 = pv1; // 대입 연산자
@@ -2932,14 +2946,14 @@ public:
         for (int i = 0; i < 9; ++i) // 원소개수가 11개 이상이면 pv3 메모리가 확장되어야 함
             pv3.push_back(pa+2);
         cout << "pv3: "; disp_vector(pv3);
-        VectorPerson pv4;
+        Vector<Person*> pv4;
         cout << "pv4 = pv3" << endl;
         pv4 = pv3; // 대입 연산자: 원소개수가 11개 이상이면 pv4의 메모리가 확장되어야 함
         cout << "pv4: "; disp_vector(pv4);
     }
 
     void operatorAdd() { // Memu item 5
-        VectorPerson pv3;
+        Vector<Person*> pv3;
         cout << "pv3 = pv1 + pv2" << endl;
         pv3 = pv1 + pv2;
         cout << "pv3: "; disp_vector(pv3);
@@ -2949,8 +2963,8 @@ public:
     }
 
     void operatorAddAssign() { // Memu item 6
-        cout << "VectorPerson pv4 = pv1: " << endl;
-        VectorPerson pv4 = pv1;   // 묵시적 복사생성자 호출
+        cout << "Vector<Person*> pv4 = pv1: " << endl;
+        Vector<Person*> pv4 = pv1;   // 묵시적 복사생성자 호출
         cout << "pv4: "; disp_vector(pv4);
         cout << "pv4 += pv2" << endl;
         pv4 += pv2; // += 연산자

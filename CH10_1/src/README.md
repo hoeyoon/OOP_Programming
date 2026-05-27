@@ -130,3 +130,67 @@ display(): count 16
 [14] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
 [15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
 ```
+
+### 문제 2 설명
+```
+지금까지 VectorPerson에 삽입하고, 저장하고, 빼내는 원소의 데이타 타입은 Person* 였다.
+다시 말하지만 Person의 객체가 아니고 포인터를 pVector[]에 저장했다.
+이제 VectorPerson을 Person, Student, Worker, StudWorker 등의 
+다양한 종류의 객체 또는 포인터를 저장할 수 있는 템플릿 클래스로 만들어 보자. 
+---------------------------------------------------------------------------
+기존 VectorPerson 클래스를 템플릿 클래스 Vector< T >로 변환해 보자.
+주의: 아래 각 항목을 실수없이 차근차근 수행하기 바란다.
+---------------------------------------------------------------------------
+1) class VectorPerson의 [선언부] 및 [멤버 함수 구현부]에서 VectorPerson 단어들을 
+    모두 Vector로 수정하라. (이 외의 다른 곳은 아직 수정하지 마라.)
+---------------------------------------------------------------------------
+2)  아래 한 행 전체를 
+template < typename T >
+    클래스 외부에서 구현한 모든 멤버 함수 앞 줄에 추가하고, class Vector { 앞 줄에도 추가하라. 
+    단, 클래스 [내부]에 있는 멤버 함수 앞에는 추가하지 마라.
+---------------------------------------------------------------------------
+3) 클래스 [외부]에서 구현한 모든 멤버 함수에 대해 아래를 수행하라. (클래스 [내부] 함수들은 제외)
+    i) 외부에 구현된 멤버 함수들(operator 연산자 포함)의 이름 앞에 있는 
+        Vector:: 을 Vector< T >:: 로 변경하라. 
+    ii) 외부에 구현된 operator =, operator +=, operator + 연산자 함수의 
+        [리턴 타입], [매개변수 타입], [지역 변수 타입]이 Vector 이면 Vector< T > 로 변경하고,
+        Vector& 이면 Vector< T >& 로 변경하라.
+---------------------------------------------------------------------------
+ 4) 지금까지 Vector에 삽입하고, 저장하고, 빼내는 원소의 데이타 타입은 Person* 였다.
+    이제 변수 선언 시 Person* 를 임의의 데이타 타입(타입 매개변수) T 로 변경하자. 
+    즉, Vector 클래스의 [선언부]와 [구현부]에서 Person* 를 모두 T 로 변경하고, 
+    Person** 를 T* 로 변경하라.
+    즉, Person **pVector 선언, at()와 operator [] 함수의 리턴 데이타 타입 등이다.
+    이렇게 하면 Vector< Person* > 또는 Vector< Person >로 선언하여 
+    Person 포인터 뿐만 아니라 Person 객체도 벡터 내에 저장할 수 있게 된다.
+---------------------------------------------------------------------------
+5) PersonManager 클래스 내의 멤버 변수 VectorPerson persons; 를 
+    Vector< Person* > persons; 로 변경하라. 즉, Vector 클래스에 
+    삽입하고, 저장하고, 빼내는 원소의 데이타 타입은 여전히 Person* 로 하겠다는 것이다.
+---------------------------------------------------------------------------
+6) VectorOperator 클래스 내에서 사용된 모든 VectorPerson 단어를 Vector< Person* > 
+    로 변경하라. 출력 문장 내의 "VectorPerson ..." 단어도 마찬가지로 수정하라.
+```
+
+### 문제 2 실행 결과
+```
+// 컴파일 했을 경우 정상적으로 컴파일되어야 하며 
+// 아래 메뉴항목을 순서적으로 실행했을 때 모두 정상 실행되어야 한다. (죽지 않고 실행된다면 OK)
+
+******************************* Main Menu *...
+* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8)                            *
+***************************************************************************
+5   // OperatorOverload
+9   // VectorOOL
+1   // operator[]
+1   // Display
+0   // Exit
+2   // operator!
+3   // CopyConstructor
+4   // operator=
+5   // operator+
+6   // operator=+
+0   // Exit
+0   // Exit
+0   // Exit
+```

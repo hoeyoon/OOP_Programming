@@ -3426,6 +3426,14 @@ void PMbyVector::clearVectors(){
 	cpCount = 0;
 }
 
+void PMbyVector::insertPerson(int index, Person* p){
+    name   .insert(index, p->getName());
+    id     .insert(index, p->getId());
+    weight .insert(index, p->getWeight());
+    married.insert(index, p->getMarried());
+    address.insert(index, copyAddress(p->getAddress()));
+}
+
 void PMbyVector::display() { // Menu item 1
     int count = name.size();
     cout << "display(): count " << count << endl;
@@ -3459,10 +3467,25 @@ void PMbyVector::clear(){
     display();
 }
 
+void PMbyVector::insert(){
+	int index;
+	if(name.empty() == 1){
+		index = 0;
+	}
+	else{
+		index = UI::getIndex("Index to insert in front? ", name.size() + 1);
+	}
+	printNotice("Input", "to insert:");
+	Person* p = Factory::inputPerson(cin);
+	if (p == nullptr) return;
+	insertPerson(index, p);
+    display();
+}
+
 void PMbyVector::run() {
     using func_t = void (PMbyVector::*)();
     func_t func_arr[] = {
-        nullptr, &PMbyVector::display, &PMbyVector::append, &PMbyVector::clear, 
+        nullptr, &PMbyVector::display, &PMbyVector::append, &PMbyVector::clear, &PMbyVector::insert, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

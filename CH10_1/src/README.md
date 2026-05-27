@@ -427,3 +427,57 @@ display(): count 16
 ...  // [문제 3] 실행 결과와 동일
 0    // Exit: PMbyVector 객체 소멸되면서 ~PMbyVector() 호출됨
 ```
+
+### 문제 7 설명
+```
+PMbyVector::insert()
+
+PMbyVector::insert()를 구현하고, run()의 func_arr[]에 등록하라.
+1) 구현 시 PersonManager::insert()를 복사해와 삽입하라.
+2) persons.size()의 persons 대신 PMbyVector의 다른 Vector 이름으로 수정하라. 
+    (name 또는 다른 Vector 이름을 사용해도 됨)
+3) p가 nullptr인 경우 바로 리턴하라.
+4) (p가 nullptr가 아닌 경우)
+    persons.insert(index, p)를 호출하는 대신 아래 두 문장들로 대체하라.
+    i)  insertPerson(index, p)을 호출하여 객체의 정보를 Vector[index] 위치에 삽입하라.
+    ii) p가 포인터하는 객체 메모리는 더 이상 필요 없으므로 메모리를 반납하라.
+5) insertPerson(int index, Person* p) 함수를 구현하라. 구현 시
+    i) pushPerson(Person* p)의 내용을 복사해 삽입하라.
+    ii) Vector::push_back(...) 함수 호출 대신 insert(...) 함수를 호출하라.
+```
+
+### 문제 7 실행 결과
+```
+7    // PMbyVector
+1    // Display
+display(): count 16
+...  // [문제 3] 실행 결과와 동일
+
+4    // Insert
+Index to insert in front? 0
+Input [delimiter(P, S, W, or A)] [person information] to insert:
+P p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+display(): count 17
+[0] p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:       // 새로 추가된 원소
+[1] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+... 
+[16] a4 44 66.6 true :Nam-gu Busan:
+
+4    // Insert
+Index to insert in front? 17
+Input [delimiter(P, S, W, or A)] [person information] to insert:
+A a4 17 88 true :Kangdong-gu, Daejeon: Electronics 3.4 2 NC Developer :CU, GS: false
+display(): count 18
+...  // 위와 동일
+[16] a4 44 66.6 true :Nam-gu Busan:
+[17] a4 17 88 true :Kangdong-gu, Daejeon:        // 새로 추가된 원소
+
+3    // Clear
+display(): count 0
+
+4    // Insert: count가 0이므로 index to insert를 입력 받지 않음
+Input [delimiter(P, S, W, or A)] [person information] to insert:
+P p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+display(): count 1
+[0] p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+```

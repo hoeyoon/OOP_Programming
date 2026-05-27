@@ -1544,7 +1544,7 @@ Vector<T>::Vector(int capacity) : count{0}, allocSize{capacity} {
 
 template < typename T >
 Vector<T>::Vector(const Vector<T>& vp){
-    cout << "VectorPerson::VectorPerson(const VectorPerson& vp)" << endl;
+    //cout << "VectorPerson::VectorPerson(const VectorPerson& vp)" << endl;
     allocSize = vp.allocSize;
     count = vp.count;
     pVector = new T[allocSize];
@@ -3347,6 +3347,95 @@ public:
 };
 // ch8_1, ch8_2: Inheritance class
 
+class PMbyVector
+{
+    // 아래의 Vector들은 Person 객체의 멤버들을 저장하기 위함임
+    Vector< string > name;
+    Vector< int >    id;
+    Vector< double > weight;
+    Vector< bool >   married;
+    Vector< char* >  address;
+    int cpCount;   // copy() 시 사용할 복사 횟수: 새로운 사람 이름 생성용
+
+    void pushArray();
+    void pushPerson(Person* p);
+    char* copyAddress(const char* addr);
+    void printNotice(const string& preMessage, const string& postMessage);
+    void clearVectors();
+    void insertPerson(int index, Person* p);
+    void erasePerson(int index);
+
+public:
+    PMbyVector();
+    ~PMbyVector();
+    void display();
+    void append();
+    void clear();
+    void remove();
+    void insert();
+    void copy();
+    void reset();
+    void run();
+};
+
+// cpCount{}는 cpCount(0) 또는 cpCount=0와 같은 의미
+PMbyVector::PMbyVector(): cpCount{} { pushArray(); }
+
+PMbyVector::~PMbyVector() { /* 코드 추가 예정 */ }
+
+// Person, Student, Worker, StudentWorker 객체들의 정보를 Vector들에 추가
+void PMbyVector::pushArray() {
+    for (int i = 0; i < MultiManager::allPersonCount; ++i)
+        pushPerson(MultiManager::allPersons[i]);
+}
+
+// Person 객체의 각 멤버를 상응하는 Vector에 추가
+// Person, Student, Worker, StudentWorker 객체들의 종류에 상관없이 
+// 아래 정보만 저장함
+void PMbyVector::pushPerson(Person* p) {
+    name   .push_back(p->getName());
+    id     .push_back(p->getId());
+    weight .push_back(p->getWeight());
+    married.push_back(p->getMarried());
+    address.push_back(copyAddress(p->getAddress()));
+}
+
+// address 멤버의 경우 문자열을 저장하기 위한 메모리를 할당 받은 후 기존 주소 
+// 문자열을 복사함; 새로 할당받은 메모리 주소를 반환함
+char* PMbyVector::copyAddress(const char* addr) {
+    if (addr == nullptr) return nullptr;
+    char *newAddr = new char[strlen(addr)+1]; // +1은 문자열 끝의 '\0' 널 문자용
+    strcpy(newAddr, addr);  // addr 문자열을 newAddr로 복사
+    return newAddr;
+}
+
+void PMbyVector::display() { // Menu item 1
+    int count = name.size();
+    cout << "display(): count " << count << endl;
+    for (int i = 0; i < count; ++i) {
+        cout << "[" << i << "] " << name[i] << " ";
+        cout << id[i] << " " << weight[i] << " " << married[i] << " :";
+        cout << ((address[i]==nullptr)?"":address[i]) << ":" << endl;
+    }
+}
+void PMbyVector::run() {
+    using func_t = void (PMbyVector::*)();
+    func_t func_arr[] = {
+        nullptr, &PMbyVector::display,
+    };
+    int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
+    string menuStr =
+    "============================ PMbyVector Menu =========================\n"
+    "= 0.Exit 1.Display 2.Append 3.Clear 4.Insert 5.Delete 6.Copy 7.Reset =\n"
+    "======================================================================\n";
+
+    while (true) {
+        int menuItem = UI::selectMenu(menuStr, menuCount);
+        if (menuItem == 0) return;
+        (this->*func_arr[menuItem])();
+    }
+} // 10_1: PMbyVector class
+
 /******************************************************************************
  * Main Menu
  ******************************************************************************/
@@ -3355,12 +3444,12 @@ class MainMenu
 {
 public:
     void run() {
-        int menuCount = 7; // 상수 정의
+        int menuCount = 8; // 상수 정의
         string menuStr =
         		"******************************* Main Menu *********************************\n"
         		"* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9, 10)                      *\n"
         		"* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *\n"
-        		"* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8)                            *\n"
+        		"* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8) 7.PMbyVector               *\n"
         		"***************************************************************************\n";
 
         while (true) {
@@ -3374,6 +3463,7 @@ public:
             case 4: AllocatedMember().run();		  break;
             case 5: OperatorOverload().run();		  break;
             case 6: Inheritance().run();			  break;
+            case 7: PMbyVector().run();				  break;
             }
         }
         cout << "Good bye!!" << endl;

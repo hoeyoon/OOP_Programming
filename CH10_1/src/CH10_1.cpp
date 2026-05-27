@@ -3350,11 +3350,11 @@ public:
 class PMbyVector
 {
     // 아래의 Vector들은 Person 객체의 멤버들을 저장하기 위함임
-    Vector< string > name;
-    Vector< int >    id;
-    Vector< double > weight;
-    Vector< bool >   married;
-    Vector< char* >  address;
+    Vector<string> name;
+    Vector<int>    id;
+    Vector<double> weight;
+    Vector<bool>   married;
+    Vector<char*>  address;
     int cpCount;   // copy() 시 사용할 복사 횟수: 새로운 사람 이름 생성용
 
     void pushArray();
@@ -3409,6 +3409,12 @@ char* PMbyVector::copyAddress(const char* addr) {
     return newAddr;
 }
 
+void PMbyVector::printNotice(const string& preMessage, const string& postMessage){
+    cout << preMessage;
+    cout << " [delimiter(P, S, W, or A)] [person information] ";
+    cout << postMessage << endl;
+}
+
 void PMbyVector::display() { // Menu item 1
     int count = name.size();
     cout << "display(): count " << count << endl;
@@ -3418,10 +3424,29 @@ void PMbyVector::display() { // Menu item 1
         cout << ((address[i]==nullptr)?"":address[i]) << ":" << endl;
     }
 }
+
+void PMbyVector::append(){
+    int count = UI::getPositiveInt("The number of persons to append? ");
+    // to_string(10) 함수: 정수 10을 문자열 "10"으로 변환
+    // stoi("10") 함수: 문자열 "10"을 정수 10으로 변환
+    printNotice("Input "+to_string(count), ":");
+    for (int i = 0; i < count; ++i) {
+        Person* p = Factory::inputPerson(cin); // 한 사람 정보 입력 받음
+        if (p) {
+        	pushPerson(p);
+			delete p;
+        } // if (p != nullptr) 와 동일;
+        // 만약 p가 nullptr이면 이는 입력 시 에러가 발생한 것임
+        // (즉, 정수를 입력해야 하는 곳에 일반 문자를 입력한 경우)
+    }
+    
+    display();
+}
+
 void PMbyVector::run() {
     using func_t = void (PMbyVector::*)();
     func_t func_arr[] = {
-        nullptr, &PMbyVector::display,
+        nullptr, &PMbyVector::display, &PMbyVector::append, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =

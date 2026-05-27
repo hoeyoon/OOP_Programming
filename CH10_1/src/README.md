@@ -341,3 +341,42 @@ display(): count 16
 [14] a3 43 51.9 false :Buk-gu Daejeon:
 [15] a4 44 66.6 true :Nam-gu Busan:
 ```
+
+### 문제 4 설명
+```
+PMbyVector::append()
+
+PMbyVector::append()를 구현하고, run()의 func_arr[]에 등록하라.
+1) 구현 시 PersonManager::append()를 복사해와 삽입하라.
+2) PersonManager::printNotice(...)도 복사해서 추가하라.
+3) append() 구현 시 p가 nullptr가 아닌 경우(if(p)), 
+    persons.push_back(p)를 호출하는 대신 아래 두 문장들로 대체하라.
+    i)  pushPerson(p)을 호출하여 객체의 정보를 Vector들에 삽입하라.
+    ii) p가 포인터하는 객체 메모리는 더 이상 필요 없으므로 메모리를 반납하라.
+```
+
+### 문제 4 실행 결과
+```
+7    // PMbyVector
+2    // Append
+The number of persons to append? 7
+Input 7 [delimiter(P, S, W, or A)] [person information] : 
+// 아래 7개의 정보를 한번에 복사해서 입력하라. 
+P p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+S s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21: Computer 3.3 2
+W w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul: Kia CEO
+A a3 14 54 false :Dong-gu, Incheon: Physics 3.8 1 Kakao Manager :SK, LG, KAI: true
+S s4 15 80 true :1001, Jungang-daero, Yeonje-gu, Busan: Biology 3.8 3
+W w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul: Naver Department-Head
+A a4 17 88 true :Kangdong-gu, Daejeon: Electronics 3.4 2 NC Developer :CU, GS: false
+display(): count 23
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+...  // 기존과 동일
+[16] p3 11 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[17] s3 12 71.5 false :Gwangju Nam-gu Bongseon-dong 21:
+[18] w3 13 65 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[19] a3 14 54 false :Dong-gu, Incheon:
+[20] s4 15 80 true :1001, Jungang-daero, Yeonje-gu, Busan:
+[21] w4 16 77 false :Buk-ro 3, Kangdong-gu, Seoul:
+[22] a4 17 88 true :Kangdong-gu, Daejeon:
+```

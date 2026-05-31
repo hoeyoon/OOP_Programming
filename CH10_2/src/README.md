@@ -425,3 +425,45 @@ display(): count 22
 2    // Shuffle
 4    // ReverseSort: 앞선 ReverseSort와 동일한 결과가 나와야 함
 ```
+
+### 문제 5 설명
+```
+전역함수 reverse()
+
+CppSTL::reverse() 함수를 구현하고, 이를 run()의 func_arr[]에 추가하라. 
+이 함수에서 persons 벡터에 있는 원소들의 배치 순서를 역으로 배치한다. 
+즉, 1 3 4 2로 저장된 원소를 2 4 3 1 등으로 역으로 재배치하는 것이다.  
+이 함수 구현 시
+----------------------------------------------------------------------------
+   기존 < algorithm >에 있는 전역함수 reverse()를 사용하라. 즉,
+   std::reverse(persons의 시작 iterator, persons의 끝 iterator) 호출하라.
+   그런 후 display()를 호출하라.
+```
+
+### 문제 5 실행 결과
+```
+1    // PersonManager
+12   // C++STL
+1    // Display
+5    // Reverse
+display(): count 16
+[0] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+[1] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[2] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[3] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[4] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+[5] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[6] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[7] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[8] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[9] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+[10] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[11] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[12] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[13] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[14] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[15] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+
+3    // Sort
+5    // Reverse: 위 [문제 4] 실행결과의 ReverseSort와 동일한 결과가 나와야 함
+```

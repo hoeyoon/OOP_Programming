@@ -17,7 +17,7 @@
 #include <cstring>
 #include <typeinfo>
 #include <sstream>    // ch9_2 추가: for istringstream iss(expr);
-
+#include <vector>
 
 using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include해야 한다.
 
@@ -1664,6 +1664,46 @@ Vector<T>& Vector<T>::operator += (const Vector<T>& vp){
 	return *this;
 }
 
+class BasePM
+{
+protected:
+    vector< Person* >& persons;
+    int& cpCount;
+
+public:
+    BasePM(vector< Person* >& persons, int& cpCount):
+    	persons{persons}, cpCount{cpCount} { };  // 두 참조변수 초기화
+    void display();
+    void copyPersons();
+};
+
+void BasePM::display(){
+    int count = persons.size();
+    cout << "display(): count " << count << endl;
+    for (int i = 0; i < count; ++i) {
+        cout << "[" << i << "] ";
+        persons[i]->println();
+    }
+}
+
+void BasePM::copyPersons(){
+    cpCount++;
+    for (unsigned i = 0, size = persons.size(); i < size; ++i) {
+    	Person *p = persons[i]->clone();
+    	string name = p->getName();
+        for (int j = 0; j < cpCount; ++j)
+            name = name[0] + name;  // 이름 변경
+        p->setName(name);
+        p->setId(p->getId() + cpCount * 20);
+        p->setWeight(p->getWeight() + cpCount);
+        if(cpCount % 2 == 1){
+        	p->setMarried(!p->getMarried());
+        }
+        persons.push_back(p);
+    }
+    display();
+}
+
 /******************************************************************************
  * ch4_2: Factory class
  ******************************************************************************/
@@ -1714,9 +1754,10 @@ public:
  * ch4_2: PersonManager class
  ******************************************************************************/
 
-class PersonManager: public BaseStation  //ch9_2 상속
+class PersonManager: public BaseStation, public BasePM  //ch9_2 상속
 {
-    Vector<Person*> persons;
+	vector<Person*> persons;
+    //Vector<Person*> persons;
     // Factory factory;
     Person** array;     // ch7_3 추가
     int arrLen;         // ch7_3 추가
@@ -1731,13 +1772,11 @@ class PersonManager: public BaseStation  //ch9_2 상속
 public:
     PersonManager(Person* array[], int len); // 6장에서 default 매개변수 설정
     ~PersonManager();
-    void display();
     void append();
     void clear();
     void login();
     void insert();
     void remove();
-    void copyPersons();
     void reset();
     void find();         // ch9_2 추가
     void dispStudentWorkers(); // ch9_2 추가
@@ -1746,7 +1785,7 @@ public:
     void run();
 };
 
-PersonManager::PersonManager(Person* array[], int len) : array(array), arrLen(len), cpCount(0) {
+PersonManager::PersonManager(Person* array[], int len) : BasePM(persons, cpCount), array(array), arrLen(len), cpCount(0) {
     //cout << "PersonManager::PersonManager(array[], len)" << endl;
 	pushArray();
     Phone::initBaseStation(this);
@@ -1789,17 +1828,6 @@ Person* PersonManager::findByName(const string name) {
 	}
 	cout << name + ": NOT found" << endl;
 	return nullptr;
-}
-
-void PersonManager::display() { // Menu item 1
-    int count = persons.size();
-    cout << "display(): count " << count << endl;
-    for (int i = 0; i < count; ++i) {
-        cout << "[" << i << "] ";
-        persons[i]->println();
-    }
-//    cout << "empty():" << persons.empty() << ", size():" << persons.size()
-//         << ", capacity():" << persons.capacity() << endl;
 }
 
 void PersonManager::append() { // Menu item 2
@@ -1853,7 +1881,7 @@ void PersonManager::insert() { // Menu item 5
 	printNotice("Input", "to insert:");
 	Person* p = Factory::inputPerson(cin);
 	if (p == nullptr) return;
-	persons.insert(index, p);
+	persons.insert(persons.begin()+index, p);
     display();
 }
 
@@ -1873,32 +1901,7 @@ void PersonManager::remove() { // Menu item 6
 	int index = UI::getIndex("Index to delete? ", persons.size());
 	Person* p = persons[index];
 	delete p;
-	persons.erase(index);
-    display();
-}
-
-void PersonManager::copyPersons() { // Menu item 7
-    cpCount++;
-    for (unsigned i = 0, size = persons.size(); i < size; ++i) {
-        //Person *p = TODO: clone()을 이용해 persons[i]를 복제한 새 객체의 주소 저장;
-        //string name = TODO: 객체 p의 이름을 구해 옴;
-    	Person *p = persons[i]->clone();
-    	string name = p->getName();
-        for (int j = 0; j < cpCount; ++j)
-            name = name[0] + name;  // 이름 변경
-        //TODO: 객체 p의 이름을 새 이름인 name으로 변경함;
-        //TODO: 객체 p의 id을 (기존 id 값에 20 * cpCount를 더한 값)으로 변경함;
-        //TODO: 객체 p의 weight을 (기존 weight 값에 cpCount를 더한 값)으로 변경함;
-        //TODO: cpCount가 홀수이면 (cpCount % 2)
-              //객체 p의 married 값을 반대(!p->getMarried())로 설정함;
-        p->setName(name);
-        p->setId(p->getId() + cpCount * 20);
-        p->setWeight(p->getWeight() + cpCount);
-        if(cpCount % 2 == 1){
-        	p->setMarried(!p->getMarried());
-        }
-        persons.push_back(p);
-    }
+	persons.erase(persons.begin()+index);
     display();
 }
 

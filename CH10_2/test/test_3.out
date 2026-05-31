@@ -1,0 +1,180 @@
+
+******************************* Main Menu *********************************
+* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9, 10)                      *
+* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *
+* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8) 7.PMbyVector               *
+***************************************************************************
+Menu item number? 1
+
+====================== Person Management Menu ===================
+= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =
+= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =
+= 12.C++STL(10_2)                                               =
+=================================================================
+Menu item number? 1
+display(): count 16
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[1] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[2] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[3] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[4] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[5] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[6] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+[7] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[8] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[9] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[10] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[11] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+[12] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[13] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[14] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+
+====================== Person Management Menu ===================
+= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =
+= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =
+= 12.C++STL(10_2)                                               =
+=================================================================
+Menu item number? 2
+The number of persons to append? 12
+Input 12 [delimiter(P, S, W, or A)] [person information] :
+P p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 8 84.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 7 85.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 6 86.3 true :100 Dunsan-ro Seo-gu Daejeon:
+W w3 4 63.5 true :Dong-gu Incheon: Hyundai Labor
+W w3 3 64.5 true :Dong-gu Incheon: Hyundai Labor
+W w3 2 65.5 true :Dong-gu Incheon: Hyundai Labor
+W w3 1 66.5 true :Dong-gu Incheon: Hyundai Labor
+S s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+S s2 2 55.3 false :Yeonje-gu Busan: Electronics 2.5 4
+S s2 3 56.3 false :Yeonje-gu Busan: Electronics 2.5 4
+S s2 4 57.3 false :Yeonje-gu Busan: Electronics 2.5 4
+display(): count 28
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[1] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[2] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[3] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[4] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[5] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[6] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+[7] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[8] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[9] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[10] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[11] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+[12] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[13] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[14] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+[16] p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[17] p3 8 84.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[18] p3 7 85.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[19] p3 6 86.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[20] w3 4 63.5 true :Dong-gu Incheon: Hyundai Labor
+[21] w3 3 64.5 true :Dong-gu Incheon: Hyundai Labor
+[22] w3 2 65.5 true :Dong-gu Incheon: Hyundai Labor
+[23] w3 1 66.5 true :Dong-gu Incheon: Hyundai Labor
+[24] s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[25] s2 2 55.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[26] s2 3 56.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[27] s2 4 57.3 false :Yeonje-gu Busan: Electronics 2.5 4
+
+====================== Person Management Menu ===================
+= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =
+= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =
+= 12.C++STL(10_2)                                               =
+=================================================================
+Menu item number? 12
+
+----------------------- C++ STL Menu ------------------------
+- 0.Exit 1.Display 2.Shuffle 3.Sort 4.ReverseSort 5.Reverse -
+-------------------------------------------------------------
+Menu item number? 1
+display(): count 28
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[1] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[2] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[3] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[4] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[5] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[6] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+[7] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[8] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[9] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[10] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[11] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+[12] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[13] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[14] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+[16] p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[17] p3 8 84.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[18] p3 7 85.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[19] p3 6 86.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[20] w3 4 63.5 true :Dong-gu Incheon: Hyundai Labor
+[21] w3 3 64.5 true :Dong-gu Incheon: Hyundai Labor
+[22] w3 2 65.5 true :Dong-gu Incheon: Hyundai Labor
+[23] w3 1 66.5 true :Dong-gu Incheon: Hyundai Labor
+[24] s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[25] s2 2 55.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[26] s2 3 56.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[27] s2 4 57.3 false :Yeonje-gu Busan: Electronics 2.5 4
+
+----------------------- C++ STL Menu ------------------------
+- 0.Exit 1.Display 2.Shuffle 3.Sort 4.ReverseSort 5.Reverse -
+-------------------------------------------------------------
+Menu item number? 3
+display(): count 28
+[0] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[1] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[2] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[3] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+[4] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[5] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[6] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[7] p3 6 86.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[8] p3 7 85.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[9] p3 8 84.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[10] p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[11] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[12] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[13] s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[14] s2 2 55.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[15] s2 3 56.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[16] s2 4 57.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[17] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[18] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+[19] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[20] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[21] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[22] w3 1 66.5 true :Dong-gu Incheon: Hyundai Labor
+[23] w3 2 65.5 true :Dong-gu Incheon: Hyundai Labor
+[24] w3 3 64.5 true :Dong-gu Incheon: Hyundai Labor
+[25] w3 4 63.5 true :Dong-gu Incheon: Hyundai Labor
+[26] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[27] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+
+----------------------- C++ STL Menu ------------------------
+- 0.Exit 1.Display 2.Shuffle 3.Sort 4.ReverseSort 5.Reverse -
+-------------------------------------------------------------
+Menu item number? 0
+
+====================== Person Management Menu ===================
+= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =
+= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =
+= 12.C++STL(10_2)                                               =
+=================================================================
+Menu item number? 0
+
+******************************* Main Menu *********************************
+* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9, 10)                      *
+* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *
+* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8) 7.PMbyVector               *
+***************************************************************************
+Menu item number? 0
+Good bye!!

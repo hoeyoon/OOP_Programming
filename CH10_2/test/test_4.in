@@ -1,0 +1,23 @@
+1 
+1 
+2 
+12
+P p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 8 84.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 7 85.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 6 86.3 true :100 Dunsan-ro Seo-gu Daejeon:
+W w3 4 63.5 true :Dong-gu Incheon: Hyundai Labor
+W w3 3 64.5 true :Dong-gu Incheon: Hyundai Labor
+W w3 2 65.5 true :Dong-gu Incheon: Hyundai Labor
+W w3 1 66.5 true :Dong-gu Incheon: Hyundai Labor
+S s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+S s2 2 55.3 false :Yeonje-gu Busan: Electronics 2.5 4
+S s2 3 56.3 false :Yeonje-gu Busan: Electronics 2.5 4
+S s2 4 57.3 false :Yeonje-gu Busan: Electronics 2.5 4
+12 
+1 
+4
+0
+0
+0
+0

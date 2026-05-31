@@ -244,3 +244,95 @@ ii) display()를 호출하라.
 
 // 위 2번 Shuffle 메뉴 항목을 실행할 때마다 원소들의 배치 순서가 다르게 출력될 것이다.
 ```
+
+### 문제 3 설명
+```
+CppSTL::sort() 함수를 구현하고, 이를 run()의 func_arr[]에 추가하라.
+이 함수에서 persons 벡터에 있는 사람들을 사전적 이름 순서로 정렬하되, 
+이름이 같을 경우에는 id 순서(작은 수에서 큰 수 순서)로 배치하라.
+----------------------------------------------------------------------------
+함수 구현 시 기존 < algorithm >에 있는 sort() 전역 함수를 사용하라. 즉,
+i) std::sort(persons의 시작 iterator, persons의 끝 iterator) 호출하여 정렬한다.
+    persons의 시작 iterator: persons.begin()
+    persons의 끝 iterator:  persons.end()
+ii) display()를 호출하라.
+----------------------------------------------------------------------------
+위에서 sort() 앞에 std::를 붙이는 이유는 알고리즘의 sort() 전역함수를 호출하기 위함이다.
+만약 std::가 없으면 CppSTL의 멤버함수 sort()를 잘못 호출하게 되므로 반드시 붙여 주어야 한다.
+위처럼 구현하여 실행해 보라. Person 클래스의 name 멤버를 순서적으로 비교하는 함수가  
+없기 때문에 정상적으로 정렬이 되지 않을 것이다.
+----------------------------------------------------------------------------
+이런 문제를 해결하기 위해 위 std::sort() 함수를 호출할 때 별도로 Person 클래스의 name 멤버를
+비교하는 람다 함수를 마지막 인자로 넘겨 주어야 한다. 
+1) 이를 위해 아래의 comp 람다 함수를 CppSTL::sort() 함수 내의 맨처음에 선언하라.
+```
+```c++
+    auto comp = [] (Person* e1, Person* e2) - > bool {
+        return ( (e1- >getName() < e2- >getName()) ||
+                 (e1- >getName() == e2- >getName() && e1- >getId() < e2- >getId()) ) ?
+               true: false;
+    };
+```
+```
+2) std::sort() 함수 호출시 마지막 인자로 아래처럼 람다 변수 comp를 추가하라.
+----------------------------------------------------------------------------
+   std::sort(persons의 시작 iterator, persons의 끝 iterator, comp);
+----------------------------------------------------------------------------
+이렇게 정렬 함수를 호출하면 이 함수는 persons 벡터를 정렬하면서 벡터 내의 
+두 사람 객체를 비교하기 위해 매번 람다 함수 comp를 호출하게 된다. 
+이때 비교하고자 하는 두 사람 객체의 포인터(Person*)가 매개변수로 넘어 온다. 
+이 포인터가 넘어 오는 이유는 vector< Person* > persons에 저장되어 있는 것은 
+객체가 아니라 객체 포인터이기 때문이다.
+일반적으로 정렬시 사용되는 람다 함수는 e1이 e2보다 작으면 true, 아니면 false를 반환한다.
+이때 요구되는 비교 조건은 응용 프로그램에 따라 다른 조건이 주어지는데 
+그 조건에 맞게 람다 함수를 작성하면 된다. 
+----------------------------------------------------------------------------
+위 comp 람다 함수는 매개변수 e1과 e2를 직접 비교하는 것이 아니라 우리 문제의 요구조건에 따라 
+e1과 e2의 이름을 비교하여 (e1의 이름이 e2의 이름보다 작거나) 또는 
+(두 이름이 같은 경우 e1의 id가 e2의 id 보다 작으면) true를 반환한다. 
+```
+
+### 문제 3 실행 결과
+```
+1    // PersonManager
+1    // Display
+2    // Append
+6
+P p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 8 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 7 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+W w3 4 55.5 true :Dong-gu Incheon: Hyundai Labor
+W w3 3 55.5 true :Dong-gu Incheon: Hyundai Labor
+S s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+
+12   // C++STL
+----------------------- C++ STL Menu ...
+1    // Display
+3    // Sort
+display(): count 22
+[0] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[1] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[2] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[3] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+[4] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[5] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[6] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[7] p3 7 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[8] p3 8 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[9] p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[10] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[11] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[12] s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[13] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[14] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+[15] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[16] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[17] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[18] w3 3 55.5 true :Dong-gu Incheon: Hyundai Labor
+[19] w3 4 55.5 true :Dong-gu Incheon: Hyundai Labor
+[20] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[21] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+
+2    // Shuffle
+3    // Sort: 앞선 Sort와 동일한 결과가 나와야 함
+```

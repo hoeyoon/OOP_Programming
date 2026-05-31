@@ -1733,10 +1733,20 @@ void CppSTL::shuffle(){
 	display();
 }
 
+void CppSTL::sort(){
+    auto comp = [] (Person* e1, Person* e2) -> bool {
+        return ( (e1->getName() < e2->getName()) ||
+                 (e1->getName() == e2->getName() && e1->getId() < e2->getId()) ) ?
+               true: false;
+    };
+	std::sort(persons.begin(), persons.end(), comp);
+	display();
+}
+
 void CppSTL::run() {
     using func_t = void (CppSTL::*)();
     func_t func_arr[] = {
-        nullptr, &CppSTL::display, &CppSTL::shuffle, 
+        nullptr, &CppSTL::display, &CppSTL::shuffle, &CppSTL::sort, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
     string menuStr =

@@ -124,3 +124,84 @@ display(): count 32
 ...
 [31] aa4 64 67.6 false :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
 ```
+
+### 문제 1 설명
+```
+CppSTL class 추가
+
+1) 아래 새로운 class CppSTL를 BasePM과 Factory 클래스 사이에 배치하라.
+    이 클래스는 C++ 표준 STL 라이브러리 및 알고리즘을 활용하고 테스트하는 클래스이다.
+```
+```c++
+/******************************************************************************
+ * ch10_2: CppSTL class
+ ******************************************************************************/
+
+class CppSTL: public BasePM
+{
+public:
+    CppSTL(vector< Person* >& persons, int& cpCount);
+    void shuffle();
+    void sort();
+    void reverseSort();
+    void reverse();
+    void run();
+};
+
+CppSTL::CppSTL(vector< Person* >& persons, int& cpCount):
+    /* TODO: BasePM의 생성자를 호출하라 */ {
+    // TODO: [문제 6] persons의 각 객체의 메모 멤버를 초기화하라.
+}
+
+void CppSTL::run() {
+    using func_t = void (CppSTL::*)();
+    func_t func_arr[] = {
+        nullptr, &CppSTL::display, 
+    };
+    int menuCount = TODO: func_arr[] 배열의 길이;
+    string menuStr =
+        "----------------------- C++ STL Menu ------------------------\n"
+        "- 0.Exit 1.Display 2.Shuffle 3.Sort 4.ReverseSort 5.Reverse -\n"
+        "-------------------------------------------------------------\n";
+
+    while (true) {
+        int menuItem = UI::selectMenu(menuStr, menuCount);
+        if (menuItem == 0) return;
+        (this- >*func_arr[menuItem])();
+    }
+}
+```
+```
+2) 위 [문제 0-1] PersonManager의 생성자의 서두를 참고하여 
+    CppSTL의 생성자 서두에서 부모 클래스인 BasePM의 생성자를 호출하라.
+3) CppSTL::run() 내의 menuCount 변수를 초기화하라.
+4) 아래 함수를 PersonManager의 public 멤버 함수로 추가하고,
+----------------------------------------------------------------------------
+void PersonManager::cppSTL() {
+    CppSTL(persons, cpCount).run(); // 임시객체 생성 후 run() 실행
+    // CppSTL stl(persons, cpCount); stl.run(); 과 동일함
+}
+----------------------------------------------------------------------------
+5) 아래 문자열을 PersonManager::run()의 메뉴 문자열에 추가하고, 
+    이 함수 내의 func_arr[]에 위 PersonManager::cppSTL() 함수 주소를 등록하라.
+----------------------------------------------------------------------------
+        "= 12.C++STL(10_2)                                               =\n"
+```
+
+### 문제 1 실행 결과
+```
+1   // PersonManager
+====================== Person Management Menu ===================
+= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =
+= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =
+= 12.C++STL(10_2)                                               =
+=================================================================
+Menu item number? 12
+
+----------------------- C++ STL Menu ------------------------
+- 0.Exit 1.Display 2.Shuffle 3.Sort 4.ReverseSort 5.Reverse -
+-------------------------------------------------------------
+Menu item number? 1   // Display
+// 위 [문제 0-1]의 Display 메뉴항목 실행결과와 동일해야 함
+```

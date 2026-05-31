@@ -1705,6 +1705,44 @@ void BasePM::copyPersons(){
 }
 
 /******************************************************************************
+ * ch10_2: CppSTL class
+ ******************************************************************************/
+
+class CppSTL: public BasePM
+{
+public:
+    CppSTL(vector< Person* >& persons, int& cpCount);
+    void shuffle();
+    void sort();
+    void reverseSort();
+    void reverse();
+    void run();
+};
+
+CppSTL::CppSTL(vector< Person* >& persons, int& cpCount):
+    BasePM(persons, cpCount) {
+    // TODO: [문제 6] persons의 각 객체의 메모 멤버를 초기화하라.
+}
+
+void CppSTL::run() {
+    using func_t = void (CppSTL::*)();
+    func_t func_arr[] = {
+        nullptr, &CppSTL::display, 
+    };
+    int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
+    string menuStr =
+        "----------------------- C++ STL Menu ------------------------\n"
+        "- 0.Exit 1.Display 2.Shuffle 3.Sort 4.ReverseSort 5.Reverse -\n"
+        "-------------------------------------------------------------\n";
+
+    while (true) {
+        int menuItem = UI::selectMenu(menuStr, menuCount);
+        if (menuItem == 0) return;
+        (this->*func_arr[menuItem])();
+    }
+}
+
+/******************************************************************************
  * ch4_2: Factory class
  ******************************************************************************/
 
@@ -1782,6 +1820,7 @@ public:
     void dispStudentWorkers(); // ch9_2 추가
     void dispPhones();	// ch9_2 추가
     bool connectTo(const string& caller, const string& callee) override; //ch9_2 추가
+    void cppSTL();
     void run();
 };
 
@@ -1992,12 +2031,18 @@ bool PersonManager::connectTo(const string& caller, const string& callee) {
     return true;
 }
 
+void PersonManager::cppSTL() {
+    CppSTL(persons, cpCount).run(); // 임시객체 생성 후 run() 실행
+    // CppSTL stl(persons, cpCount); stl.run(); 과 동일함
+}
+
 void PersonManager::run() {
     using func_t = void (PersonManager::*)();
     using PM = PersonManager; // 코딩 길이를 줄이기 위해
     func_t func_arr[] = {
         nullptr, &PM::display, &PM::append, &PM::clear, &PM::login, &PM::insert, &PM::remove,
 		&PM::copyPersons, &PM::reset, &PM::find, &PM::dispStudentWorkers, &PM::dispPhones, 
+		&PM::cppSTL, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =
@@ -2005,6 +2050,7 @@ void PersonManager::run() {
         "= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =\n"
 		"= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =\n"
     	"= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =\n"
+		"= 12.C++STL(10_2)                                               =\n"
         "=================================================================\n";
 
     while (true) {

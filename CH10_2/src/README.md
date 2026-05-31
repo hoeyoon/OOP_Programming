@@ -336,3 +336,92 @@ display(): count 22
 2    // Shuffle
 3    // Sort: 앞선 Sort와 동일한 결과가 나와야 함
 ```
+
+### 문제 4 설명
+```
+CppSTL::reverseSort() 함수를 구현하고, 이를 run()의 func_arr[]에 추가하라. 
+이 함수에서 persons 벡터에 있는 사람들을 사전적 이름 순서를 역순으로 정렬하되, 
+이름이 같을 경우에는 id의 역순(큰 수에서 작은 수 순서)로 배치하라.
+----------------------------------------------------------------------------
+1) 함수 구현 시 위 [문제 3]처럼
+    auto comp = 람다 함수 구현 
+       // 위 [문제 3]의 람다 함수와 동일하게 구현하되 return 값을 반대로 반환하면 됨)
+       // 즉, true를 false로, false를 true로 반환하면 역순으로 정렬된다.
+    std::sort() 함수를 이용하여 정렬한다.
+    그런 후 display()를 호출하라.
+----------------------------------------------------------------------------
+이렇게 구현한 후 프로그램을 실행시켜라. 아래 [문제 4] 실행 결과와 동일하게 나와야 한다.
+----------------------------------------------------------------------------
+2) 위 코드가 정상적으로 실행되면 다음과 같이 프로그램을 수정하라.
+    위 auto comp = 람다식; 문장 전체를 주석으로 처리하라. 
+    람다식을 사용하지 않고 다른 방식으로 구현할 예정임.
+    아래 클래스를 기존 주석처리된 람다식 뒤에 배치하라. 함수 내에서 다른 클래스 선언 가능함.
+```
+```c++
+    class Compare { 
+    public:
+        bool operator()(Person* e1, Person* e2) { // template 멤버 함수
+            TODO: 람다식의 return 문장을 여기에 배치
+        }
+    };
+```
+```
+3) 위 클래스 다음에 아래 객체 변수를 선언하라. std::sort() 문장은 기존처럼 사용한다.
+----------------------------------------------------------------------------
+    Compare comp; // 이렇게 객체를 선언한 후 sort() 문장에서 기존처럼 이 객체를 사용함
+----------------------------------------------------------------------------
+    이는 위 함수 연산자 operator()를 가진 클래스의 객체를 생성한 후 이 객체를 
+    sort() 함수의 마지막 인자로 넘겨 주는 것이다. 
+    중요: 실제로 1)의 auto comp 람다식은 컴파일러에 의해 이런 식으로 구현된다. 
+    이렇게 해서 프로그램을 실행시켜도 [문제 4] 실행 결과와 동일하게 나와야 한다.
+----------------------------------------------------------------------------
+4) 이제 위 Compare comp; 문장과 바로 다음 문장인 std::sort() 함수 호출 문장을 
+    주석처리하고, 대신 아래 sort() 문장을 주석처리된 기존 sort() 문장 뒤에 삽입하라. 
+    이는 미리 선언된 객체 변수 comp를 sort() 함수 인자로 넘겨 주는 대신
+    Compare의 임시 객체를 생성한 후 바로 sort()의 마지막 인자로 넘겨 주는 문장이다. 
+    std::sort(persons.begin(), persons.end(), Compare()); // 임시 객체 생성
+```
+
+### 문제 4 실행 결과
+```
+1    // PersonManager
+1    // Display
+2    // Append
+6 
+P p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 8 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+P p3 7 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+W w3 4 55.5 true :Dong-gu Incheon: Hyundai Labor
+W w3 3 55.5 true :Dong-gu Incheon: Hyundai Labor
+S s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+
+12   // C++STL
+1    // Display
+4    // ReverseSort
+display(): count 22
+[0] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+[1] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[2] w3 4 55.5 true :Dong-gu Incheon: Hyundai Labor
+[3] w3 3 55.5 true :Dong-gu Incheon: Hyundai Labor
+[4] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[5] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[6] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[7] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+[8] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[9] s2 1 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[10] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[11] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[12] p3 9 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[13] p3 8 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[14] p3 7 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[15] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[16] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[17] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[18] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+[19] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[20] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[21] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+
+2    // Shuffle
+4    // ReverseSort: 앞선 ReverseSort와 동일한 결과가 나와야 함
+```

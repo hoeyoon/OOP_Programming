@@ -25,7 +25,7 @@ using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 //----------------------------------------------------------------------------
 // 휴대폰 기지국
@@ -1743,10 +1743,30 @@ void CppSTL::sort(){
 	display();
 }
 
+void CppSTL::reverseSort(){
+//    auto comp = [] (Person* e1, Person* e2) -> bool {
+//        return ( (e1->getName() < e2->getName()) ||
+//                 (e1->getName() == e2->getName() && e1->getId() < e2->getId()) ) ?
+//               false: true;
+//    };
+    class Compare { 
+    public:
+        bool operator()(Person* e1, Person* e2) { // template 멤버 함수
+        	return ( (e1->getName() < e2->getName()) ||
+        			(e1->getName() == e2->getName() && e1->getId() < e2->getId()) ) ?
+        			false: true;
+        }
+    };
+//    Compare comp;
+//	std::sort(persons.begin(), persons.end(), comp);
+    std::sort(persons.begin(), persons.end(), Compare()); // 임시 객체 생성
+	display();
+}
+
 void CppSTL::run() {
     using func_t = void (CppSTL::*)();
     func_t func_arr[] = {
-        nullptr, &CppSTL::display, &CppSTL::shuffle, &CppSTL::sort, 
+        nullptr, &CppSTL::display, &CppSTL::shuffle, &CppSTL::sort, &CppSTL::reverseSort, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
     string menuStr =

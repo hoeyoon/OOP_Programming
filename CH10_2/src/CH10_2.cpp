@@ -18,6 +18,7 @@
 #include <typeinfo>
 #include <sstream>    // ch9_2 추가: for istringstream iss(expr);
 #include <vector>
+#include <algorithm>
 
 using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include해야 한다.
 
@@ -1722,12 +1723,20 @@ public:
 CppSTL::CppSTL(vector< Person* >& persons, int& cpCount):
     BasePM(persons, cpCount) {
     // TODO: [문제 6] persons의 각 객체의 메모 멤버를 초기화하라.
+	for(int i = 0; i < cpCount; i++){
+		persons[i]->setMemo("");
+	}
+}
+
+void CppSTL::shuffle(){
+	random_shuffle(persons.begin(), persons.end());
+	display();
 }
 
 void CppSTL::run() {
     using func_t = void (CppSTL::*)();
     func_t func_arr[] = {
-        nullptr, &CppSTL::display, 
+        nullptr, &CppSTL::display, &CppSTL::shuffle, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
     string menuStr =

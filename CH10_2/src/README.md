@@ -205,3 +205,42 @@ Menu item number? 12
 Menu item number? 1   // Display
 // 위 [문제 0-1]의 Display 메뉴항목 실행결과와 동일해야 함
 ```
+
+### 문제 2 설명
+```
+전역함수 random_shuffle()
+
+CppSTL::shuffle() 함수를 구현하고, 이를 CppSTL::run()의 func_arr[]에 추가하라.
+함수 구현 시 
+i) 이 함수에서 persons 벡터에 있는 원소들의 배치 순서를 랜덤하게 재배치하라.
+    이때 기존 < algorithm >에 있는 전역함수 random_shuffle()을 사용하라. 즉,
+    random_shuffle(persons의 시작 iterator, persons의 끝 iterator) 호출하여
+    persons 벡터에 있는 원소들의 배치 순서를 랜덤하게 재배치하라. 이 함수 호출 시
+    함수 인자인 시작과 끝 iterator는 persons의 begin()과 end()를 사용하면 된다. 
+    헤드 파일 < algorithm >을 include하라.
+ii) display()를 호출하라.
+```
+
+### 문제 2 실행 결과
+```
+1 12 1 2   // Shuffle
+// 랜덤하게 재배치하므로 출력 순서가 아래와 다르게 출력될 수도 있음
+[0] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[1] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[2] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[3] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[4] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[5] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+[6] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[7] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[8] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[9] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+[10] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[11] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[12] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[13] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[14] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[15] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+
+// 위 2번 Shuffle 메뉴 항목을 실행할 때마다 원소들의 배치 순서가 다르게 출력될 것이다.
+```

@@ -98,3 +98,34 @@ void vectorDisplay() {
 menu item? 2
 vector: 10 12 25 19 20 14 10 23 23 28 
 ```
+
+### 문제 3 설명
+```
+algorithm 함수 사용하기
+
+아래의 vectorSort()는 3번 메뉴을 선택했을 때 실행되는 함수이다. 
+1) 아래 vectorSort()의 코드를 소스 파일에 복사하라. 
+    이 함수는 벡터 전체를 정렬한 후 정렬된 벡터를 출력한다.
+2) 이 함수의 TODO 부분을 구현하라.
+```
+```c++
+void vectorSort() {
+    vectorAppend();
+    printVector("before sort");
+
+    TODO: 벡터 iv 전체를 정렬하라.
+
+    printVector("after sort"); // 작은 수에서 큰 수 순서로 출력되어야 함
+}
+```
+
+### 문제 3 실행 결과
+```
+...
+// 프로그램 실행 후 바로 3번 메뉴를 실행하지 않으면 아래와 다른 난수들이 생생될 것이다. 
+menu item? 3
+before sort
+vector: 10 12 25 19 20 14 10 23 23 28 
+after sort
+vector: 10 10 12 14 19 20 23 23 25 28 
+```

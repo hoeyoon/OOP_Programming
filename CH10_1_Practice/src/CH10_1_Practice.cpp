@@ -109,7 +109,16 @@ void vectorDisplay() {
     printVector();
 }
 
-void vectorSort() {}
+void vectorSort() {
+    vectorAppend();
+    printVector("before sort");
+
+    // TODO: 벡터 iv 전체를 정렬하라.
+    sort(iv.begin(), iv.end());
+
+    printVector("after sort"); // 작은 수에서 큰 수 순서로 출력되어야 함
+}
+
 void vectorLambda() {}
 
 // map의 모든 원소의 (키, 값) 쌍을 출력한다.

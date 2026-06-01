@@ -594,3 +594,29 @@ Indian: 18
 much: 16
 and: 15
 ```
+
+### 문제 4 설명
+```
+앞 과제 "10장 문제-2"의 [문제 0-1]에서 기존 PersonManager 클래스에 있던 
+display()와 copyPersons()를 부모 클래스인 BasePM 클래스로 옮겼었다. 
+---------------------------------------------------------------------------
+CppSTL의 부모 클래스 BasePM에 있는 copyPersons() 함수를 
+CppSTL::run()의 func_arr[]에 추가하라. 1번 메뉴 항목인 display() 등록을 참고하라.
+```
+
+### 문제 4 실행 결과
+```
+1 12  // C++STL
+9     // CopyPersons
+display(): count 32
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[1] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+...
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+[16] pp0 30 71 true :Gwangju Nam-gu Bongseon-dong 21:
+[17] pp1 31 62.1 false :Jong-ro 1-gil, Jongno-gu, Seoul:
+[18] pp2 32 53.2 true :1001, Jungang-daero, Yeonje-gu, Busan:
+...
+[30] aa3 63 52.9 true :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[31] aa4 64 67.6 false :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+```

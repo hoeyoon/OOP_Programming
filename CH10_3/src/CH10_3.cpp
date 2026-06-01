@@ -1981,6 +1981,7 @@ void CppSTL::run() {
     func_t func_arr[] = {
         nullptr, &CppSTL::display, &CppSTL::shuffle, &CppSTL::sort, &CppSTL::reverseSort, 
 		&CppSTL::reverse, &CppSTL::dispMemo, &CppSTL::countWord, &CppSTL::top10WordCount, 
+		&CppSTL::copyPersons, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
     string menuStr =

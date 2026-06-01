@@ -5,7 +5,7 @@ using namespace std;
 // 대량의 데이터를 순서적으로 저장하고 있는 컨테이너 클래스
 class Container {
 private:
-	정수형 vector 변수 v 선언;
+	vector<int> v;
 
 public:
 	void push(int value);	// value를 컨테이너에 삽입
@@ -16,42 +16,45 @@ public:
 	void print();			// 컨테이너에 삽입된 모든 원소를 순서적으로 출력
 };
 
-Container의 push(value) 함수 {
-	매개변수 value를 벡트 v의 적절한 멤버 함수를 호출하여 벡터의 맨 뒤에 추가한다. 
+void Container::push(int value){
+	v.push_back(value);
 }
 
-Container의 add(inc) {
-	for문을 이용하여 
-	    벡터 v의 모든 원소에 inc를 더한다.
+void Container::add(int inc){
+	for(int i = 0; i < (int)v.size(); i++){
+		v[i] += inc;
+	}
 }
 
-Container의 get(index, value) {
-	index가 0보다 적거나 또는 index가 벡터v의 원소의 개수와 같거나 크면 
-	    false 리턴
-	아니면 
-	    index 위치의 벡터v의 원소를 value에 저장하고 
-	    true 반환
-	    // 컨테이너의 index는 벡터의 index와 동일한 의미를 가진다.
+bool Container::get(int index, int &value){
+	if(index < 0 || index >= (int)v.size()){
+		return false;
+	}
+	value = v[index];
+	return true;
 }
 
-Container의 find(value) {
-	for문을 이용하여 
-	    value와 동일한 벡터 v의 원소를 만나면 
-	        그 원소의 인덱스 값을 반환한다.
-	value와 동일한 값을 찾지 못할 경우 -1을 리턴함
+int Container::find(int value){
+	for(int i = 0; i < (int)v.size(); i++){
+		if(v[i] == value){
+			return i;
+		}
+	}
+	return -1;
 }
 
-Container의 remove(value) {
-    // 벡터의 특정 원소를 삭제하기 위해선 iterator을 이용해야 한다.
-    따라서 vector v의 iterator it 변수를 선언하고 
-    for 문을 이용하여 loop 돌면서 각각의 it에 대해
-        *it와 value가 같은 값인 it를 찾아서 
-            v.erase(it)를 호출하여 해당 원소를 삭제하고,
-            바로 true 리턴
-    동일한 값을 하나도 찾지 못할 경우 false 반환 
+bool Container::remove(int value){
+	vector<int>::iterator it;
+	for(it = v.begin(); it != v.end(); it++){
+		if(*it == value){
+			v.erase(it);
+			return true;
+		}
+	}
+	return false;
 }
 
-Container의 print() {
+void Container::print() {
 	for (int i = 0; i < (int)v.size(); i++)
 		cout << "[" << i << "]" << v[i] << " ";
 	cout << endl << endl;

@@ -416,3 +416,181 @@ w1: 1
 w2: 1
 s3: 0
 ```
+
+### 문제 3-1 설명
+```
+아래 [문제 3-1] 실행 결과를 먼저 확인하라. 
+persons 벡테에서 관리되는 모든 사람들의 메모 중에 포함된 모든 단어에 대해 그 단어가 출현하는 횟수를 
+세어서 "단어이름: 단어출현횟수"를 출력하되, 
+단어의 출현 횟수가 가장 많은 사람부터 작은 순서로 출력해 준다.
+---------------------------------------------------------------------------
+CppSTL::top10WordCount() 함수를 구현하고, 이를 run()의 func_arr[]에 추가하라.
+    이 함수에서 각 사람의 메모를 구한 후 
+    그 메모에 있는 각 단어가 출현될 때마다 그 단어의 < 단어이름, 단어출현횟수 > 짝을 map 컨테이너에
+    저장하되 이미 단어가 존재할 경우 그 단어의 출현횟수를 1 증가시킨다. 
+    그런 후 마지막에 map에 저장된 각 원소 < 단어이름, 단어출현횟수 >를 순서적으로 출력한다. 
+---------------------------------------------------------------------------
+이 함수 코드는 다음과 같다. 코드를 잘 이해하기 바란다.
+```
+```c++
+void CppSTL::top10WordCount() {
+    map< string, int > wordCountMap;
+    범위기반 for문을 사용하여 persons의 각 p에 대해 (CppSTL::countWord()처럼 하면 됨)
+        p의 메모를 구하여 Memo memo에 저장한 후 
+        for 문을 이용하여 memo 내의 각 단어를 얻어 와 wordCountMap의 [] 연산자를 사용하여 
+            해당 단어의 출현횟수를 1 증가시킨다. (CppSTL::countWord()처럼 하면됨)
+    cout << "=== Word count in alphabetical order ===" << endl;
+    CppSTL::countWord()의 마지막 코드를 참고하여 wordCountMap의 각 단어 이름과 횟수를 출력하라.
+}
+```
+
+### 문제 3-1 실행 결과
+```
+1 12 1 6
+8        // Top10WordCount
+=== Word count in alphabetical order ===
+': 2
+,: 65
+.: 20
+America: 2
+Author: 2
+Cooper: 2
+Fenimore: 2
+Few: 5
+Indian: 18
+Introduction: 2
+It: 7
+James: 2
+Last: 12
+Mohicans: 12
+North: 2
+Still: 8
+The: 12
+accompanying: 8
+allusions: 11
+and: 15
+antithesis: 6
+are: 11
+as: 10
+believed: 7
+character: 6
+confusion: 10
+diversity: 5
+exhibit: 5
+explanation: 10
+express: 5
+greater: 11
+if: 5
+in: 34
+information: 7
+is: 15
+it: 5
+its: 11
+itself: 8
+may: 5
+men: 5
+most: 7
+much: 16
+names: 10
+native: 2
+necessary: 11
+notes: 8
+obscurity: 8
+obvious: 8
+of: 34
+or: 13
+reader: 8
+render: 10
+rendered: 11
+s: 2
+scene: 7
+so: 21
+some: 10
+sufficiently: 11
+tale: 7
+text: 8
+than: 2
+that: 7
+the: 70
+there: 8
+this: 7
+to: 29
+traditions: 8
+understand: 11
+useful: 10
+warrior: 2
+we: 5
+```
+
+### 문제 3-2 설명
+```
+// 아래 [문제 3-2] 실행 결과를 먼저 확인하라. 
+// 기존 [문제 3-1] 출력에 이어서 출력한 단어들 중 출현 횟수가 가장 많은 10개의 단어를 선별한 후
+// 출현 회수가 많은 단어부터 작은 단어 순으로 정렬하여 출력하였다.
+//----------------------------------------------------------------------------
+여기서는 우순순위 큐 priority_queue< > 를 사용한다. 이 컨테이너는 데이타를 큐에 보관하지만
+FIFO 순서가가 아니라 우선순위 순서로, 즉 빼낼 때 우선순위가 제일 높은 원소부터 빼 낼 수 있게 해 준다.
+우선순위를 지정하는 것은 원소를 비교하는 비교함수에서 결정한다.
+여기서 우선순위는, 출현횟수가 많은 10개의 단어 중 (출현횟수가 가장 많은 단어가) 우선순위가 가장 높으며
+(출현횟수가 같을 경우 단어이름이 사전적 순서에서 앞선 단어가) 우선순위가 더 높은 것으로 정의한다.
+---------------------------------------------------------------------------
+아래 헤드 파일을 소스파일 앞쪽에 추가하라.
+---------------------------------------------------------------------------
+#include < queue >      // ch10_3 추가
+---------------------------------------------------------------------------
+그리고 기존 CppSTL::top10WordCount() 함수의 맨 뒤에 아래 코드를 추가하라.
+```
+```c++
+    // 우선순위 큐에서 우선순위를 비교할 때 사용하는 함수 operator 정의
+    // e1, e2는 pair< string, int > , 즉 struct pair { string first; int second; }
+    //         pair< 단어이름, 출현횟수 >
+    struct CountComp {
+        // 두 개 단어의 우선순위를 비교하는 함수 operator
+        // 이 함수는 아래 우선순위큐에 객체를 pq.push(p)할 때 우선순위 결정을 위해 호출 됨
+        // e1, e2는 아래 우선순위큐 pq에 저장된 임의의 두 원소임
+        bool operator()(PairStrInt& e1, PairStrInt& e2) {
+            return (e1.second < e2.second) ||
+                   (e1.second == e2.second && e2.first < e1.first);
+            // (e1의 출현회수가 e2의 출현횟수 보다 작으면) true를 또는
+            // (출현횟수가 같을 경우 이름이 작으면) true를 반환한다. 
+            // 이렇게 반환하면 우선순위큐에선 결국 출현횟수(second)가 높은 순으로 정렬되며 
+            // 출현횟수가 같으면 단어이름(first) 순서로 정렬됨
+        }
+    };
+    // 우선순위큐< 삽입할 데이터 구조, 삽입된 데이터를 보관할 컨테이너, 비교함수를 가진 클래스 >
+    priority_queue< PairStrInt, vector< PairStrInt >, CountComp > pq;
+    for (auto p: wordCountMap)
+        pq.push(p); // 우선순위큐에 < 단어이름, 출현횟수 > p를 삽입 (우선순위에 따라 자동 정렬됨)
+
+    // 출현횟수가 가장 많은 10개의 단어를 출력함
+    cout << "\n=== Top 10 word count ===" << endl;
+
+    // 아래 pq.pop()은 우선순위큐에서 우선순위가 가장 높은 객체를 제거(삭제)함
+    for (int i = 0; i <  10 && !pq.empty(); pq.pop(), ++i) {
+        // 아래 top()은 (우선순위큐에서 삭제하지는 않고) 우선순위가 가장 높은 객체를 얻어 옴 
+        PairStrInt p = pq.top(); 
+        cout << p.first << ": " << p.second << endl;
+    }
+```
+
+### 문제 3-2 실행 결과
+```
+1 12 1 6
+8        // Top10WordCount
+=== Word count in alphabetical order ===
+': 2
+...      // 기존 [문제 3-1] 실행 결과와 동일
+we: 5
+
+=== Top 10 word count ===
+the: 70
+,: 65
+in: 34   // in과 of는 출현횟수가 동일하며 이 경우 단어이름 순서로 출력됨
+of: 34
+to: 29
+so: 21
+.: 20
+Indian: 18
+much: 16
+and: 15
+```

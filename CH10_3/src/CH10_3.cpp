@@ -17,6 +17,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <queue>      // ch10_3 추가
 
 using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include해야 한다.
 
@@ -1767,6 +1768,7 @@ public:
     void reverse();
     void dispMemo();
     void countWord();
+    void top10WordCount();
     void run();
 };
 
@@ -1918,11 +1920,67 @@ void CppSTL::countWord() {
         cout << p.first << ": " << p.second << endl; 
 }
 
+void CppSTL::top10WordCount() {
+	/*
+    map< string, int > wordCountMap;
+    범위기반 for문을 사용하여 persons의 각 p에 대해 (CppSTL::countWord()처럼 하면 됨)
+        p의 메모를 구하여 Memo memo에 저장한 후 
+        for 문을 이용하여 memo 내의 각 단어를 얻어 와 wordCountMap의 [] 연산자를 사용하여 
+            해당 단어의 출현횟수를 1 증가시킨다. (CppSTL::countWord()처럼 하면됨)
+    cout << "=== Word count in alphabetical order ===" << endl;
+    CppSTL::countWord()의 마지막 코드를 참고하여 wordCountMap의 각 단어 이름과 횟수를 출력하라.
+    */
+    map<string, int> wordCountMap; 
+    string next;
+    
+    for (auto p: persons) {
+        Memo memo(p->getMemo());
+        for (size_t pos = 0; !memo.getNext(pos, next).empty(); )
+            wordCountMap[next]++;
+    }
+    cout << "=== Word count in alphabetical order ===" << endl;
+    
+    for(auto& p : wordCountMap){
+    	cout << p.first << ": " << p.second << endl;
+    }
+    
+    // 우선순위 큐에서 우선순위를 비교할 때 사용하는 함수 operator 정의
+    // e1, e2는 pair< string, int > , 즉 struct pair { string first; int second; }
+    //         pair< 단어이름, 출현횟수 >
+    struct CountComp {
+        // 두 개 단어의 우선순위를 비교하는 함수 operator
+        // 이 함수는 아래 우선순위큐에 객체를 pq.push(p)할 때 우선순위 결정을 위해 호출 됨
+        // e1, e2는 아래 우선순위큐 pq에 저장된 임의의 두 원소임
+        bool operator()(PairStrInt& e1, PairStrInt& e2) {
+            return (e1.second < e2.second) ||
+                   (e1.second == e2.second && e2.first < e1.first);
+            // (e1의 출현회수가 e2의 출현횟수 보다 작으면) true를 또는
+            // (출현횟수가 같을 경우 이름이 작으면) true를 반환한다. 
+            // 이렇게 반환하면 우선순위큐에선 결국 출현횟수(second)가 높은 순으로 정렬되며 
+            // 출현횟수가 같으면 단어이름(first) 순서로 정렬됨
+        }
+    };
+    // 우선순위큐< 삽입할 데이터 구조, 삽입된 데이터를 보관할 컨테이너, 비교함수를 가진 클래스 >
+    priority_queue< PairStrInt, vector< PairStrInt >, CountComp > pq;
+    for (auto p: wordCountMap)
+        pq.push(p); // 우선순위큐에 < 단어이름, 출현횟수 > p를 삽입 (우선순위에 따라 자동 정렬됨)
+
+    // 출현횟수가 가장 많은 10개의 단어를 출력함
+    cout << "\n=== Top 10 word count ===" << endl;
+
+    // 아래 pq.pop()은 우선순위큐에서 우선순위가 가장 높은 객체를 제거(삭제)함
+    for (int i = 0; i <  10 && !pq.empty(); pq.pop(), ++i) {
+        // 아래 top()은 (우선순위큐에서 삭제하지는 않고) 우선순위가 가장 높은 객체를 얻어 옴 
+        PairStrInt p = pq.top(); 
+        cout << p.first << ": " << p.second << endl;
+    }
+}
+
 void CppSTL::run() {
     using func_t = void (CppSTL::*)();
     func_t func_arr[] = {
         nullptr, &CppSTL::display, &CppSTL::shuffle, &CppSTL::sort, &CppSTL::reverseSort, 
-		&CppSTL::reverse, &CppSTL::dispMemo, &CppSTL::countWord,
+		&CppSTL::reverse, &CppSTL::dispMemo, &CppSTL::countWord, &CppSTL::top10WordCount, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
     string menuStr =

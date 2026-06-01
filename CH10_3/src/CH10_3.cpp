@@ -16,13 +16,14 @@
 #include <sstream>    // ch9_2 추가: for istringstream iss(expr);
 #include <vector>
 #include <algorithm>
+#include <map>
 
 using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include해야 한다.
 
 /******************************************************************************
  * 아래 상수 정의는 필요에 따라 변경하여 사용하라.
  ******************************************************************************/
-#define AUTOMATIC_ERROR_CHECK false // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
+#define AUTOMATIC_ERROR_CHECK true // true: 자동 오류 체크, false: 키보드에서 직접 입력하여 프로그램 실행
 
 //----------------------------------------------------------------------------
 // 휴대폰 기지국
@@ -1765,6 +1766,7 @@ public:
     void reverseSort();
     void reverse();
     void dispMemo();
+    void countWord();
     void run();
 };
 
@@ -1848,11 +1850,79 @@ void CppSTL::dispMemo(){
 	}
 }
 
+using PairStrInt = pair<string, int>; 
+// 이후부터 pair< string, int > 를 간단히 PairStrInt 로 사용하겠다는 의미
+// pair< string, int >는 struct pair { string first; int second; }와 동일함
+
+void CppSTL::countWord() {
+    map<string, int> wcMap; // < 사람이름, 단어출현횟수 >를 저장하는 컨테이너 (트리에 원소들을 보관)
+    string next, &word = UI::getNext("Word to count? "); // 사용자로부터 단어 하나 입력 받음
+
+    for (auto p: persons) { // persons에 보관 중인 각 사람 객체 포인터 p에 대해
+        Memo memo(p->getMemo());
+        int count = 0;
+        for (size_t pos = 0; !memo.getNext(pos, next).empty(); ) // 메모에서 한 단어 빼옴
+            if (next == word) ++count; // 사용자가 입력한 word와 같은 단어를 찾으면 count 증가
+        wcMap[p->getName()] = wcMap[p->getName()] + count;
+        // < 사람이름, count > 짝을 wcMap에 저장; 기존이 동일 이름이 있을 경우 기존 값에 count 값을 더함 
+    }
+    cout << "=== Word count in NAME order ===" << endl;
+     
+    // 아래 auto& p는 pair< string, int >& 이며 참조자(&)이다.
+    // 즉 struct pair { string first; int second; }의 객체 참조자임
+    // first가 키, second가 값
+    for (auto& p: wcMap)  // wcMap에 저장된 각 pair< 사람이름, 단어출현횟수 > p에 대해,
+        cout << p.first << ": " << p.second << endl; 
+        // first: 사람이름, second: 단어출현횟수
+    // 위의 범위기반 for 문의 각 p에 저장된 사람 이름은 사전적 순서로 출력된다.
+    // map< string, int > wcMap에 저장될 때 키 값인 사람이름 순서로 정렬되어 저장되기 때문이다.
+    
+    /*
+    PairStrInt(이름과 출현회수를 저장하는 짝) 타입의 객체를 저장하는 새로운 vector 객체 변수 
+    wcVector를 선언하라. 즉, vector< PairStrInt > wcVector;
+    // PairStrInt은 countWord() 함수 앞쪽 코드 참조;
+
+    // 각 <이름, 출현횟수> p를 wcMap에서 구해 와 wcVector 벡터에 저장한다.
+    // 아래 p는 PairStrInt 형의 객체임; 이 객체를 바로 벡터에 삽입하면 됨
+    범위기반 for문을 사용하여 벡터 wcMap 각 원소 auto& p에 대해
+       원소 p를 wcVector의 맨 뒤에 추가 (원소 p는 < 이름,출현회수 >를 저장하는 짝 pair 임)
+
+    // 정렬 시 사용되는 람다 함수: 출현횟수(second)가 큰 수에서 작은 수 순서로 정렬
+    //                      출현횟수가 동일할 경우 사람이름(first) 순서으로 정렬
+    // e1과 e2는 wcVector 벡터 내의 임의의 두 원소임
+    auto comp = [](PairStrInt& e1, PairStrInt& e2) {
+        return (e1.second > e2.second) || 
+               (e2.second == e1.second && e1.first < e2.first);
+    };
+    위 람다 함수를 사용하여여 wcVector의 처음부터 끝까지 정렬하라. (CppSTL::sort() 함수 참조)
+
+    cout << "\n=== Word count in COUNT order ===" << endl;
+    기존 CppSTL::countWord()의 마지막 코드를 참고하여 
+    wcVector의 각 원소의 이름과 횟수를 출력하라.
+	*/
+    
+    vector<PairStrInt> wcVector;
+    for(auto& p : wcMap){
+    	wcVector.push_back(p);
+    }
+    
+    auto comp = [](PairStrInt& e1, PairStrInt& e2) {
+        return (e1.second > e2.second) || 
+               (e2.second == e1.second && e1.first < e2.first);
+    };
+    std::sort(wcVector.begin(), wcVector.end(), comp);
+    
+	cout << "\n=== Word count in COUNT order ===" << endl;
+    
+    for (auto& p: wcVector)
+        cout << p.first << ": " << p.second << endl; 
+}
+
 void CppSTL::run() {
     using func_t = void (CppSTL::*)();
     func_t func_arr[] = {
         nullptr, &CppSTL::display, &CppSTL::shuffle, &CppSTL::sort, &CppSTL::reverseSort, 
-		&CppSTL::reverse, &CppSTL::dispMemo,
+		&CppSTL::reverse, &CppSTL::dispMemo, &CppSTL::countWord,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
     string menuStr =
@@ -1970,7 +2040,7 @@ void PersonManager::pushArray(){
 }
 
 void PersonManager::deleteElemets() {
-	for(int i = 0; i < persons.size(); i++){
+	for(int i = 0; i < (int)persons.size(); i++){
 		Person *temp = persons[i];
 
 		delete temp;
@@ -1986,7 +2056,7 @@ void PersonManager::printNotice(const string preMessage, const string postMessag
 }
 
 Person* PersonManager::findByName(const string name) {
-	for(int i = 0; i < persons.size(); i++){
+	for(int i = 0; i < (int)persons.size(); i++){
 		if(name == persons[i]->getName()){
 			return persons[i];
 		}
@@ -2098,7 +2168,7 @@ void PersonManager::find() { // Menu item 9
 	
 	bool found = false;
 	
-	for(int i = 0; i < persons.size(); i++){
+	for(int i = 0; i < (int)persons.size(); i++){
 		if((typeid(*persons[i]) == typeid(*p)) && (*persons[i] == *p)){
             cout << "[" << i << "] "; persons[i]->println();
             found = true;
@@ -2118,7 +2188,7 @@ void PersonManager::dispStudentWorkers() { // Menu item 10
          인자가 포인터면 인자 앞에 *를 붙여야만 함) 
             cout << "[" << i << "] "; persons[i]->println();
 	*/
-    for(int i = 0; i < persons.size(); i++){
+    for(int i = 0; i < (int)persons.size(); i++){
     	if(typeid(*persons[i]) == typeid(StudentWorker)){
             cout << "[" << i << "] "; persons[i]->println();    		
     	}
@@ -2132,7 +2202,7 @@ void PersonManager::dispPhones() { // Menu item 11
         cout << "[" << i << "] "; persons[i]->getSmartPhone()->println();*/
         // 추상클래스 SmartPhone::println()->print()->가상함수 getMaker()-> 
         // 파생클래스(Galaxy 또는 IPhone)의 override된 getMaker() 함수가 실제 호출됨  
-    for(int i = 0; i < persons.size(); i++){
+    for(int i = 0; i < (int)persons.size(); i++){
         cout << "[" << i << "] "; persons[i]->getSmartPhone()->println();
     }
 }

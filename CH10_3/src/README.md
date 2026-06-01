@@ -667,3 +667,83 @@ Made a call to w2 @ s1's Galaxy Phone
 Base station: sends a call signal of s1 to w2
 w2's IPhone 13 Phone: received a call from s1
 ```
+
+### 문제 6 설명
+```
+기존 PersonManager::find()는 사용자가 입력한 사람 객체(*p)와 동일한 객체을 
+(*p == *persons[i])를 이용하여 우리가 직접 for문을 이용하여 찾았다. 
+이제 직접 for문을 이용하는 대신 < algorithm >에서 제공되는 for_each() 함수를
+이용해 보도록 하자.
+---------------------------------------------------------------------------
+기존 PersonManager::find()의 함수 { 본체 } 를 아래 코드로 대체하라.
+기능은 기존 함수와 동일하다. 
+(동일한 객체가 여러개 있을 경우 이를 모두 다 찾아서 출력해 준다.)
+```
+```c++
+    printNotice("Input", "to find by operator ==");
+    Person* p = Factory::inputPerson(cin);
+    if (p == nullptr) return;
+    // p->println(); 이 문장은 삭제되었음
+    int i = -1;
+    bool found = false;
+    auto comp = [p, &i, &found](Person* e) {
+        ++i;
+        if ((typeid(*p) == typeid(*e)) && (*p == *e)) {
+            cout << "[" << i << "] "; e->println();
+            found = true;
+        }
+    };
+    for_each(persons.begin(), persons.end(), comp);
+    if (!found) cout << "NOT found by operator ==" << endl;
+```
+```
+위 코드는 for_each()를 호출하는데 비교 람다식으로 comp를 지정한다.
+for_each()는 persons의 처음부터 끝까지 각각의 원소인 객체 포인터 e에 대해 
+comp 람다 함수를 호출한다. 함수 매개변수로 각 객체 포인터 e가 전달된다.
+이 람다식의 캡쳐 리스트 [p, &i, &found]는 find() 함수 내의 지역변수들을 
+람다식에 전달한다. p는 값으로, &i와 &found는 참조자로 람다식에 전달된다. 
+즉, 지역변수인 i와 found를 람다 함수에서도 이들을 수정하겠다는 의미이다.
+persons에 저장된 사람 객체 중에서도 p와 동일한 종류의 객체일 경우에만 
+==를 이용해 비교한다. 람다식 내의 i는 persons 내에서 찾은 동일한 객체의 
+인덱스 즉, persons[i]의 i를 의미한다.
+```
+
+### 문제 6 실행 결과
+```
+1    // PersonManager
+1    // Display
+2    // Append
+6
+P p3 13 84.3 false :100 Dunsan-ro Buk-gu Seoul:
+P p3 13 85.3 true :100 Dunsan-ro Dong-gu Gwangju:
+P p3 13 86.3 false :100 Dunsan-ro Nam-gu Busan:
+W w3 33 56.5 true :Dong-gu Seoul: Hyundai Labor
+W w3 33 57.5 false :Dong-gu Gwangju: Hyundai Labor
+S s2 22 55.3 true :Yeonje-gu Seoul: Electronics 3.5 4
+
+9    // Find
+Input [delimiter(P, S, W, or A)] [person information] to find by operator ==
+P p3 13 84.3 false :100 Dunsan-ro Buk-gu Seoul:
+[3] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[16] p3 13 84.3 false :100 Dunsan-ro Buk-gu Seoul:
+[17] p3 13 85.3 true :100 Dunsan-ro Dong-gu Gwangju:
+[18] p3 13 86.3 false :100 Dunsan-ro Nam-gu Busan:
+
+9    // Find
+Input [delimiter(P, S, W, or A)] [person information] to find by operator ==
+W w3 33 56.5 true :Dong-gu Seoul: Hyundai Labor
+[10] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[19] w3 33 56.5 true :Dong-gu Seoul: Hyundai Labor
+[20] w3 33 57.5 false :Dong-gu Gwangju: Hyundai Labor
+
+9    // Find
+Input [delimiter(P, S, W, or A)] [person information] to find by operator ==
+S s2 22 55.3 true :Yeonje-gu Seoul: Electronics 3.5 4
+[5] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[21] s2 22 55.3 true :Yeonje-gu Seoul: Electronics 3.5 4
+
+9    // Find
+Input [delimiter(P, S, W, or A)] [person information] to find by operator ==
+S s2 23 55.3 true :Yeonje-gu Seoul: Electronics 3.5 4
+NOT found by operator ==
+```

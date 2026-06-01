@@ -2,9 +2,15 @@
 #define MAX_ARRAY_SIZE 6
 using namespace std;
 
-template
- 	 smallest( a[], int n) {
-
+template<typename T>
+T smallest(T a[], int n) {
+	T min = a[0];
+	for(int i = 0; i < n; i++){
+		if(min > a[i]){
+			min = a[i];
+		}
+	}
+	return min;
 }
 
 int main() {

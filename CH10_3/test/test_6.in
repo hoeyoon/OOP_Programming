@@ -1,0 +1,20 @@
+1
+1
+2
+6
+P p3 13 84.3 false :100 Dunsan-ro Buk-gu Seoul:
+P p3 13 85.3 true :100 Dunsan-ro Dong-gu Gwangju:
+P p3 13 86.3 false :100 Dunsan-ro Nam-gu Busan:
+W w3 33 56.5 true :Dong-gu Seoul: Hyundai Labor
+W w3 33 57.5 false :Dong-gu Gwangju: Hyundai Labor
+S s2 22 55.3 true :Yeonje-gu Seoul: Electronics 3.5 4
+9
+P p3 13 84.3 false :100 Dunsan-ro Buk-gu Seoul:
+9
+W w3 33 56.5 true :Dong-gu Seoul: Hyundai Labor
+9
+S s2 22 55.3 true :Yeonje-gu Seoul: Electronics 3.5 4
+9
+S s2 23 55.3 true :Yeonje-gu Seoul: Electronics 3.5 4
+0
+0

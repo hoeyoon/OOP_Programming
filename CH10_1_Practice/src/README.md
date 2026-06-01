@@ -281,3 +281,57 @@ map: (10,S0) (12,S2) (14,S4) (19,S9) (20,S0) (23,S3) (25,S5) (28,S8)
 map => vector
 vector: 10 12 14 19 20 23 25 28 
 ```
+
+### 문제 8 설명
+```
+정렬함수를 사용하지 않고 벡터 정렬하기
+
+기존 vectorAppend() 내의 //rnd.setSeed(); 문장의 주석을 해재하라.
+그러면 매번 메뉴 항목을 선택할 때마다 난수 발생용 seed 값을 새로 입력 받을 것이다.
+seed에 따라서 생성되는 난수들이 달라질 것이다.
+```
+
+### 문제 8 실행 결과
+```
+...
+menu item? 2
+seed for random number? 10
+vector: 10 16 21 21 16 13 19 25 25 16 
+...
+menu item? 3
+seed for random number? 10
+before sort
+vector: 10 16 21 21 16 13 19 25 25 16 
+after sort
+vector: 10 13 16 16 16 19 21 21 25 25 
+...
+menu item? 4
+seed for random number? 10
+before add
+vector: 10 16 21 21 16 13 19 25 25 16 
+after add
+vector: 21 27 32 32 27 24 30 36 36 27 
+...
+menu item? 5
+seed for random number? 10
+vector: 10 16 21 21 16 13 19 25 25 16 
+vector => map
+map: (10,S0) (13,S3) (16,S6) (19,S9) (21,S1) (25,S5) 
+...
+menu item? 6
+seed for random number? 10
+vector: 10 16 21 21 16 13 19 25 25 16 
+vector => map
+map: (10,S0) (13,S3) (16,S6) (19,S9) (21,S1) (25,S5) 
+key(26) not found
+(13,S3)
+(16,S6)
+...
+menu item? 7
+seed for random number? 10
+vector: 10 16 21 21 16 13 19 25 25 16 
+vector => map
+map: (10,S0) (13,S3) (16,S6) (19,S9) (21,S1) (25,S5) 
+map => vector
+vector: 10 13 16 19 21 25 
+```

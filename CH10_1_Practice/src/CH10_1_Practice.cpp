@@ -92,7 +92,7 @@ void printVector(string msg = {}) {
 
 // 10개의 난수를 발생하여 벡터에 삽입한다.
 void vectorAppend() {
-	//rnd.setSeed(); // 지시가 있을 때까지 주석을 해제하지 마시오. 
+	rnd.setSeed(); // 지시가 있을 때까지 주석을 해제하지 마시오. 
     if (!iv.empty()) iv.clear(); // iv에 기존 원소가 있으면 모두 제거함
 
     // TODO: 10개의 난수를 생성하여 iv 벡터에 추가하시오.

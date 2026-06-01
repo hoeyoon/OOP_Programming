@@ -2115,13 +2115,12 @@ void PersonManager::printNotice(const string preMessage, const string postMessag
 }
 
 Person* PersonManager::findByName(const string name) {
-	for(int i = 0; i < (int)persons.size(); i++){
-		if(name == persons[i]->getName()){
-			return persons[i];
-		}
-	}
-	cout << name + ": NOT found" << endl;
-	return nullptr;
+    auto comp = [&name](Person* e) -> bool { return name == e->getName(); };
+    auto it = find_if(persons.begin(), persons.end(), comp);
+    if (it != persons.end())
+        return *it;  // 반복자가 포인터하는 값, 여기서는 벡터 persons 내에 저장된 Person*
+    cout << name + ": NOT found" << endl;
+    return nullptr;
 }
 
 void PersonManager::append() { // Menu item 2

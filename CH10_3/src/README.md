@@ -620,3 +620,50 @@ display(): count 32
 [30] aa3 63 52.9 true :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
 [31] aa4 64 67.6 false :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
 ```
+
+### 문제 5 설명
+```
+기존 PersonManager::findByName()의 함수 { 본체 } 를 아래 코드로 대체하라.
+```
+```c++
+    auto comp = [&name](Person* e) -> bool { return name == e->getName(); };
+    auto it = find_if(persons.begin(), persons.end(), comp);
+    if (it != persons.end())
+        return *it;  // 반복자가 포인터하는 값, 여기서는 벡터 persons 내에 저장된 Person*
+    cout << name + ": NOT found" << endl;
+    return nullptr;
+```
+```
+기존 findByName()는 (name == persons[i]->getName()) 조건문을 이용하여
+우리가 직접 for문을 이용하여 매개변수 name과 동일한 이름을 가진 사람을 persons 내에서 찾았다.
+이제 < algorithm >에서 제공되는 find_if() 함수를 이용하여 동일한 이름의 사람을 찾아보자.
+---------------------------------------------------------------------------
+위 코드는 find_if()를 이용하여 persons 벡터의 시작과 끝까지 찾는다. 
+이때 비교 함수로 람다 함수 comp를 지정한다. 이 람다식의 캡쳐 리스트 [&name]은
+찾고자 하는 사람이름 name의 참조자를 람다식에 전달하는 것이고, 
+매개변수 (Person* e)는 persons 벡터에 저장된 각 사람객체의 포인터이다. 
+find_if()는 persons 벡터의 각각의 사람 포인터에 대해 comp를 호출한다.
+find_if()는 찾은 객체 포인터에 대한 iterator it를 반환하며 
+*it 가 사람 객체 포인터이다. 즉, *it는 persons 벡터에 저장된 하나의 원소인데, 
+여기서 persons 벡터는 Person*를 저장하고 있기 때문이다.
+```
+
+### 문제 5 실행 결과
+```
+// 참고로 위 PersonManager::findByName()는 PersonManager::login(), 
+// PersonManager::connectTo()에서(전화연결시) 호출된다.
+//----------------------------------------------------------------------------
+1 
+4    // Person Management Menu: Login
+s5
+s5: NOT found
+4    // Login
+s1
+     // 빈줄입력
++++++++++++++++++++++ Current User Menu ...
+14   // PhoneCall
+Name to call? w2
+Made a call to w2 @ s1's Galaxy Phone
+Base station: sends a call signal of s1 to w2
+w2's IPhone 13 Phone: received a call from s1
+```

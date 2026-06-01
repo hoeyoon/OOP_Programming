@@ -33,10 +33,38 @@ public:
 // [10, 29] 범위의 난수 발생기
 Rand rnd(10, 29);
 
+template<typename T>
+class Store {
+    T value;
+public:
+    Store(const T& v={}) { value = v; }
+    T get()              { return value; }
+    void set(const T& v) { value = v; }
+    T add(const T& v)  { value += v; return value;}
+};
+
 /******************************************************************************
  * template class
  ******************************************************************************/
+
+// Store< int > is 에 정수 값을 넣고 빼고 수정한다.
+// Store< string > ss("S1") 에 문자열을 넣고 빼고 수정한다.
 void templateClass() {
+    Store<int> is;
+    int i = is.get();
+    cout << "is.get()   : " << i << endl;
+    is.set(3);
+    cout << "is.set(3)" << endl;
+    i = is.add(4);
+    cout << "is.add(4)  : " << i << endl;
+
+    Store<string> ss("S1");
+    string s = ss.get();
+    cout << "ss.get()   : " << s << endl;
+    ss.set("S3");
+    cout << "ss.set(S3)" << endl;
+    s = ss.add("S4");
+    cout << "ss.add(S4) : " << s << endl;
 }
 
 /******************************************************************************

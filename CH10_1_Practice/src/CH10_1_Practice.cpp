@@ -152,7 +152,26 @@ void printMap(string msg = {}) {
     cout << endl;
 }
 
-void vectorToMap() {}
+void vectorToMap() {
+    vectorAppend();
+    printVector();
+    /*
+    TODO: mp에 기존 원소가 있다면, 모든 원소를 제거하라. vectorAppend() 참조
+   
+    TODO: 벡터의 각 원소 값 val에 대해, 키로 val을 사용하고, 값으로 "S"+"val%10" 문자열을 
+          만들어 맵 mp에 삽입하라. 예) 원소가 25라면 (25, "S5") 쌍이 삽입됨.
+          정수 25%10를 문자열로 변환하는 함수는 to_string(25%10)이다.
+          이 함수의 원형은 string to_string(int v); 이다.
+	*/
+    if (!mp.empty()) mp.clear();
+    
+    for(auto it : iv){
+    	mp.insert({it, "S" + to_string(it % 10)});
+    }
+    
+    printMap("vector => map");
+}
+
 void find_map() {}
 void mapFind() {}
 void mapToVector() {}

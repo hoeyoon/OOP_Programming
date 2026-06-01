@@ -172,8 +172,31 @@ void vectorToMap() {
     printMap("vector => map");
 }
 
-void find_map() {}
-void mapFind() {}
+void find_map() {
+    int key = rnd();
+
+    /*
+    TODO: mp에서 key를 검색한 후,
+          키가 존재하면 (키, 값) 쌍을 출력하고,
+          키가 존재하진 않을 경우 "key(키) not found"를 출력한다.
+	*/
+    map<int, string>::iterator it;
+    if((it = mp.find(key)) != mp.end()){
+    	cout << "(" << it->first << ", " << it->second << ")" << endl;
+    }
+    else{
+    	cout << "key(" << key << ") not found" << endl;
+    }
+}
+
+// map에서 키 값을 검색한 후 값을 출력한다.
+void mapFind() {
+    vectorToMap();
+    find_map();
+    find_map();
+    find_map();
+}
+
 void mapToVector() {}
 
 /******************************************************************************

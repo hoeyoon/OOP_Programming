@@ -15,7 +15,7 @@ class Rand {
     // 난수를 생성하는 엔진
     default_random_engine re;
     // 발생된 난수 값들이 일정 범위의 균등 분포(unfiform)로 매핑
-    uniform_int_distribution< int > dist;
+    uniform_int_distribution<int> dist;
 public:
     // [low, high] 범위 내의 값이 발생하도록 dist 초기화
     Rand(int low, int high): dist(low, high) { }
@@ -77,9 +77,38 @@ void templateClass() {
 vector<int> iv;
 map<int, string> mp;
 
-void printVector(string msg = {}) {}
-void vectorAppend() {}
-void vectorDisplay() {}
+// 벡터 iv의 모든 원소를 화면에 출력한다.
+void printVector(string msg = {}) {
+	if (!msg.empty())
+	    cout << msg << endl;
+    cout << "vector: ";
+    
+    for(auto it : iv){
+    	cout << it << " ";
+    }
+
+    cout << endl;
+}
+
+// 10개의 난수를 발생하여 벡터에 삽입한다.
+void vectorAppend() {
+	//rnd.setSeed(); // 지시가 있을 때까지 주석을 해제하지 마시오. 
+    if (!iv.empty()) iv.clear(); // iv에 기존 원소가 있으면 모두 제거함
+
+    // TODO: 10개의 난수를 생성하여 iv 벡터에 추가하시오.
+    // 난수 생성방법: rnd() 함수를 호출한 후 그 리턴 값을 벡터에 추가하면 됨 
+    //            rnd()는 [10, 29] 범위의 난수 값을 발생시킴
+    for(int i = 0; i < 10; i++){
+    	iv.push_back(rnd());
+    }
+}
+
+// 벡터에 10개의 값을 삽입한 후 벡터 내용을 출력한다.
+void vectorDisplay() {
+    vectorAppend();
+    printVector();
+}
+
 void vectorSort() {}
 void vectorLambda() {}
 

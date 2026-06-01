@@ -119,7 +119,26 @@ void vectorSort() {
     printVector("after sort"); // 작은 수에서 큰 수 순서로 출력되어야 함
 }
 
-void vectorLambda() {}
+void vectorLambda() {
+    vectorAppend();
+    printVector("before add");
+    int start = seed;
+
+    //TODO: auto lmd = 람다함수 선언;
+    // 람다함수는 매개변수로 넘어 온 벡터 원소에 캡처리스트 변수 start 값을 더해 준다.
+    // 주의: 매개변수와 캡처리스트의 데이타 타입을 잘 지정해야 한다. call by value?, reference?, or pointer?
+    auto lmd = [start](int& n){
+    	n += start + 1;
+    };
+
+    start++; // 이 문장의 위치는 반드시 위 람다함수 선언 뒤에 있어야 한다.
+
+    //TODO: 벡터 iv의 모든 원소에 start 값을 더하라.(이때 반드시 위 람다함수 lmd을 사용하라.)
+    //    힌트: for_each() 를 사용하면 편리하다.
+    for_each(iv.begin(), iv.end(), lmd);
+
+    printVector("after add");
+}
 
 // map의 모든 원소의 (키, 값) 쌍을 출력한다.
 void printMap(string msg = {}) {

@@ -129,3 +129,44 @@ vector: 10 12 25 19 20 14 10 23 23 28
 after sort
 vector: 10 10 12 14 19 20 23 23 25 28 
 ```
+
+### 문제 4 설명
+```
+lambda 함수 사용하기
+
+아래의 vectorLambda()는 4번 메뉴을 선택했을 때 실행되는 함수이다. 
+1) 아래 vectorLambda()의 코드를 소스 파일에 복사하라. 
+    이 함수는 람다 함수를 사용하여 벡터의 모든 원소에 seed+1 값을 더한다.
+2) 이 함수의 TODO 부분을 구현하라.
+```
+```c++
+void vectorLambda() {
+    vectorAppend();
+    printVector("before add");
+    int start = seed;
+
+    TODO: auto lmd = 람다함수 선언;
+    // 람다함수는 매개변수로 넘어 온 벡터 원소에 캡처리스트 변수 start 값을 더해 준다.
+    // 주의: 매개변수와 캡처리스트의 데이타 타입을 잘 지정해야 한다. call by value?, reference?, or pointer?
+
+    start++; // 이 문장의 위치는 반드시 위 람다함수 선언 뒤에 있어야 한다.
+
+    TODO: 벡터 iv의 모든 원소에 start 값을 더하라.(이때 반드시 위 람다함수 lmd을 사용하라.)
+    //    힌트: for_each() 를 사용하면 편리하다.
+
+    printVector("after add");
+}
+```
+
+### 문제 4 실행 결과
+```
+...
+menu item? 4
+before add
+vector: 10 12 25 19 20 14 10 23 23 28 
+after add
+vector: 11 13 26 20 21 15 11 24 24 29 
+
+주지: 람다 선언 당시 strat는 0이고, 이후 start++, 그 후 for_each() 문이 실행되었다.
+    즉, 실제 start++ 한 1 이 모든 벡터 원소에 더해 진다. 
+```

@@ -1702,6 +1702,56 @@ void BasePM::copyPersons(){
     display();
 }
 
+const char* memoArr[] = { memoData,
+R"(The Last of the Mohicans
+It is believed that the scene of this tale, and most of the information
+necessary to understand its allusions, are rendered sufficiently 
+obvious to the reader in the text itself, or in the accompanying notes.
+Still there is so much obscurity in the Indian traditions, and so much
+)",
+
+R"(The Last of the Mohicans
+It is believed that the scene of this tale, and most of the information
+necessary to understand its allusions, are rendered sufficiently 
+)",
+
+R"(The Last of the Mohicans
+necessary to understand its allusions, are rendered sufficiently 
+obvious to the reader in the text itself, or in the accompanying notes.
+Still there is so much obscurity in the Indian traditions, and so much
+confusion in the Indian names, as to render some explanation useful.
+)",
+
+R"(The Last of the Mohicans
+confusion in the Indian names, as to render some explanation useful.
+Few men exhibit greater diversity, or, if we may so express it, 
+greater antithesis of character, 
+)",
+
+R"(The Last of the Mohicans
+necessary to understand its allusions, are rendered sufficiently 
+obvious to the reader in the text itself, or in the accompanying notes.
+Still there is so much obscurity in the Indian traditions, and so much
+confusion in the Indian names, as to render some explanation useful.
+)",
+
+R"(confusion in the Indian names, as to render some explanation useful.
+)",
+
+R"(It is believed that the scene of this tale, and most of the information
+necessary to understand its allusions, are rendered sufficiently 
+)",
+
+R"(greater antithesis of character,
+)",
+
+R"(confusion in the Indian names, as to render some explanation useful.
+Few men exhibit greater diversity, or, if we may so express it, 
+greater antithesis of character, 
+)",
+};
+int lenMemoArr = sizeof(memoArr) / sizeof(memoArr[0]);
+
 /******************************************************************************
  * ch10_2: CppSTL class
  ******************************************************************************/
@@ -1714,14 +1764,30 @@ public:
     void sort();
     void reverseSort();
     void reverse();
+    void dispMemo();
     void run();
 };
 
 CppSTL::CppSTL(vector< Person* >& persons, int& cpCount):
     BasePM(persons, cpCount) {
     // TODO: [문제 6] persons의 각 객체의 메모 멤버를 초기화하라.
-	for(int i = 0; i < cpCount; i++){
-		persons[i]->setMemo("");
+	/*
+    int i = 0;
+    범위기반 for문을 사용하여 벡터 persons의 각 원소 p에 대해, 즉 for (auto p : persons)
+        // 참고로 p는 Person*이고, 아래 getMemo()는 char *이다.
+        p가 포인터하는 객체의 메모(p->getMemo())가 nullptr이거나 또는 
+                        메모 길이(strlen(p->getMemo()))가 0이면
+             위 memoArr[i]를 p의 메모로 설정(setMemo()) 해 준다. 그리고
+             i 값을 증가시킨 후 i가 lenMemoArr와 같거나 클 경우 다시 0으로 설정함
+	*/
+	int i = 0;
+	for(auto p : persons){
+		if((p->getMemo() == nullptr) || (strlen(p->getMemo()) == 0)){
+			p->setMemo(memoArr[i++]);
+			if(i >= lenMemoArr){
+				i = 0;
+			}
+		}
 	}
 }
 
@@ -1765,11 +1831,28 @@ void CppSTL::reverse(){
 	display();
 }
 
+void CppSTL::dispMemo(){
+	/*
+    범위기반 for문을 사용하여 벡터 persons의 각 원소 p에 대해, 
+        Memo 객체 memo를 선언한다; 이때 Memo 생성자의 인자로 p의 메모를 넘겨준다.
+        // 즉, Memo 생성자는 p의 메모의 시작 주소를 매개변수로 넘겨 받아 
+        // Memo 객체 memo에 메모를 복사하여 저장한다. 
+        아래처럼의 p의 이름을 출력한다. 
+        cout << "name: " << p->getName() << endl;
+        실행결과를 참고하여 Memo의 적절한 멤버함수를 사용하여 memo의 내용을 출력하라.
+	*/
+	for(auto p : persons){
+		Memo memo(p->getMemo());
+        cout << "name: " << p->getName() << endl;
+        memo.displayMemo();
+	}
+}
+
 void CppSTL::run() {
     using func_t = void (CppSTL::*)();
     func_t func_arr[] = {
         nullptr, &CppSTL::display, &CppSTL::shuffle, &CppSTL::sort, &CppSTL::reverseSort, 
-		&CppSTL::reverse, 
+		&CppSTL::reverse, &CppSTL::dispMemo,
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]);
     string menuStr =

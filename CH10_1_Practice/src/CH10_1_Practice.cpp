@@ -197,7 +197,22 @@ void mapFind() {
     find_map();
 }
 
-void mapToVector() {}
+void mapToVector() {
+    vectorToMap();
+
+    // TODO: 벡터 iv의 모든 원소를 제거한다.
+
+    // TODO: 맵 mp의 모든 키 값을 순서적으로 벡터 iv에 추가하라.
+    // 힌트: mp 내의 각 원소 키를 구하는 방법은 printMap()을 참조하라.
+    // map은 tree를 이용하여 모든 원소를 키 값 순서로 관리하므로 키 순으로 자동 정렬된다.
+    if (!iv.empty()) iv.clear();
+    
+    for(auto it : mp){
+    	iv.push_back(it.first);
+    }
+
+    printVector("map => vector");
+}
 
 /******************************************************************************
  * menu_switch() 함수: 선택된 메인 메뉴 항목을 실행함

@@ -932,6 +932,19 @@ ostream& drawDashLine(ostream& out){
     return out;
 }
 
+class question { // 매개변수가 있는 조작자를 만들기 위한 클래스
+    const string& msg;
+public:
+    question(const string& msg): msg{msg} { } // 생성자
+    friend istream& operator >> (istream& in, const question& qst);
+};
+
+// question 클래스의 입력 연산자: 단순히 question 객체에 저장된 msg를 출력해주는 역할을 한다. 
+istream& operator >> (istream& in, const question& qst) {
+    cout << qst.msg;
+    return in;
+}
+
 /******************************************************************************
  * User Interface
  ******************************************************************************/
@@ -976,8 +989,7 @@ bool UI::checkDataFormatError(istream& in) {
 // 한 사람의 정보 즉, 각 멤버 데이터를 순서적으로 입력 받아 p에 저장하고
 // 입력 중 입력 데이터에 오류가 있는지 확인하고 오류가 있을 시 에러 메시지를 출력한다.
 bool UI::inputPerson(Person& p) {
-    cout << "input person information:" << endl;
-    cin >> p;
+    cin >> question("input person information:\n") >> p;
     if (checkDataFormatError(cin)) return false;
     if (echo_input) p.println(); // 자동체크에서 사용됨
     return true;
@@ -985,8 +997,7 @@ bool UI::inputPerson(Person& p) {
 
 // 입력장치에서 하나의 단어로 구성된 문자열을 입력 받음
 string& UI::getNext(const string& msg) {
-    cout << msg; // 입력용 메시지를 출력
-    cin >> line; // 하나의 단어를 읽어 들임
+    cin >> question(msg) >> line;
     if (echo_input) cout << line << endl; // 자동체크 시 출력됨
     getline(cin, emptyLine); // 입력받은 한 단어 외 그 행의 나머지 데이타(엔터포함)는 읽어서 버림
     return line;             // 이유는 여기서 [엔터]를 제거하지 않으면
@@ -994,8 +1005,8 @@ string& UI::getNext(const string& msg) {
 
 // 입력장치에서 한 행을 입력 받음
 string& UI::getNextLine(const string& msg) {
-    cout << msg; // 입력용 메시지를 출력
-    getline(cin, line); // 한 행을 읽어 들임
+    cin >> question(msg);
+    getline(cin, line);
     if (echo_input) cout << line << endl; // 자동체크 시 출력됨
     return line;
 }
@@ -1003,8 +1014,7 @@ string& UI::getNextLine(const string& msg) {
 // 하나의 정수를 입력 받음; 정수가 아닌 아닌 문자열 입력시 에러 메시지 출력 후 재입력 받음
 int UI::getInt(const string& msg) {
     for (int value; true; ) {
-        cout << msg;
-        cin >> value;
+    	cin >> question(msg) >> value;
         if (echo_input) cout << value << endl; // 자동체크 시 출력됨
         if (checkInputError(cin, "Input an INTEGER.\n"))
             continue;

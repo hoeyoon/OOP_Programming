@@ -235,3 +235,103 @@ than the native warrior of North America.
 [10] than the native warrior of North America.
 --------------------
 ```
+
+### 문제 5 설명
+```
+매개변수가 있는 입력 조작자(manipulator) 구현 및 활용
+
+지금까지 UI::getNext(const string& msg)에서 
+사용자에게 질문하는 메시지인 msg를 cout을 통해 출력하고, 사용자가 입력한 
+단어를 cin을 통해 입력 받기 위해 아래 두 문장을 이용하였다.
+    cout << msg;
+    cin >> line;
+---------------------------------------------------------------------------
+1) 이 문장을 아래처럼 하나의 cin 문장으로 수정하라. 
+---------------------------------------------------------------------------
+    cin >> question(msg) >> line;
+---------------------------------------------------------------------------
+이는 기존 cout을 사용하지 않고 매개변수가 있는 입력 조작자 question(msg)을 사용하여 
+질문 메시지인 msg를 출력한다. (여기서 cout을 사용하지는 않는다.)
+---------------------------------------------------------------------------
+이 입력 조작자 question(msg)은 아래 코드와 같이 구현된다. 
+아래 question 클래스와 입력 연산자 >>를 UI 클래스와 StudentWorker 클래스 사이에 배치하라.
+```
+```c++
+class question { // 매개변수가 있는 조작자를 만들기 위한 클래스
+    const string& msg;
+public:
+    question(const string& msg): msg{msg} { } // 생성자
+    friend istream& operator >> (istream& in, const question& qst);
+};
+
+// question 클래스의 입력 연산자: 단순히 question 객체에 저장된 msg를 출력해주는 역할을 한다. 
+istream& operator >> (istream& in, const question& qst) {
+    cout << qst.msg;
+    return in;
+}
+```
+```
+위 question은 사실 클래스 이름이며, 
+cin >> question(msg) >> line; 문장 실행 시 question(msg)을 통해
+이 클래스의 이름 없는 임시 객체가 생성된다.
+이때 인자 msg는 생성자 question(const string& msg)에게 매개변수로 넘겨지며 
+이 값은 question 클래스의 멤버 변수인 msg에 저장된다. 
+임시 객체인 question(msg)의 참조자가 위 입력 연산자 operator >> (in, qst)의 
+두번째 매개변수 qst로 전달된다.
+---------------------------------------------------------------------------
+위 입력 연산자 operator >> (istream& in, const question& qst)는 
+매개변수 qst로 question 객체의 참조자를 받는다. 
+이 연산자는 qst 객체의 msg 멤버를 cout을 통해 cout << qst.msg 처럼 출력한다. 
+여기서 question 클래스의 private 멤버인 qst.msg에 접근할 수 있도록 하기 위해 
+이 연산자 함수 >>() 를 question 내에서 friend로 선언해야 한다.
+---------------------------------------------------------------------------
+2) UI의 getNextLine(), getInt() 함수 내에서도 
+    cout << msg 대신 위 1)처럼 매개변수가 있는 입력 조작자 question(msg)을 사용하여 
+    msg를 출력하도록 관련 코드를 수정하라.
+3) UI의 inputPerson(Person& p) 함수 내에서 
+---------------------------------------------------------------------------
+    cout << "input person information:" << endl;
+    cin >> p;
+---------------------------------------------------------------------------
+위 두 문장 대신 위 1)처럼 매개변수가 있는 입력 조작자 question(string& msg) 를 사용하여 
+출력하도록 관련 코드를 수정하라. 위 << endl 대신 "input person information:\n"을 
+question(string& msg)의 msg로 넘겨주면 동일한 효과를 볼 수 있다.
+```
+
+### 문제 5 실행 결과
+```
+1    // PersonManager
+1    // Display
+Menu item number? 4   // Login: UI::selectMenu() -> getIndex() -> getInt(msg)
+user name: p0         // UI::getNext()
+password:             // 그냥 엔터; UI::getNextLine()
+9    // ManageMemo
+1    // DisplayMemo
+------- Memo -------
+The Last of the Mohicans
+...
+than the native warrior of North America.
+--------------------
+
+6    // RepaceLine
+Line number to replace? 0     // UI::getPositiveInt() -> getInt(msg)
+Input a line to replace:      // UI::getNextLine()
+This is the first line.
+--- Memo by line ---
+[0] This is the first line.
+[1] James Fenimore Cooper
+...
+[10] than the native warrior of North America.
+--------------------
+
+0    // Exit
+6    // IsSame
+rUser: p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+p    : p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+(rUser == p): true
+input person information:     // UI::inputPerson(Person& p)
+p0 11 70 false :Gwangju Nam-gu Bongseon-dong 21:
+rUser: p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+p    : p0 11 70 false :Gwangju Nam-gu Bongseon-dong 21:
+(rUser == p): false
+```

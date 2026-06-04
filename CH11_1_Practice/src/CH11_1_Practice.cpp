@@ -24,7 +24,7 @@ ostream& operator << (ostream& out, const Point& ref){
 }
 
 istream& operator >> (istream& in, Point& ref){
-	in >> ref.x >> ref.x;
+	in >> ref.x >> ref.y;
 	return in;
 }
 
@@ -36,6 +36,11 @@ ostream& leftp(ostream& out){
 ostream& rightp(ostream& out){
 	out << " )";
 	return out;
+}
+
+istream& inmsg(istream& in){
+	cout << "x, y coordinate? ";
+	return in;
 }
 
 /******************************************************************************
@@ -65,7 +70,7 @@ void inPoint() {
 }
 
 void inMnpPoint() {
-    //cin >> inmsg >> p;
+    cin >> inmsg >> p;
     outMnpPoint();
 }
 

@@ -15,7 +15,42 @@ public:
         permitWeight = weight;
         itemWeight = 0;
     }
+    
+    void putItem(int n){
+    	itemWeight += n;
+    	if(permitWeight - itemWeight < 0){
+    		cout << "This box doesn't have available space." << endl;
+    	}
+    }
+    
+    friend istream& operator >> (istream& in, Box& ref);
+    friend ostream& operator << (ostream& out, const Box& ref);
 };
+
+ostream& boxSign (ostream& out){	
+	out << "[[[[[ BOX ]]]]]";
+	return out;
+}
+
+istream& operator >> (istream& in, Box& ref){
+	if(ref.itemWeight == 0){
+		cout << "Box label and weight : ";
+		in >> ref.label >> ref.permitWeight;
+	}
+	else{
+		cout << "This box is not empty. You can change only label of this box" << endl;
+		cout << "Box label : ";
+		in >> ref.label;
+	}
+	return in;		
+}
+
+ostream& operator << (ostream& out, const Box& ref){
+	out << boxSign << endl;
+	out << "Box label : " << ref.label << endl;
+	out << "Box available weight : " << ref.permitWeight - ref.itemWeight << endl;
+	return out;
+}
 
 
 int main() {

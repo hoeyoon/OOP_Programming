@@ -17,10 +17,36 @@ public:
         return out << title << " " << isbn << " " << price << " " << isNovel;
     }
     void println() const { print(cout) << endl; }
+    ostream& printFormat(ostream& out){
+    	out << left << setw(10) << setfill('*') << title << ":" << showbase << hex << isbn << ":" <<
+    			dec << setw(0) << setfill(' ') << setprecision(3) << price << ":" << setprecision(6) << boolalpha << isNovel << noboolalpha;
+    	return out;
+    }
+    
+    friend ostream& operator << (ostream& out, const Book& ref);
+    friend istream& operator >> (istream& in, Book& ref);
 };
 
 // 여기에 필요한 함수들을 구현하시오.
+ostream& operator << (ostream& out, const Book& ref){
+	out << ref.title << " " << ref.isbn << " " << ref.price << " " << ref.isNovel;
+	return out;
+}
 
+ostream& outPrompt(ostream& out){
+	out << "Book: ";
+	return out;
+}
+
+istream& operator >> (istream& in, Book& ref){
+	in >> ref.title >> ref.isbn >> ref.price >> ref.isNovel;
+	return in;
+}
+
+istream& inPrompt(istream& in){
+	cout << "title ISBN price isNovel? ";
+	return in;
+}
 
 //------------------------------------------------------
 // 경고: 아래 함수들은 주석을 제거하는 것 외는 수정하지 마시오.
@@ -38,18 +64,18 @@ int main() {
         cin >> menu;
         if (menu == 0) break;
         else if (menu == 2) { // 조작자 outPrompt 구현
-            //cout << outPrompt;
+            cout << outPrompt;
         }
         else if (menu == 3) { // 연산자 >> books[index] 구현
             cout << "title ISBN price isNovel? ";
-            //cin >> books[index];
+            cin >> books[index];
         }
         else if (menu == 4) { // 조작자 inPrompt 구현
-            //cin >> inPrompt >> books[index];
+            cin >> inPrompt >> books[index];
         }
         else if (menu == 5) { // 멤버함수 printFormat(cout) 구현
-            //cout << books[index] << endl;
-            //books[index].printFormat(cout) << endl;  // book의 멤버들을 순서적으로 출력함
+            cout << books[index] << endl;
+            books[index].printFormat(cout) << endl;  // book의 멤버들을 순서적으로 출력함
         }
         else if (menu == 6) {
             cout << "book index to select [0,1,2]? ";

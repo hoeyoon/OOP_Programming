@@ -370,6 +370,7 @@ public:
     operator int()    { return this->id; }
     
     friend ostream& operator << (ostream& out, Person& ref);
+    friend istream& operator >> (istream& in, Person& ref);
 };
 
 /* Person::Person(): Person("") {
@@ -621,6 +622,11 @@ void Person::printMembers(ostream& out)   {
 ostream& operator << (ostream& out, Person& ref){
 	ref.print(out);
 	return out;
+}
+
+istream& operator >> (istream& in, Person& ref){
+	ref.input(in);
+	return in;
 }
 
 /******************************************************************************
@@ -962,7 +968,7 @@ bool UI::checkDataFormatError(istream& in) {
 // 입력 중 입력 데이터에 오류가 있는지 확인하고 오류가 있을 시 에러 메시지를 출력한다.
 bool UI::inputPerson(Person& p) {
     cout << "input person information:" << endl;
-    p.input(cin);
+    cin >> p;
     if (checkDataFormatError(cin)) return false;
     if (echo_input) p.println(); // 자동체크에서 사용됨
     return true;
@@ -2052,7 +2058,7 @@ public:
         //      Person::input(istream&)을 호출했을 뿐이데 p가 포인트하는 실제 객체의  
         //      종류에 따라 오버라이딩된 파생 클래스의 input()이 호출된다. (다형성)
         //---------------------------------------------------------------------
-        p->input(in);  // 각 클래스별 멤버들을 모두 입력 받음
+        in >> *p;  // 각 클래스별 멤버들을 모두 입력 받음
 
         if (UI::checkDataFormatError(in)) { // 정수입력할 곳에 일반 문자 입력한 경우
             delete p;         // 할당된 메모리 반납

@@ -22,6 +22,16 @@ ostream& operator << (ostream& out, const Point& ref){
 	return out;
 }
 
+ostream& leftp(ostream& out){
+	out << "( ";
+	return out;
+}
+
+ostream& rightp(ostream& out){
+	out << " )";
+	return out;
+}
+
 /******************************************************************************
  * 선택된 메인 메뉴 항목을 실행하는 함수들
  ******************************************************************************/
@@ -39,7 +49,7 @@ void outPoint() {
 }
 
 void outMnpPoint() {
-    //cout << leftp << p << rightp << endl;
+    cout << leftp << p << rightp << endl;
 }
 
 void inPoint() {

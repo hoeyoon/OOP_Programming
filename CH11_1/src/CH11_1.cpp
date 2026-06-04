@@ -120,7 +120,14 @@ public:
     virtual string getMaker() = 0;
     void print(ostream& out) { out << owner << "'s Phone: " << getMaker(); }
     void println() { print(cout); cout << endl; }
+    
+    friend ostream& operator << (ostream& out, SmartPhone& ref);
 };
+
+ostream& operator << (ostream& out, SmartPhone& ref){
+	ref.print(out);
+	return out;
+}
 
 //----------------------------------------------------------------------------
 // GalaxyPhone class
@@ -1304,6 +1311,7 @@ public:
 
 void CurrentUser::display() { // Menu item 1
     rUser.println();
+    cout << *(rUser.getSmartPhone()) << endl;
 }
 
 void CurrentUser::getter() { // Menu item 2
@@ -2255,7 +2263,7 @@ void PersonManager::dispPhones() { // Menu item 11
         // 추상클래스 SmartPhone::println()->print()->가상함수 getMaker()-> 
         // 파생클래스(Galaxy 또는 IPhone)의 override된 getMaker() 함수가 실제 호출됨  
     for(int i = 0; i < (int)persons.size(); i++){
-        cout << "[" << i << "] "; persons[i]->getSmartPhone()->println();
+        cout << "[" << i << "] " << *(persons[i]->getSmartPhone()) << endl;
     }
 }
 
@@ -3857,7 +3865,7 @@ public:
         int menuCount = 8; // 상수 정의
         string menuStr =
         		"******************************* Main Menu *********************************\n"
-        		"* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9, 10, 11)                  *\n";
+        		"* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9, 10, 11)                  *\n"
         		"* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *\n"
         		"* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8) 7.PMbyVector               *\n"
         		"***************************************************************************\n";

@@ -11,6 +11,7 @@ public:
     Point() { x = 31; y = 15; }
     
     friend ostream& operator << (ostream& out, const Point& ref);
+    friend istream& operator >> (istream& in, Point& ref);
 };
 
 
@@ -20,6 +21,11 @@ ostream& operator << (ostream& out, const Point& ref){
 			setfill('.') << ref.y << ", " << boolalpha << ((ref.x == ref.y) ? true : false) << 
 			noboolalpha << noshowbase << right << setfill(' ');
 	return out;
+}
+
+istream& operator >> (istream& in, Point& ref){
+	in >> ref.x >> ref.x;
+	return in;
 }
 
 ostream& leftp(ostream& out){
@@ -54,7 +60,7 @@ void outMnpPoint() {
 
 void inPoint() {
     cout << "input x and y: ";
-    //cin >> p;
+    cin >> p;
     outMnpPoint();
 }
 

@@ -10,7 +10,7 @@
 ### 문제 1 설명
 ```
 SmartPhone의 출력 연산자 << 구현
- ******************************************************************************/
+
 지금까지 PersonManager::dispPhones()에서 아래 문장을 이용하여 스마트폰 객체를 출력하였다.
         cout << "[" << i << "] "; persons[i]->getSmartPhone()->println();
 ---------------------------------------------------------------------------
@@ -59,3 +59,82 @@ s2
 s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
 s2's Phone: Apple IPhone 13
 ``` 
+
+### 문제 2 설명
+```
+Person의 출력 연산자 << 구현
+
+지금까지 BasePM::display()에서 아래 문장을 이용하여 각 사람 객체을 출력하였다.
+        cout << "[" << i << "] "; persons[i]->println();
+---------------------------------------------------------------------------
+1) 이 문장을 아래 문장처럼 수정하라. 
+    이는 출력 연산자 << 를 이용하여 사람 객체가 출력되게 변경한 것이다.
+    만약 Person p; Person& rp;로 선언되었다면 그냥 p와 rp를 바로 출력하면 되고,
+        Person *p; 로 선언되었다면 *p로 출력해야 한다.
+        cout << "[" << i << "] " << *(persons[i]) << endl;
+---------------------------------------------------------------------------
+    이것이 가능하도록 출력 연산자 << 를 구현하여 Person과 Student 클래스 사이에 배치하라.
+    이 연산자 구현 시 Person::println()처럼 기존 Person::print() 멤버함수를 호출하면 
+    간단히 구현할 수 있다.
+    이 연산자 함수의 Person 매개변수는 참조 변수(call by reference)로 선언하라.
+---------------------------------------------------------------------------
+2) CurrentUser의 display(), setter(), set(), isSame() 함수 내에서 
+    Person::println() 대신 위 1)처럼 << 와 endl를 사용하여 출력하도록 수정하라.
+3) Factory::inputPerson(), 
+    PersonManager의 find(), dispStudentWorkers(),
+    그리고 UI::inputPerson()도 Person::println() 대신 
+    위 1)처럼 << 와 endl를 사용하여 출력하도록 수정하라.
+```
+
+### 문제 2 실행 결과
+```
+1    // PersonManager
+1    // Display
+display(): count 16
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+...
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+
+9    // Find
+Input [delimiter(P, S, W, or A)] [person information] to find by operator ==
+S s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[7] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+
+10    // DispAlbaStud
+dispStudentWorkers(): 
+[12] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[13] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[14] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+
+2    //  Append
+The number of persons to append? 1
+W w5 35 77.7 true :Eunpyeong-gu Seoul: Ssangyong Vice-president
+display(): count 17
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+...
+[16] w5 35 77.7 true :Eunpyeong-gu Seoul: Ssangyong Vice-president
+
+4    // Login
+w2
+     // 빈줄 삽입
+1    // Display
+w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+w2's Phone: Apple IPhone 13
+
+3    // Setter
+rp.setMembers():rp 32 44.4 true :Dobong-gu Kwangju:
+
+4    // Set
+rp.set():rp 32 44.4 false :Dobong-gu Kwangju:
+
+6    // IsSame
+rUser: w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+p    : w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+(rUser == p): true
+input person information:
+w2 32 0 false :: Hyundai Manager // 사용자 입력
+rUser: w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+p    : w2 32 0 false :: Hyundai Manager
+(rUser == p): true
+```

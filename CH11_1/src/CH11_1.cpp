@@ -368,6 +368,8 @@ public:
     Person& operator >> (char* name);   // 멤버 name의 C-스트링을 매개변수 name에 복사
     operator string() { return this->name; }
     operator int()    { return this->id; }
+    
+    friend ostream& operator << (ostream& out, Person& ref);
 };
 
 /* Person::Person(): Person("") {
@@ -614,6 +616,11 @@ Person& Person::operator >> (char* name){   // 멤버 name의 C-스트링을 매
 
 void Person::printMembers(ostream& out)   {
 	out << name << " " << id << " " << weight << " " << married << " :" << (address == nullptr ? "" : address) << ":";
+}
+
+ostream& operator << (ostream& out, Person& ref){
+	ref.print(out);
+	return out;
 }
 
 /******************************************************************************
@@ -1698,8 +1705,7 @@ void BasePM::display(){
     int count = persons.size();
     cout << "display(): count " << count << endl;
     for (int i = 0; i < count; ++i) {
-        cout << "[" << i << "] ";
-        persons[i]->println();
+        cout << "[" << i << "] " << *(persons[i]) << endl;	
     }
 }
 

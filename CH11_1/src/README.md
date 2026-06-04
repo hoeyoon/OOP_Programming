@@ -396,3 +396,129 @@ a1
 [10] than the native warrior of North America.
 --------------------
 ```
+
+### 문제 7-0 설명
+```
+1) PersonManager::run()의 Menu 문자열의 일부분을 아래 문자열로 교체하라.
+        "= 12.C++STL(10_2) 13.DispFormat(ch11)                           =\n"
+---------------------------------------------------------------------------
+2) PersonManager 클래스에 아래 함수를 추가하고, 
+    PersonManager::run()의 func_arr[]에 이 함수를 등록하라.
+```
+```c++
+void PersonManager::dispFormat() {
+    cout << "dispFormat(): count " << persons.size() << endl;
+    int i = 0;
+    for (auto p: persons) {
+        인덱스 i를 [i++] 형식으로 화면에 출력하되, 인덱스 i를  
+            (폭 2, 우맞춤, 0으로 채움)으로 설정한 후 출력하라. (예:[01])
+        p->printFormat(cout);
+        cout << endl;
+    }
+}
+```
+```
+p->printFormat(cout)가 구현되지 않아 아직 정상적으로 컴파일되진 않겠지만 
+일단 아래 실행 결과를 먼저 확인하라.
+```
+
+### 문제 7-0 실행 결과
+```
+1    // PersonManager
+====================== Person Management Menu ===================
+= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =
+= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =
+= 12.C++STL(10_2) 13.DispFormat(ch11)                           =
+=================================================================
+Menu item number? 13    // DispFormat
+dispFormat(): count 16
+[00] p0      0xa 70.0 false :Gwangju Nam-gu Bongseon-dong 21:
+[01] p1      0xb 61.1 true  :Jong-ro 1-gil, Jongno-gu, Seoul:
+[02] p2      0xc 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[03] p3      0xd 83.3 true  :100 Dunsan-ro Seo-gu Daejeon:
+[04] s1     0x15 65.4 true  :Jongno-gu Seoul: Physics 3.8 1
+[05] s2     0x16 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[06] s3     0x17 55.5 true  :Dong-gu Incheon: Computer 3.5 2
+[07] s4     0x18 66.6 false :Sasang-gu Sejong: History 3.1 1
+[08] w1     0x1f 33.3 false :Kangnam-gu Seoul: Samsung Director
+[09] w2     0x20 44.4 true  :Dobong-gu Kwangju: Hyundai Manager
+[10] w3     0x21 55.5 true  :Dong-gu Incheon: Hyundai Labor
+[11] w4     0x22 66.6 false :Sasang-gu Sejong: Kia CEO
+[12] a1     0x29 55.5 true  :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: 0
+[13] a2     0x2a 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: 1
+[14] a3     0x2b 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: 1
+[15] a4     0x2c 66.6 true  :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: 0
+```
+
+### 문제 7 설명
+```
+위 [문제 7-0] 실행 결과의 메뉴항목 13.DispFormat(ch11)의 출력을 참고하여 
+Person, Student, Worker, StudWorker 클래스에 아래 함수를 추가한 후 구현하라.
+단, virtual 또는 override 키워드의 사용은 각 클래스의
+기존 virtual void print(ostream& out) 함수 선언을 참고하여 선언하라.
+---------------------------------------------------------------------------
+    virtual void printFormat(ostream& out); // 11_1에서 추가
+---------------------------------------------------------------------------
+각 클래스에서 위 함수를 기존의 virtual void print(ostream& out) 함수의 
+구현 방법과 동일하게 구현하라. 즉, 기존의 print(...)가 printMembers(out)를 
+호출하여 구현했듯이 printFormat(...) 역시 아래 함수를 호출하여 구현하라.
+---------------------------------------------------------------------------
+    void printFormatMembers(ostream& out); // 11_1에서 추가
+---------------------------------------------------------------------------
+Person, Student, Worker, StudWorker 클래스에 
+위 함수를 protected 영역에 선언한 후 구현하라.
+Person의 printFormatMembers() 구현 시 
+    name(폭 5, 좌맞춤), id(폭 5, 16진수, base 출력), 
+    weight(폭 4, 유효 숫자 자리수 3, 
+            소수점 이하 값이 0이라도 남은 공간에 0으로 출력(즉 70은 70.0으로 출력))
+    married(폭 5, 좌맞춤), address(기존 address 출력과 동일)
+    위에서 각 설정 값을 변경했을 경우 해당 멤버 출력 후 다른 멤버들 출력시에는 
+    디폴트 설정 값이 자동 적용되게 원상 복귀해야 함. 즉, 16진수 후 십진수로, 
+    showpoint는 noshowpoint로, 유효 숫자 자리수는 디폴트 값(6)으로 설정
+---------------------------------------------------------------------------
+Student의 printFormatMembers() 구현 시
+    department(기존과 동일), GPA(유효 숫자 자리수 2), year(기존과 동일)
+    해당 멤버 출력 후 유효 숫자 자리수을 디폴트 설정 값(6)으로 원상 복귀해야 함
+---------------------------------------------------------------------------
+Worker의 printFormatMembers() 구현 시
+    기존 멤버 출력과 동일; printMembers()를 호출할 것
+---------------------------------------------------------------------------
+StudentWorker의 printFormatMembers() 구현 시
+    career(기존 출력과 동일), male(true, false로 출력하지 말고 1, 0으로 출력)
+    male 출력한 후 다른 boolean 값 출력 시에는 여전히 true, false로 출력되게 해야 함
+```
+
+### 문제 7 실행 결과
+```
+1    // PersonManager
+13   // DispFormat
+dispFormat(): count 16
+[00] p0      0xa 70.0 false :Gwangju Nam-gu Bongseon-dong 21:
+... // 위 [문제 7-0] 실행 결과와 동일
+[15] a4     0x2c 66.6 true  :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: 0
+
+1    // Display
+display(): count 16
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+[1] p1 11 61.1 true :Jong-ro 1-gil, Jongno-gu, Seoul:
+[2] p2 12 52.2 false :1001, Jungang-daero, Yeonje-gu, Busan:
+[3] p3 13 83.3 true :100 Dunsan-ro Seo-gu Daejeon:
+[4] s1 21 65.4 true :Jongno-gu Seoul: Physics 3.8 1
+[5] s2 22 54.3 false :Yeonje-gu Busan: Electronics 2.5 4
+[6] s3 23 55.5 true :Dong-gu Incheon: Computer 3.5 2
+[7] s4 24 66.6 false :Sasang-gu Sejong: History 3.1 1
+[8] w1 31 33.3 false :Kangnam-gu Seoul: Samsung Director
+[9] w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
+[10] w3 33 55.5 true :Dong-gu Incheon: Hyundai Labor
+[11] w4 34 66.6 false :Sasang-gu Sejong: Kia CEO
+[12] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+[13] a2 42 66.6 false :Sasang-gu Sejong: History 3.1 1 Kia CEO :Seven Eveven,eMart Jinju,CU Bongsun: true
+[14] a3 43 51.9 false :Buk-gu Daejeon: Computer 3.5 2 Samsung Manager :Youngpung,Kyobo Gwanghwa,E-mart Suwon: true
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+
+//----------------------------------------------------------------------------
+// id는 십진수, weight는 소수점 있고 없는지(70), 
+// married, male은 true or false로 정상 출력되는지 확인하라.
+//----------------------------------------------------------------------------
+```

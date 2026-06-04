@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <map>
 #include <queue>      // ch10_3 추가
+#include <iomanip>
 
 using namespace std;  // 헤드 파일은 반드시 이 문장 앞쪽에 include해야 한다.
 
@@ -315,6 +316,7 @@ protected:
     void copyAddress(const char* address); // 5_2에서 추가
     void copyMemo(const char* c_str);      // 5_2에서 추가
     SmartPhone* newSmartPhone();           // 9_1에서 추가
+    void printFormatMembers(ostream& out); // 11_1에서 추가
 
 public:
     //Person();
@@ -350,6 +352,7 @@ public:
 
     virtual void input(istream& in)  { inputMembers(in); } // ch3_2에서 추가
     virtual void print(ostream& out) { printMembers(out); }
+    virtual void printFormat(ostream& out) { printFormatMembers(out); } // 11_1에서 추가
     void println()            { print(cout); cout << endl; }
     virtual void whatAreYouDoing();                          // ch3_2에서 추가
     Person& operator = (const Person& p);				// ch7_1에서 추가
@@ -619,6 +622,15 @@ void Person::printMembers(ostream& out)   {
 	out << name << " " << id << " " << weight << " " << married << " :" << (address == nullptr ? "" : address) << ":";
 }
 
+void Person::printFormatMembers(ostream& out){
+    out << setw(5) << left << name << right << " ";
+    out << hex << showbase << id << dec << noshowbase << " ";
+    out << setw(4) << setprecision(3) << showpoint << weight
+        << noshowpoint << setprecision(6) << " ";
+    out << left << setw(5) << boolalpha << married << right << " ";
+    out << ":" << address << ": ";
+}
+
 ostream& operator << (ostream& out, Person& ref){
 	ref.print(out);
 	return out;
@@ -641,6 +653,7 @@ class Student : virtual public Person {
 protected:
     void inputMembers(istream& in);
     void printMembers(ostream& out);
+    void printFormatMembers(ostream& out); // 11_1에서 추가
 
 public:
     Student(const string& name={}, int id={}, double weight={},
@@ -662,6 +675,10 @@ public:
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
     void input(istream& in) override { Person::inputMembers(cin); inputMembers(cin); }
     void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
+    void printFormat(ostream& out) override{ // 11_1에서 추가
+    	Person::printFormatMembers(out);
+    	printFormatMembers(out);
+    }
 
     bool operator==(const Person& p) override;
     void whatAreYouDoing() override;
@@ -699,6 +716,10 @@ void Student::printMembers(ostream& out)   {             // 멤버 출력
     out << " " << department << " " << GPA << " " << year;
 }
 
+void Student::printFormatMembers(ostream& out){
+	out << department << setprecision(2) << " " << GPA << setprecision(6) << " " << year;
+}
+
 bool Student::operator == (const Person& p){
     const Student& s = dynamic_cast< const Student& >(p); // 다운 캐스팅
 	if(Person::operator==(p) && year == s.year && department == s.department){
@@ -733,6 +754,7 @@ class Worker : virtual public Person {
 protected:
     void inputMembers(istream& in);
     void printMembers(ostream& out);
+    void printFormatMembers(ostream& out); // 11_1에서 추가
 
 public:
     Worker(const string& name={}, int id={}, double weight={},
@@ -752,6 +774,10 @@ public:
     // 부모(기본) 클래스의 멤버 함수 재정의: Redefined member functions
     void input(istream& in) override { Person::inputMembers(cin); inputMembers(cin); }
     void print(ostream& out) override { Person::printMembers(cout); printMembers(cout); }
+    void printFormat(ostream& out) override{ // 11_1에서 추가
+    	Person::printFormatMembers(out);
+    	printFormatMembers(out);
+    }
 
     bool operator==(const Person& p) override;
     void whatAreYouDoing() override;
@@ -789,6 +815,10 @@ void Worker::inputMembers(istream& in){
 
 void Worker::printMembers(ostream& out)   {
     out << " " << company << " " << position;
+}
+
+void Worker::printFormatMembers(ostream& out){
+	printMembers(out);
 }
 
 bool Worker::operator == (const Person& p){
@@ -831,6 +861,7 @@ class StudentWorker : public Student, public Worker
 protected:
     void inputMembers(istream& in);
     void printMembers(ostream& out);
+    void printFormatMembers(ostream& out); // 11_1에서 추가
 
 public:
     StudentWorker(
@@ -860,6 +891,10 @@ public:
     void print(ostream& out) override { 
     	Person::printMembers(out); Student::printMembers(out); 
     	Worker::printMembers(out); printMembers(out); 
+    }
+    void printFormat(ostream& out) override{ // 11_1에서 추가
+    	Person::printFormatMembers(out); Student::printFormatMembers(out);
+    	Worker::printFormatMembers(out); printFormatMembers(out);
     }
 
     bool operator==(const Person& p) override;
@@ -909,6 +944,11 @@ void StudentWorker::printMembers(ostream& out)   {
     out << " :" << career << ": " << male;
 }
 
+void StudentWorker::printFormatMembers(ostream& out){
+	out << " :" << career << ": ";
+	out << noboolalpha << male << boolalpha;
+}
+
 bool StudentWorker::operator == (const Person& p){
     const StudentWorker& a = dynamic_cast< const StudentWorker& >(p);
     return Student::operator==(a) && Worker::operator==(a) && male == a.male;
@@ -953,7 +993,7 @@ public:
 };
 
 ostream& operator << (ostream& out, const printIndex& pridx){
-    cout << pridx.index;
+    cout << "[" << pridx.index << "] ";
     return out;
 }
 
@@ -2136,6 +2176,7 @@ public:
     void dispPhones();	// ch9_2 추가
     bool connectTo(const string& caller, const string& callee) override; //ch9_2 추가
     void cppSTL();
+    void dispFormat();
     void run();
 };
 
@@ -2335,13 +2376,26 @@ void PersonManager::cppSTL() {
     // CppSTL stl(persons, cpCount); stl.run(); 과 동일함
 }
 
+void PersonManager::dispFormat() {
+    cout << "dispFormat(): count " << persons.size() << endl;
+    int i = 0;
+    for (auto p: persons) {
+//        인덱스 i를 [i++] 형식으로 화면에 출력하되, 인덱스 i를  
+//            (폭 2, 우맞춤, 0으로 채움)으로 설정한 후 출력하라. (예:[01])
+    	cout << "[" << setw(2) << right << setfill('0') << i++ << setfill(' ') << "] ";
+    	
+        p->printFormat(cout);
+        cout << endl;
+    }
+}
+
 void PersonManager::run() {
     using func_t = void (PersonManager::*)();
     using PM = PersonManager; // 코딩 길이를 줄이기 위해
     func_t func_arr[] = {
         nullptr, &PM::display, &PM::append, &PM::clear, &PM::login, &PM::insert, &PM::remove,
 		&PM::copyPersons, &PM::reset, &PM::find, &PM::dispStudentWorkers, &PM::dispPhones, 
-		&PM::cppSTL, 
+		&PM::cppSTL, &PM::dispFormat, 
     };
     int menuCount = sizeof(func_arr) / sizeof(func_arr[0]); // func_arr[] 길이
     string menuStr =
@@ -2349,7 +2403,7 @@ void PersonManager::run() {
         "= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =\n"
 		"= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =\n"
     	"= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =\n"
-		"= 12.C++STL(10_2)                                               =\n"
+		"= 12.C++STL(10_2) 13.DispFormat(ch11)                           =\n"
         "=================================================================\n";
 
     while (true) {

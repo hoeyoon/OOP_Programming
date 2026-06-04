@@ -335,3 +335,64 @@ rUser: p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
 p    : p0 11 70 false :Gwangju Nam-gu Bongseon-dong 21:
 (rUser == p): false
 ```
+
+### 문제 6 설명
+```
+매개변수가 있는 출력 조작자(manipulator) 구현 및 활용 
+
+지금까지 BasePM::display()에서 아래 문장 "[" << i << "] " 을 이용하여 
+출력될 사람 객체의 순서를 표시하는 인덱스를 출력하였다.
+        cout << "[" << i << "] " << *(persons[i]) << endl;
+---------------------------------------------------------------------------
+1) 이 문장을 아래 문장처럼 수정하라. 
+        cout << printIndex(i) << *(persons[i]) << endl;
+---------------------------------------------------------------------------
+    이는 매개변수가 있는 출력 조작자 printIndex(i) 이용하여 인덱스를 출력한다.
+---------------------------------------------------------------------------
+    이것이 가능하도록 앞서 작성한 매개변수가 있는 입력 조작자 question(msg)를 참고하여 
+    출력 조작자 printIndex(i)를 구현하라. 구현시  
+    i) 먼저 위 [문제 5]의 class question과 operator >>를 복사하여 
+       question 클래스 앞쪽에 배치하라.
+    ii) 클래스 이름 question, operator >>, istream를 적절한 이름으로 변경하고, 
+        const string& msg -> int index, in -> out, qst -> pridx로 젼경하라.
+    iii) operator << 의 출력문장을 절절히 수정하되 pridx.index를 출력해야 한다.
+---------------------------------------------------------------------------
+2) PersonManager의 find(), dispStudentWorkers(), dispPhones() 함수 내에서도 
+    위 1)처럼 매개변수가 있는 출력 조작자 printIndex(i) 를 사용하여 출력하도록 수정하라.
+---------------------------------------------------------------------------
+3) Memo::dispByLine() 함수 내에서도 조작자 printIndex(i) 를 사용하여 출력하도록 수정하라.
+```
+
+### 문제 6 실행 결과
+```
+1    // PersonManager
+1    // Display: BasePM::display()
+[0] p0 10 70 false :Gwangju Nam-gu Bongseon-dong 21:
+...
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+
+9    // Find: PersonManager::find()
+A a4 44 66.6 true :: History 3.1 1 LG DepartmentHead :: false
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+
+10   // DispAlbaStud: PersonManager::dispStudentWorkers()
+[12] a1 41 55.5 true :Dong-gu Incheon: Computer 3.5 2 Hyundai Labor :CU KangNam,Seven Eleven,GSStore Suwon: false
+...
+[15] a4 44 66.6 true :Nam-gu Busan: History 3.1 1 LG DepartmentHead :CU, FamilyMart, LotteMart, HomePlus: false
+
+11   // DispPhones: PersonManager::dispPhones()
+[0] p0's Phone: Apple IPhone 13
+...
+[15] a4's Phone: Apple IPhone 13
+
+4    // Login
+a1
+
+9    // ManageMemo
+4    // DispByLine: Memo::dispByLine()
+--- Memo by line ---
+[0] The Last of the Mohicans
+...
+[10] than the native warrior of North America.
+--------------------
+```

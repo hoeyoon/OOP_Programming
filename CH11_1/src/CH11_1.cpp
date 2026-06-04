@@ -945,6 +945,18 @@ istream& operator >> (istream& in, const question& qst) {
     return in;
 }
 
+class printIndex { // 매개변수가 있는 조작자를 만들기 위한 클래스
+    int index;
+public:
+    printIndex(int index): index{index} { } // 생성자
+    friend ostream& operator << (ostream& out, const printIndex& pridx);
+};
+
+ostream& operator << (ostream& out, const printIndex& pridx){
+    cout << pridx.index;
+    return out;
+}
+
 /******************************************************************************
  * User Interface
  ******************************************************************************/
@@ -1730,7 +1742,7 @@ void BasePM::display(){
     int count = persons.size();
     cout << "display(): count " << count << endl;
     for (int i = 0; i < count; ++i) {
-        cout << "[" << i << "] " << *(persons[i]) << endl;	
+        cout << printIndex(i) << *(persons[i]) << endl;
     }
 }
 

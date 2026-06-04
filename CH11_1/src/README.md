@@ -186,3 +186,52 @@ rUser: w2 32 44.4 true :Dobong-gu Kwangju: Hyundai Manager
 p    : w2 32 0 false :: Hyundai Manager
 (rUser == p): true
 ```
+
+### 문제 4 설명
+```
+매개변수가 없는 출력 조작자(manipulator) 구현 및 활용
+
+지금까지 Memo::displayMemo()의 맨 마지막에 아래 문장을 이용하여 메모 출력을 마무리하였다.
+    cout << "--------------------" << endl;
+---------------------------------------------------------------------------
+1) 이 문장을 아래 문장처럼 매개변수가 없는 출력 조작자 drawDashLine을 사용하도록 수정하라. 
+    cout << drawDashLine;
+---------------------------------------------------------------------------
+    이것이 가능하도록 출력 조작자 drawDashLine을 구현하라.
+    구현된 코드는 아래처럼 StudentWorker와 UI 클래스 사이에 아래처럼 배치하라.
+```
+```c++
+/*****************************************************************************
+ * ch11_1: I/O Manipulator
+ *****************************************************************************/
+
+// 모든 입출력 조작자는 여기에 배치하라.
+
+drawDashLine 조작자 구현
+```
+```
+2) Memo::dispByLine() 함수 내에서도 위 1)처럼 출력 조작자 drawDashLine을 사용하여
+    출력하도록 수정하라.
+```
+
+### 문제 4 실행 결과
+```
+1    // PersonManager
+4    // Login
+a1
+     // 빈줄 삽입
+9    // ManageMemo
+1    // DisplayMemo
+------- Memo -------
+The Last of the Mohicans
+...
+than the native warrior of North America.
+--------------------
+
+4    // DispByLine
+--- Memo by line ---
+[0] The Last of the Mohicans
+...
+[10] than the native warrior of North America.
+--------------------
+```

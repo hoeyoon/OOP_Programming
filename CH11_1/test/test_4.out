@@ -1,0 +1,93 @@
+
+******************************* Main Menu *********************************
+* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9, 10, 11)                  *
+* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *
+* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8) 7.PMbyVector               *
+***************************************************************************
+Menu item number? 1
+
+====================== Person Management Menu ===================
+= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =
+= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =
+= 12.C++STL(10_2) 13.DispFormat(ch11)                           =
+=================================================================
+Menu item number? 4
+user name: a1
+password: 
+
++++++++++++++++++++++ Current User Menu ++++++++++++++++++++++++
++ 0.Logout 1.Display 2.Getter 3.Setter 4.Set 5.WhatAreYouDoing +
++ 6.IsSame 7.InputPerson 8.ChangePasswd(4_2) 9.ManageMemo(4_3) +
++ 10.DefaultParameter(6_1) 11.StaticMember(6_1) 15.CalExp(9_2) +
++ 12.ChangeSmartPhone(9_2) 13.Calculate(9_2) 14.PhoneCall(9_2) +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 9
+
+++++++++++++++++++++++ Memo Management Menu +++++++++++++++++++++
++ 0.Exit 1.DisplayMemo 2.FindString 3.CompareWord 4.DispByLine  +
++ 5.DeleteLine 6.RepaceLine 7.ScrollUp 8.ScrollDown 9.InputMemo +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 1
+------- Memo -------
+The Last of the Mohicans
+James Fenimore Cooper
+Author's Introduction
+It is believed that the scene of this tale, and most of the information
+necessary to understand its allusions, are rendered sufficiently 
+obvious to the reader in the text itself, or in the accompanying notes.
+Still there is so much obscurity in the Indian traditions, and so much
+confusion in the Indian names, as to render some explanation useful.
+Few men exhibit greater diversity, or, if we may so express it, 
+greater antithesis of character, 
+than the native warrior of North America.
+--------------------
+
+++++++++++++++++++++++ Memo Management Menu +++++++++++++++++++++
++ 0.Exit 1.DisplayMemo 2.FindString 3.CompareWord 4.DispByLine  +
++ 5.DeleteLine 6.RepaceLine 7.ScrollUp 8.ScrollDown 9.InputMemo +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 4
+--- Memo by line ---
+[0] The Last of the Mohicans
+[1] James Fenimore Cooper
+[2] Author's Introduction
+[3] It is believed that the scene of this tale, and most of the information
+[4] necessary to understand its allusions, are rendered sufficiently 
+[5] obvious to the reader in the text itself, or in the accompanying notes.
+[6] Still there is so much obscurity in the Indian traditions, and so much
+[7] confusion in the Indian names, as to render some explanation useful.
+[8] Few men exhibit greater diversity, or, if we may so express it, 
+[9] greater antithesis of character, 
+[10] than the native warrior of North America.
+--------------------
+
+++++++++++++++++++++++ Memo Management Menu +++++++++++++++++++++
++ 0.Exit 1.DisplayMemo 2.FindString 3.CompareWord 4.DispByLine  +
++ 5.DeleteLine 6.RepaceLine 7.ScrollUp 8.ScrollDown 9.InputMemo +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 0
+
++++++++++++++++++++++ Current User Menu ++++++++++++++++++++++++
++ 0.Logout 1.Display 2.Getter 3.Setter 4.Set 5.WhatAreYouDoing +
++ 6.IsSame 7.InputPerson 8.ChangePasswd(4_2) 9.ManageMemo(4_3) +
++ 10.DefaultParameter(6_1) 11.StaticMember(6_1) 15.CalExp(9_2) +
++ 12.ChangeSmartPhone(9_2) 13.Calculate(9_2) 14.PhoneCall(9_2) +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Menu item number? 0
+
+====================== Person Management Menu ===================
+= 0.Exit 1.Display 2.Append 3.Clear 4.Login(CurrentUser, ch9)   =
+= 5.Insert(6_2) 6.Delete(6_2) 7.CopyPersons(7_3) 8.Reset(7_3)   =
+= 9.Find(9_2) 10.DispAlbaStud(9_2) 11.DispPhones(9_2)           =
+= 12.C++STL(10_2) 13.DispFormat(ch11)                           =
+=================================================================
+Menu item number? 0
+
+******************************* Main Menu *********************************
+* 0.Exit 1.PersonManager(ch3_2, 4, 6, 7_2, 8, 9, 10, 11)                  *
+* 2.Class:Object(ch3_1) 3.CopyConstructor(ch5_1) 4.AllocatedMember(ch5_2) *
+* 5.OperatorOverload(ch7_1) 6.Inheritance(ch8) 7.PMbyVector               *
+***************************************************************************
+Menu item number? 0
+Good bye!!

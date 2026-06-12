@@ -24,4 +24,3 @@ int main() {
     // string 자료형의 문자열 길이를 구하는 함수는 .length() 이다.
     return 0;
 }
-mbti에 대해 설명하는 문서를 만들어줘

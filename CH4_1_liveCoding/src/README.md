@@ -1,5 +1,66 @@
-#include <iostream>
-#include <string>
+```
+/*  "Room" 클래스와 "House" 클래스를 사용하여 집에 있는 방을 관리하는 간단한 프로그램을 구현한 것입니다.
+
+  Room 클래스:
+     방의 사용자 이름과 방 번호를 포함하는 클래스
+     생성자를 통해 방을 생성하며, 이름과 방 번호를 설정
+     이름을 변경하거나 방 정보를 출력할 수 있음
+
+  House 클래스:
+     집 이름, 주소, 그리고 여러 개의 방을 포함.  Room 클래스를 사용하여 방 정보 관리
+     방 리스트를 생성하고, 방 개수에 따라 각 방의 번호를 1부터 부여
+     방 정보를 출력하고, 사용자 이름과 방 번호를 기반으로 방을 렌트하는 기능을 제공합니다.
+  */
+/*
+예제 - 1
+(출력)Enter the number of rooms: (입력)4
+(출력)House Name: Chosun Dormitory
+(출력)Address: Gwangju
+(출력)Room List:
+(출력)Name: Chosun, Room NO: 1
+(출력)Name: Chosun, Room NO: 2
+(출력)Name: Chosun, Room NO: 3
+(출력)Name: Chosun, Room NO: 4
+(출력)Enter the room user's name and room number: (입력)KIM 2
+(출력)Successfully rented the room.
+(출력)Enter the room user's name and room number: (입력)YANG 3
+(출력)Successfully rented the room.
+(출력)Enter the room user's name and room number: (입력)LEE 4
+(출력)Successfully rented the room.
+(출력)Enter the room user's name and room number: (입력)PARK 4
+(출력)Successfully rented the room.
+(출력)House Name: Chosun Dormitory
+(출력)Address: Gwangju
+(출력)Room List:
+(출력)Name: Chosun, Room NO: 1
+(출력)Name: KIM, Room NO: 2
+(출력)Name: YANG, Room NO: 3
+(출력)Name: PARK, Room NO: 4
+
+예제 - 2
+(출력)Enter the number of rooms: (입력)3
+(출력)House Name: Chosun Dormitory
+(출력)Address: Gwangju
+(출력)Room List:
+(출력)Name: Chosun, Room NO: 1
+(출력)Name: Chosun, Room NO: 2
+(출력)Name: Chosun, Room NO: 3
+(출력)Enter the room user's name and room number:  (입력)KIM 4
+(출력)Room number input error.
+(출력)Enter the room user's name and room number:  (입력)LEE 1
+(출력)Successfully rented the room.
+(출력)Enter the room user's name and room number:  (입력)PARK 6
+(출력)Room number input error.
+(출력)House Name: Chosun Dormitory
+(출력)Address: Gwangju
+(출력)Room List:
+(출력)Name: LEE, Room NO: 1
+(출력)Name: Chosun, Room NO: 2
+(출력)Name: Chosun, Room NO: 3
+*/
+
+#include < iostream >
+#include < string >
 using namespace std;
 
 /******************************* Room 클래스 정의: 방의 정보를 나타내는 클래스 *********************************/
@@ -21,7 +82,7 @@ public:
 Room::Room(string name, int roomNO) : name(name), roomNO(roomNO) {}
 
 
-//    Room 클래스 기본 생성자  완성
+//    Room 클래스 기본 생성자  완성 
 // Room 클래스 기본 생성자  // "Chosun"이라는 기본 이름과 0번 방 번호로 초기화
 Room::Room() : Room("Chosun", 0) {}
 
@@ -66,15 +127,17 @@ public:
 House::House(int size, string houseName, string address)
     : size(size), houseName(houseName), address(address) {  // 멤버 변수 초기화
 
+
     // 문제 1
-    // 방 정보 저장을 위한 roomList 생성
+    // 방 정보 저장을 위한 roomList 생성 
     // 생성된 방의 번호를 1부터 순차적으로 초기화
     // 방 번호 변경 할때는 Room 클래스의 setRoomNO() 함수 이용
 
-	roomList = new Room[size];
-	for(int i = 0; i < size; i++){
-		roomList[i].setRoomNO(i + 1);
-	}
+
+
+
+
+
 }
 
 // House 클래스 소멸자: 메모리 해제
@@ -84,19 +147,17 @@ House::~House() {
     }
 }
 
+
 // 문제 2
 // House 클래스의 방 렌트 메소드
 // 입력한 방 번호가 존재하면 해당 번호의 방 사용자 이름 수정하고 true 리턴
 // 입력한 방 번호가 존재하지 않으면 false 리턴
 bool House::rentRoom(string name, int roomNO) {
-	for(int i = 0; i < size; i++){
-		if(roomList[i].getRoomNO() == roomNO){
-			roomList[i].changeName(name);
-			return true;
-		}
-	}
-	return false;
+   
 }
+
+
+
 
 // House 클래스의 집 정보 출력 메소드
 void House::showHouse()  {
@@ -138,3 +199,4 @@ int main() {
 
     return 0;  // 메인 함수가 성공적으로 종료될 때 반환하는 값
 }
+```
